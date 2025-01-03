@@ -44,4 +44,9 @@ extension MagazineTableViewController {
         
         return cell
     }
+    
+    /// TableView의 Row별 Height을 반환하는 메서드
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 404
+    }
 }
