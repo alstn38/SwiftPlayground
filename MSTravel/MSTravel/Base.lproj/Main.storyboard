@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="404" id="Weu-1F-g6H" customClass="MagazineTableViewCell" customModule="MSTravel" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MagazineTableViewCell" rowHeight="404" id="Weu-1F-g6H" customClass="MagazineTableViewCell" customModule="MSTravel" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="50" width="402" height="404"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Weu-1F-g6H" id="v8H-hs-y3W">
@@ -25,6 +25,9 @@
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VHY-cw-d4F">
                                             <rect key="frame" x="45" y="20" width="312" height="276"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="270" id="qgF-o1-D2n"/>
+                                            </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hK-9H-sXv">
                                             <rect key="frame" x="45" y="311" width="232" height="21"/>
@@ -60,6 +63,12 @@
                                         <constraint firstItem="JIo-D5-BC2" firstAttribute="top" secondItem="8hK-9H-sXv" secondAttribute="bottom" constant="5" id="xKm-Y3-BQO"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="magazineDateLabel" destination="AJF-Oq-tyh" id="Dk1-jD-ELJ"/>
+                                    <outlet property="magazineImageView" destination="VHY-cw-d4F" id="CWq-rn-buK"/>
+                                    <outlet property="magazineSubtitle" destination="JIo-D5-BC2" id="i0b-Uo-5Dw"/>
+                                    <outlet property="magazineTitleLabel" destination="8hK-9H-sXv" id="ML4-LJ-QPs"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
