@@ -7,23 +7,41 @@
 
 import UIKit
 
-class MagazineViewController: UIViewController {
+final class MagazineTableViewController: UITableViewController {
 
+    private var magzineArray = MagazineInfo().magazine
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        setupNavigation()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    /// 네비게이션 설정하는 메서드
+    private func setupNavigation() {
+        title = "MS TRAVEL"
     }
-    */
+}
 
+extension MagazineTableViewController {
+    
+    /// TableView의 Row의 개수를 반환하는 메서드
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return magzineArray.count
+    }
+    
+    /// TableView의 Row별 Cell 반환하는 메서드
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "MagazineTableViewCell",
+            for: indexPath
+        ) as? MagazineTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let row = magzineArray[indexPath.row]
+        cell.configureCell(row)
+        
+        return cell
+    }
 }
