@@ -27,9 +27,11 @@ final class CityDetailTableViewCell: UITableViewCell {
     func configureCell(_ travel: Travel, tag: Int) {
         cityNameLabel.text = travel.title
         cityDescriptionLabel.text = travel.description
-        saveCountLabel.text = "(3) · 저장 \(travel.save ?? 0)"
         cityLikeButton.isSelected = travel.like ?? false
         cityLikeButton.tag = tag
+        
+        let saveCount = travel.save ?? 0
+        saveCountLabel.text = "(3) · 저장 \(saveCount.formatToDecimalNumber())"
         
         guard let travelImage = travel.travel_image else {
             return cityImageView.image = UIImage(systemName: "photo.artframe")
