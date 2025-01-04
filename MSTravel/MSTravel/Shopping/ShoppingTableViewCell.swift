@@ -20,7 +20,7 @@ final class ShoppingTableViewCell: UITableViewCell {
         setupCell()
     }
     
-    func configureCell(_ shoppingCategory: ShoppingCategory) {
+    func configureCell(_ shoppingCategory: ShoppingCategory, tag: Int) {
         shoppingListLabel.text = shoppingCategory.title
         
         let checkImage = shoppingCategory.isChecked
@@ -32,7 +32,10 @@ final class ShoppingTableViewCell: UITableViewCell {
         : UIImage(systemName: "star")
         
         shoppingCheckButton.setImage(checkImage, for: .normal)
+        shoppingCheckButton.tag = tag
+        
         shoppingLikeButton.setImage(likeImage, for: .normal)
+        shoppingLikeButton.tag = tag
     }
     
     private func setupCell() {

@@ -12,12 +12,18 @@ struct ShoppingCategory {
     var isChecked: Bool = false
     var isLiked: Bool = false
     
-    mutating func toggleChecked() {
-        self.isChecked.toggle()
+    mutating func toggleState(_ type: StateType) {
+        switch type {
+        case .isChecked:
+            self.isChecked.toggle()
+        case .isLiked:
+            self.isLiked.toggle()
+        }
     }
     
-    mutating func toggleLiked() {
-        self.isLiked.toggle()
+    enum StateType {
+        case isChecked
+        case isLiked
     }
 }
 

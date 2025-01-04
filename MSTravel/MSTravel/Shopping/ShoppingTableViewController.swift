@@ -13,7 +13,11 @@ final class ShoppingTableViewController: UITableViewController {
     @IBOutlet var shoppingTextField: UITextField!
     @IBOutlet var shoppingAddButton: UIButton!
     
-    private var shoppingArray = ShoppingCategoryInfo().shoppingCategory
+    private var shoppingArray = ShoppingCategoryInfo().shoppingCategory {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +47,18 @@ final class ShoppingTableViewController: UITableViewController {
         shoppingAddButton.setTitle("추가", for: .normal)
         shoppingAddButton.tintColor = .black
     }
+    
+    // objc func에 enum타입을 넣어 두 가지 버튼을 동시에 하려고 했지만 실패
+    // -> objc에는 enum은 지원하지 않는 것으로 배웠다.
+    /// 구매완료 버튼을 클릭했을 때 동작하는 메서드입니다.
+    @objc private func shoppingCheckButtonDidTap(_ sender: UIButton) {
+        shoppingArray[sender.tag].toggleState(.isChecked)
+    }
+    
+    /// 즐겨찾기 버튼을 클릭했을 때 동작하는 메서드입니다.
+    @objc private func shoppingLikeButtonDidTap(_ sender: UIButton) {
+        shoppingArray[sender.tag].toggleState(.isLiked)
+    }
 }
 
 extension ShoppingTableViewController {
@@ -59,7 +75,9 @@ extension ShoppingTableViewController {
             for: indexPath
         ) as? ShoppingTableViewCell else { return UITableViewCell() }
         
-        cell.configureCell(shoppingArray[indexPath.row])
+        cell.configureCell(shoppingArray[indexPath.row], tag: indexPath.row)
+        cell.shoppingCheckButton.addTarget(self, action: #selector(shoppingCheckButtonDidTap), for: .touchUpInside)
+        cell.shoppingLikeButton.addTarget(self, action: #selector(shoppingLikeButtonDidTap), for: .touchUpInside)
         
         return cell
     }
