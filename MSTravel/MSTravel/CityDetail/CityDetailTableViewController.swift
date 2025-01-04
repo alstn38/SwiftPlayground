@@ -30,6 +30,28 @@ final class CityDetailTableViewController: UITableViewController {
     @objc private func cityLikeButtonDidTap(_ sender: UIButton) {
         travelArray[sender.tag].like?.toggle()
     }
+    
+    /// 광고 여부에 따라 반환하는 TableView Cell 다르게 처리하는 메서드
+    // 제네릭 도전해보기
+    private func tableViewDequeReusableCell<T: UITableViewCell>(
+        _ tableView: UITableView,
+        cellType: T.Type,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: String(describing: cellType),
+            for: indexPath
+        ) as? T else { return UITableViewCell() }
+        
+        if let advertisementCell = cell as? AdvertisementTableViewCell {
+            advertisementCell.configureCell(travelArray[indexPath.row])
+        } else if let cityDetailCell = cell as? CityDetailTableViewCell {
+            cityDetailCell.configureCell(travelArray[indexPath.row], tag: indexPath.row)
+            cityDetailCell.cityLikeButton.addTarget(self, action: #selector(cityLikeButtonDidTap), for: .touchUpInside)
+        }
+        
+        return cell
+    }
 }
 
 extension CityDetailTableViewController {
@@ -42,26 +64,11 @@ extension CityDetailTableViewController {
     /// TableView의 Section별 Row를 반환하는 메서드
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let isAdvertisement = travelArray[indexPath.row].ad
-        let travelRow = travelArray[indexPath.row]
-        let cell: UITableViewCell
         
-        if isAdvertisement {
-            guard let advertisementCell = tableView.dequeueReusableCell(
-                withIdentifier: "AdvertisementTableViewCell",
-                for: indexPath
-            ) as? AdvertisementTableViewCell else { return UITableViewCell() }
-            advertisementCell.configureCell(travelRow)
-            cell = advertisementCell
-        } else {
-            guard let cityDetailCell = tableView.dequeueReusableCell(
-                withIdentifier: "CityDetailTableViewCell",
-                for: indexPath
-            ) as? CityDetailTableViewCell else { return UITableViewCell() }
-            cityDetailCell.configureCell(travelRow, tag: indexPath.row)
-            cityDetailCell.cityLikeButton.addTarget(self, action: #selector(cityLikeButtonDidTap), for: .touchUpInside)
-            cell = cityDetailCell
-        }
-        
+        let cell = isAdvertisement
+        ? tableViewDequeReusableCell(tableView, cellType: AdvertisementTableViewCell.self, cellForRowAt: indexPath)
+        : tableViewDequeReusableCell(tableView, cellType: CityDetailTableViewCell.self, cellForRowAt: indexPath)
+
         return cell
     }
 }
