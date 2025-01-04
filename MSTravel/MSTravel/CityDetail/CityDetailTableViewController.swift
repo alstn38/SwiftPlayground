@@ -39,6 +39,8 @@ extension CityDetailTableViewController {
             return UITableViewCell()
         }
         
+        cell.configureCell(travel: travelArray[indexPath.row])
+        
         return cell
     }
 }

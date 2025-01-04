@@ -5,6 +5,7 @@
 //  Created by 강민수 on 1/3/25.
 //
 
+import Kingfisher
 import UIKit
 
 final class CityDetailTableViewCell: UITableViewCell {
@@ -23,6 +24,23 @@ final class CityDetailTableViewCell: UITableViewCell {
         setupGradeStarImageView()
     }
     
+    func configureCell(travel: Travel) {
+        cityNameLabel.text = travel.title
+        cityDescriptionLabel.text = travel.description
+        saveCountLabel.text = "(3) · 저장 \(travel.save ?? 0)"
+        cityLikeButton.isSelected = travel.like ?? false
+        
+        guard let travelImage = travel.travel_image else {
+            return cityImageView.image = UIImage(systemName: "photo.artframe")
+        }
+        
+        if let imageURL = URL(string: travelImage) {
+            cityImageView.kf.setImage(with: imageURL)
+        } else {
+            cityImageView.image = UIImage(systemName: "photo.artframe")
+        }
+    }
+    
     private func setupCell() {
         cityNameLabel.font = .boldSystemFont(ofSize: 14)
         cityNameLabel.textColor = .black
@@ -38,6 +56,7 @@ final class CityDetailTableViewCell: UITableViewCell {
         
         cityImageView.contentMode = .scaleToFill
         cityImageView.layer.cornerRadius = 10
+        cityImageView.tintColor = .black
         
         cityLikeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         cityLikeButton.setImage(UIImage(systemName: "heart.fill"), for: .selected)
