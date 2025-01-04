@@ -24,11 +24,12 @@ final class CityDetailTableViewCell: UITableViewCell {
         setupGradeStarImageView()
     }
     
-    func configureCell(travel: Travel) {
+    func configureCell(_ travel: Travel, tag: Int) {
         cityNameLabel.text = travel.title
         cityDescriptionLabel.text = travel.description
         saveCountLabel.text = "(3) · 저장 \(travel.save ?? 0)"
         cityLikeButton.isSelected = travel.like ?? false
+        cityLikeButton.tag = tag
         
         guard let travelImage = travel.travel_image else {
             return cityImageView.image = UIImage(systemName: "photo.artframe")

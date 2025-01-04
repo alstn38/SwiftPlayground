@@ -9,7 +9,11 @@ import UIKit
 
 final class CityDetailTableViewController: UITableViewController {
     
-    private var travelArray: [Travel] = TravelInfo().travel
+    private var travelArray: [Travel] = TravelInfo().travel {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +24,11 @@ final class CityDetailTableViewController: UITableViewController {
     /// navigation을 설정하는 메서드
     private func setupNavigation() {
         title = "도시 상세 정보"
+    }
+    
+    /// 도시 좋아요 버튼을 클릭했을 때 동작하는 메서드
+    @objc private func cityLikeButtonDidTap(_ sender: UIButton) {
+        travelArray[sender.tag].like?.toggle()
     }
 }
 
@@ -39,7 +48,8 @@ extension CityDetailTableViewController {
             return UITableViewCell()
         }
         
-        cell.configureCell(travel: travelArray[indexPath.row])
+        cell.configureCell(travelArray[indexPath.row], tag: indexPath.row)
+        cell.cityLikeButton.addTarget(self, action: #selector(cityLikeButtonDidTap), for: .touchUpInside)
         
         return cell
     }
