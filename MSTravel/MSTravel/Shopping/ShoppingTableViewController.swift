@@ -48,6 +48,21 @@ final class ShoppingTableViewController: UITableViewController {
         shoppingAddButton.tintColor = .black
     }
     
+    /// 쇼핑 목록 추가 버튼을 눌렀을 때 동작하는 메서드
+    @IBAction private func shoppingAddButtonDidTap(_ sender: Any) {
+        let userInputText = shoppingTextField.text ?? ""
+        guard !userInputText.isEmpty else { return }
+        
+        let newShoppingCategory = ShoppingCategory(title: userInputText)
+        shoppingArray.append(newShoppingCategory)
+        view.endEditing(true)
+    }
+    
+    /// 쇼핑 목록 키보드 완료 버튼을 눌렀을 때 동작하는 메서드
+    @IBAction func shoppingTextFieldRetunDidTap(_ sender: UITextField) {
+        shoppingAddButtonDidTap(sender)
+    }
+    
     // objc func에 enum타입을 넣어 두 가지 버튼을 동시에 하려고 했지만 실패
     // -> objc에는 enum은 지원하지 않는 것으로 배웠다.
     /// 구매완료 버튼을 클릭했을 때 동작하는 메서드입니다.
