@@ -48,6 +48,33 @@ final class ShoppingTableViewController: UITableViewController {
         shoppingAddButton.tintColor = .black
     }
     
+    /// 쇼핑 목록을 swipe를 통해 삭제하려고 시도할 때 동작하는 메서드
+    private func presentDeleteAlert(at indexPath: IndexPath) {
+        let alert = UIAlertController(
+            title: "정말 삭제하시겠습니까?",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(
+            title: "취소",
+            style: .cancel
+        )
+        
+        let deleteAction = UIAlertAction(
+            title: "삭제",
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.shoppingArray.remove(at: indexPath.row)
+            }
+        )
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        present(alert, animated: true)
+    }
+    
     /// 쇼핑 목록 추가 버튼을 눌렀을 때 동작하는 메서드
     @IBAction private func shoppingAddButtonDidTap(_ sender: Any) {
         let userInputText = shoppingTextField.text ?? ""
@@ -100,5 +127,16 @@ extension ShoppingTableViewController {
     /// TabieView의 Cell의 height을 반환하는 메서드
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    /// TableView 밀어서 삭제하는 메서드
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        if editingStyle == .delete {
+            presentDeleteAlert(at: indexPath)
+        }
     }
 }
