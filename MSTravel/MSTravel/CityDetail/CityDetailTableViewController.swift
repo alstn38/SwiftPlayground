@@ -41,15 +41,26 @@ extension CityDetailTableViewController {
     
     /// TableView의 Section별 Row를 반환하는 메서드
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "CityDetailTableViewCell",
-            for: indexPath
-        ) as? CityDetailTableViewCell else {
-            return UITableViewCell()
-        }
+        let isAdvertisement = travelArray[indexPath.row].ad
+        let travelRow = travelArray[indexPath.row]
+        let cell: UITableViewCell
         
-        cell.configureCell(travelArray[indexPath.row], tag: indexPath.row)
-        cell.cityLikeButton.addTarget(self, action: #selector(cityLikeButtonDidTap), for: .touchUpInside)
+        if isAdvertisement {
+            guard let advertisementCell = tableView.dequeueReusableCell(
+                withIdentifier: "AdvertisementTableViewCell",
+                for: indexPath
+            ) as? AdvertisementTableViewCell else { return UITableViewCell() }
+            advertisementCell.configureCell(travelRow)
+            cell = advertisementCell
+        } else {
+            guard let cityDetailCell = tableView.dequeueReusableCell(
+                withIdentifier: "CityDetailTableViewCell",
+                for: indexPath
+            ) as? CityDetailTableViewCell else { return UITableViewCell() }
+            cityDetailCell.configureCell(travelRow, tag: indexPath.row)
+            cityDetailCell.cityLikeButton.addTarget(self, action: #selector(cityLikeButtonDidTap), for: .touchUpInside)
+            cell = cityDetailCell
+        }
         
         return cell
     }
