@@ -10,10 +10,27 @@ import UIKit
 final class PopularCityTableViewController: UITableViewController {
     
     private let originalCityArray: [City] = CityInfo().city
+    private var countryCategory: CountryCategory = .all {
+        didSet {
+            switch countryCategory {
+            case .all:
+                cityArray = originalCityArray
+            case .domestic:
+                cityArray = originalCityArray.filter { $0.domestic_travel }
+            case .overseas:
+                cityArray = originalCityArray.filter { !$0.domestic_travel }
+            }
+        }
+    }
+    private var searchedText: String = ""
     private var cityArray: [City] = [] {
         didSet {
             tableView.reloadData()
         }
+    }
+    
+    private var filterdCityArray: [City] {
+        get { cityArray.filter { $0.hasKeyword(searchedText) } }
     }
 
     @IBOutlet var countrySegmentedControl: UISegmentedControl!
@@ -51,21 +68,28 @@ final class PopularCityTableViewController: UITableViewController {
     }
     
     /// 도시 변경 SegmentedControl Value가 변경되었을 때 호출되는 메서드
-    @IBAction func countrySegmentValueDidChange(_ sender: UISegmentedControl) {
-        if sender.selectedSegmentIndex == 0 {
-            cityArray = originalCityArray
-        } else if sender.selectedSegmentIndex == 1 {
-            cityArray = originalCityArray.filter { $0.domestic_travel }
-        } else {
-            cityArray = originalCityArray.filter { !$0.domestic_travel }
+    @IBAction private func countrySegmentValueDidChange(_ sender: UISegmentedControl) {
+        countryCategory = CountryCategory(rawValue: sender.selectedSegmentIndex)
+    }
+    
+    /// 도시 검색 TextField의 값이 변경되었을 때 호출되는 메서드
+    @IBAction private func searchCountryTextFieldDidChanged(_ sender: UITextField) {
+        var searchedText = sender.text ?? ""
+        searchedText = searchedText.trimmingCharacters(in: [" "])
+        
+        while searchedText.contains("  ") {
+            searchedText = searchedText.replacingOccurrences(of: "  ", with: " ")
         }
+        
+        self.searchedText = searchedText
+        tableView.reloadData()
     }
 }
 
 extension PopularCityTableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityArray.count
+        return filterdCityArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,12 +98,30 @@ extension PopularCityTableViewController {
             for: indexPath
         ) as? PopularCityTableViewCell else { return UITableViewCell() }
         
-        cell.configureCell(cityArray[indexPath.row])
+        cell.configureCell(filterdCityArray[indexPath.row])
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
+    }
+}
+
+extension PopularCityTableViewController {
+    
+    enum CountryCategory: Int {
+        case all
+        case domestic
+        case overseas
+        
+        init(rawValue: Int) {
+            switch rawValue {
+            case 0: self = .all
+            case 1: self = .domestic
+            case 2: self = .overseas
+            default: self = .all
+            }
+        }
     }
 }
