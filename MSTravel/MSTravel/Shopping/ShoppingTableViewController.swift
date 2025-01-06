@@ -113,7 +113,7 @@ extension ShoppingTableViewController {
     /// TableView의 Section별 Cell을 반환하는 메서드
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "ShoppingTableViewCell",
+            withIdentifier: ShoppingTableViewCell.identifier,
             for: indexPath
         ) as? ShoppingTableViewCell else { return UITableViewCell() }
         

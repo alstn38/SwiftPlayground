@@ -33,7 +33,7 @@ extension MagazineTableViewController {
     /// TableView의 Row별 Cell 반환하는 메서드
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "MagazineTableViewCell",
+            withIdentifier: MagazineTableViewCell.identifier,
             for: indexPath
         ) as? MagazineTableViewCell else {
             return UITableViewCell()
