@@ -17,6 +17,21 @@ struct City {
     var displayCityName: String {
         return "\(city_name) | \(city_english_name)"
     }
+    
+    /// 도시 이름(한글, 영문), 도시 설명에 키워드가 들어가는지 여부를 반환하는 메서드
+    func hasKeyword(_ keyword: String) -> Bool {
+        if keyword.isEmpty {
+            return true
+        } else if city_name.lowercased().contains(keyword.lowercased()) {
+            return true
+        } else if city_english_name.lowercased().contains(keyword.lowercased()) {
+            return true
+        } else if city_explain.lowercased().contains(keyword.lowercased()) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 struct CityInfo {
