@@ -298,6 +298,9 @@
                                         <segment title="Second"/>
                                         <segment title=""/>
                                     </segments>
+                                    <connections>
+                                        <action selector="countrySegmentValueDidChange:" destination="CPg-BM-BSV" eventType="valueChanged" id="ASb-FE-vcf"/>
+                                    </connections>
                                 </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>

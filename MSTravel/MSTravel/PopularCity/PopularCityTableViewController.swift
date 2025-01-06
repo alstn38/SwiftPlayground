@@ -9,7 +9,12 @@ import UIKit
 
 final class PopularCityTableViewController: UITableViewController {
     
-    private var cityArray: [City] = CityInfo().city
+    private let originalCityArray: [City] = CityInfo().city
+    private var cityArray: [City] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     @IBOutlet var countrySegmentedControl: UISegmentedControl!
     @IBOutlet var searchCountryTextField: UITextField!
@@ -20,6 +25,7 @@ final class PopularCityTableViewController: UITableViewController {
         setupNavigation()
         setupHeaderView()
         setupTableView()
+        countrySegmentValueDidChange(countrySegmentedControl)
     }
     
     /// Navigation 설정하는 메서드
@@ -42,6 +48,17 @@ final class PopularCityTableViewController: UITableViewController {
     private func setupTableView() {
         let uiNib = UINib(nibName: PopularCityTableViewCell.identifier, bundle: nil)
         tableView.register(uiNib, forCellReuseIdentifier: PopularCityTableViewCell.identifier)
+    }
+    
+    /// 도시 변경 SegmentedControl Value가 변경되었을 때 호출되는 메서드
+    @IBAction func countrySegmentValueDidChange(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            cityArray = originalCityArray
+        } else if sender.selectedSegmentIndex == 1 {
+            cityArray = originalCityArray.filter { $0.domestic_travel }
+        } else {
+            cityArray = originalCityArray.filter { !$0.domestic_travel }
+        }
     }
 }
 
