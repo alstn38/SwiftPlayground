@@ -57,10 +57,12 @@ extension PopularCityTableViewController {
             for: indexPath
         ) as? PopularCityTableViewCell else { return UITableViewCell() }
         
+        cell.configureCell(cityArray[indexPath.row])
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 130
     }
 }

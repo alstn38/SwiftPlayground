@@ -5,6 +5,7 @@
 //  Created by 강민수 on 1/6/25.
 //
 
+import Kingfisher
 import UIKit
 
 final class PopularCityTableViewCell: UITableViewCell {
@@ -23,6 +24,22 @@ final class PopularCityTableViewCell: UITableViewCell {
         setupCell()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cityImageView.backgroundColor = .clear
+    }
+    
+    func configureCell(_ city: City) {
+        if let url = URL(string: city.city_image) {
+            cityImageView.kf.setImage(with: url)
+        } else {
+            cityImageView.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 205/255, alpha: 1.0)
+        }
+        
+        cityNameLabel.text = city.displayCityName
+        cityDescriptionLabel.text = city.city_explain
+    }
+    
     private func setupCell() {
         cellBackgroundView.layer.cornerRadius = 15
         cellBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMaxYCorner]
@@ -37,7 +54,7 @@ final class PopularCityTableViewCell: UITableViewCell {
         
         cityImageView.contentMode = .scaleToFill
         
-        cityNameLabel.font = .boldSystemFont(ofSize: 15)
+        cityNameLabel.font = .boldSystemFont(ofSize: 17)
         cityNameLabel.textColor = .white
         cityNameLabel.numberOfLines = 1
         cityNameLabel.textAlignment = .right
