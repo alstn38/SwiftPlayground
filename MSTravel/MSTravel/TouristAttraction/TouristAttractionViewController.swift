@@ -5,22 +5,39 @@
 //  Created by 강민수 on 1/7/25.
 //
 
+import Kingfisher
 import UIKit
 
 final class TouristAttractionViewController: UIViewController {
     
     static let identifier: String = "TouristAttractionViewController"
+    var travelInfo: Travel?
     
-    @IBOutlet var locationImageView: UIImageView!
-    @IBOutlet var locationNameLabel: UILabel!
-    @IBOutlet var locationDescriptionLabel: UILabel!
-    @IBOutlet var anotherLocationButton: UIButton!
+    @IBOutlet private var locationImageView: UIImageView!
+    @IBOutlet private var locationNameLabel: UILabel!
+    @IBOutlet private var locationDescriptionLabel: UILabel!
+    @IBOutlet private var anotherLocationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigation()
         setupView()
+        configureView()
+    }
+    
+    /// View의 Data를 전달하는 메서드
+    func configureView() {
+        guard let travelInfo else { return }
+        if let cityImageLink = travelInfo.travel_image,
+           let url = URL(string: cityImageLink) {
+            locationImageView.kf.setImage(with: url)
+        } else {
+            locationImageView.image = UIImage(systemName: "photo.artframe")
+        }
+        
+        locationNameLabel.text = travelInfo.title
+        locationDescriptionLabel.text = travelInfo.description
     }
     
     /// 네비게이션을 설정하는 메서드
@@ -32,6 +49,7 @@ final class TouristAttractionViewController: UIViewController {
     private func setupView() {
         locationImageView.layer.cornerRadius = 10
         locationImageView.contentMode = .scaleToFill
+        locationImageView.tintColor = .black
         
         locationNameLabel.font = .boldSystemFont(ofSize: 36)
         locationNameLabel.textColor = .black

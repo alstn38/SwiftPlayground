@@ -54,7 +54,7 @@ final class CityDetailTableViewController: UITableViewController {
     }
     
     /// 관광지 세부 화면으로 push하는 메서드
-    private func pushToTouristAttractionViewController() {
+    private func pushToTouristAttractionViewController(with travel: Travel) {
         // 1. 스토리보드를 특정하기, name: - 스토리보드 파일 이름
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -62,6 +62,7 @@ final class CityDetailTableViewController: UITableViewController {
         guard let viewController = storyboard.instantiateViewController(
             withIdentifier: TouristAttractionViewController.identifier
         ) as? TouristAttractionViewController else { return }
+        viewController.travelInfo = travel
         
         // 3. 화면을 전환할 방법 선택하기 - 아래에서 위로 / modal / present
         navigationController?.pushViewController(viewController, animated: true)
@@ -95,7 +96,7 @@ extension CityDetailTableViewController {
         case true:
             print("광고")
         case false:
-            pushToTouristAttractionViewController()
+            pushToTouristAttractionViewController(with: travelArray[indexPath.row])
         }
     }
 }
