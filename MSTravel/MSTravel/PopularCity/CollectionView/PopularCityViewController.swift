@@ -9,10 +9,27 @@ import UIKit
 
 final class PopularCityViewController: UIViewController {
     
+    @IBOutlet private var citySearchBar: UISearchBar!
     @IBOutlet private var countrySegmentedControl: UISegmentedControl!
     @IBOutlet private var cityCollectionView: UICollectionView!
-    private var allCountryCategory: CountryCategory = .all
-    private let originalCityArray: [City] = CityInfo().city
+    
+    private var filteredCityArray: [City] = [] {
+        didSet {
+            cityCollectionView.reloadData()
+        }
+    }
+    
+    private var searchedText: String = "" {
+        didSet {
+            filteredCityArray = selectedCountryCategory.originalCityArray.filter { $0.hasKeyword(searchedText) }
+        }
+    }
+    
+    private var selectedCountryCategory: CountryCategory = .all {
+        didSet {
+            filteredCityArray = selectedCountryCategory.originalCityArray.filter { $0.hasKeyword(searchedText) }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +37,7 @@ final class PopularCityViewController: UIViewController {
         setupNavigation()
         setupView()
         setupCollectionView()
+        countrySegmentValueDidChange(countrySegmentedControl)
     }
     
     /// 네비게이션을 설정하는 메서드
@@ -58,7 +76,7 @@ final class PopularCityViewController: UIViewController {
         let itemLength = (screenWidth - (horizontalSpace * 2) - minimumInteritemSpacing) / CGFloat(rowItemCount)
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: itemLength, height: itemLength)
+        layout.itemSize = CGSize(width: itemLength, height: itemLength / 4 * 6)
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 20
         layout.minimumInteritemSpacing = minimumInteritemSpacing
@@ -66,13 +84,18 @@ final class PopularCityViewController: UIViewController {
         
         cityCollectionView.collectionViewLayout = layout
     }
+    
+    /// 국가 선택 Segment 값이 변경되었을 때 호출되는 메서드
+    @IBAction private func countrySegmentValueDidChange(_ sender: UISegmentedControl) {
+        selectedCountryCategory = CountryCategory(rawValue: sender.selectedSegmentIndex)
+    }
 }
 
 extension PopularCityViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     /// collectionView의 Section별 Item의 개수를 반환하는 메서드
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return originalCityArray.count
+        return filteredCityArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -80,6 +103,7 @@ extension PopularCityViewController: UICollectionViewDelegate, UICollectionViewD
             withReuseIdentifier: PopularCityCollectionViewCell.identifier,
             for: indexPath
         ) as? PopularCityCollectionViewCell else { return UICollectionViewCell() }
+        item.configureCell(filteredCityArray[indexPath.row])
         
         return item
     }
@@ -109,6 +133,17 @@ extension PopularCityViewController {
                 return "국내"
             case .overseas:
                 return "해외"
+            }
+        }
+        
+        var originalCityArray: [City] {
+            switch self {
+            case .all:
+                return CityInfo().city
+            case .domestic:
+                return CityInfo().city.filter { $0.domestic_travel }
+            case .overseas:
+                return CityInfo().city.filter { !$0.domestic_travel }
             }
         }
     }
