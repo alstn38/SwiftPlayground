@@ -105,7 +105,7 @@ extension PopularCityViewController: UICollectionViewDelegate, UICollectionViewD
             withReuseIdentifier: PopularCityCollectionViewCell.identifier,
             for: indexPath
         ) as? PopularCityCollectionViewCell else { return UICollectionViewCell() }
-        item.configureCell(filteredCityArray[indexPath.row])
+        item.configureCell(filteredCityArray[indexPath.row], searchText: searchedText)
         
         return item
     }

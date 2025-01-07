@@ -33,14 +33,27 @@ final class PopularCityCollectionViewCell: UICollectionViewCell {
         cityImageView.layer.cornerRadius = cityImageView.frame.height / 2
     }
     
-    func configureCell(_ cityInfo: City) {
+    func configureCell(_ cityInfo: City, searchText: String) {
         if let url = URL(string: cityInfo.city_image) {
             cityImageView.kf.setImage(with: url)
         } else {
             cityImageView.backgroundColor = .gray
         }
+        
         cityNameLabel.text = cityInfo.displayCityName
         cityDescriptionLabel.text = cityInfo.city_explain
+        highlightSearchedLabelText(cityNameLabel, searchedText: searchText)
+        highlightSearchedLabelText(cityDescriptionLabel, searchedText: searchText)
+    }
+    
+    /// Label의 검색된 Text를 highlight하는 메서드
+    private func highlightSearchedLabelText(_ label: UILabel, searchedText: String) {
+        guard let labelText = label.text else { return }
+        guard let searchedRange = labelText.range(of: searchedText, options: .caseInsensitive) else { return }
+        let nsRange = NSRange(searchedRange, in: labelText)
+        let attributedString = NSMutableAttributedString(string: labelText)
+        attributedString.addAttribute(.foregroundColor, value: UIColor.systemBlue, range: nsRange)
+        label.attributedText = attributedString
     }
     
     private func setupCell() {
