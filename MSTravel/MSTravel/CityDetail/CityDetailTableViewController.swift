@@ -67,6 +67,30 @@ final class CityDetailTableViewController: UITableViewController {
         // 3. 화면을 전환할 방법 선택하기 - 아래에서 위로 / modal / present
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    /// 광고 세부 화면으로 present하는 메서드
+    private func presentToAdvertisementViewController(with title: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let viewController = storyboard.instantiateViewController(
+            withIdentifier: AdvertisementViewController.identifier
+        ) as? AdvertisementViewController else { return }
+        viewController.advertisementText = title
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        // UINavigationAppearance 시도해보기.
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationController.navigationBar.tintColor = .black
+        
+        let appearance = UINavigationBar.appearance()
+        appearance.scrollEdgeAppearance = navigationAppearance
+        
+        
+        present(navigationController, animated: true)
+    }
 }
 
 extension CityDetailTableViewController {
@@ -90,13 +114,14 @@ extension CityDetailTableViewController {
     /// TableView의 Cell이 선택되었을 때 동작하는 메서드
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.reloadRows(at: [indexPath], with: .fade)
-        let isAdvertisement = travelArray[indexPath.row].ad
+        let row = travelArray[indexPath.row]
+        let isAdvertisement = row.ad
         
         switch isAdvertisement {
         case true:
-            print("광고")
+            presentToAdvertisementViewController(with: row.title)
         case false:
-            pushToTouristAttractionViewController(with: travelArray[indexPath.row])
+            pushToTouristAttractionViewController(with: row)
         }
     }
 }
