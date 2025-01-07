@@ -695,9 +695,12 @@
                                     <segment title="Second"/>
                                     <segment title=""/>
                                 </segments>
+                                <connections>
+                                    <action selector="countrySegmentValueDidChange:" destination="hWb-xk-TGc" eventType="valueChanged" id="lcw-R9-F3x"/>
+                                </connections>
                             </segmentedControl>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="10m-PW-Mbd">
-                                <rect key="frame" x="0.0" y="186" width="402" height="688"/>
+                                <rect key="frame" x="0.0" y="194" width="402" height="597"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ag0-PB-qAK">
                                     <size key="itemSize" width="128" height="128"/>
@@ -734,17 +737,18 @@
                             <constraint firstItem="10m-PW-Mbd" firstAttribute="trailing" secondItem="Zvm-u2-8O4" secondAttribute="trailing" id="9cG-7y-MOu"/>
                             <constraint firstItem="mV5-Ac-yAI" firstAttribute="leading" secondItem="Zvm-u2-8O4" secondAttribute="leading" constant="10" id="Be6-BO-HXB"/>
                             <constraint firstItem="mV5-Ac-yAI" firstAttribute="trailing" secondItem="Zvm-u2-8O4" secondAttribute="trailing" constant="-10" id="ICa-zg-6DB"/>
-                            <constraint firstAttribute="bottom" secondItem="10m-PW-Mbd" secondAttribute="bottom" id="PS3-tN-Zpg"/>
                             <constraint firstItem="10m-PW-Mbd" firstAttribute="leading" secondItem="Zvm-u2-8O4" secondAttribute="leading" id="RHW-xM-BDX"/>
                             <constraint firstItem="ksf-e4-dkD" firstAttribute="leading" secondItem="Zvm-u2-8O4" secondAttribute="leading" constant="20" id="jSS-LS-hWC"/>
+                            <constraint firstItem="Zvm-u2-8O4" firstAttribute="bottom" secondItem="10m-PW-Mbd" secondAttribute="bottom" id="kdR-4j-h2S"/>
                             <constraint firstItem="ksf-e4-dkD" firstAttribute="top" secondItem="mV5-Ac-yAI" secondAttribute="bottom" constant="4" id="qwi-hB-2Yz"/>
                             <constraint firstItem="Zvm-u2-8O4" firstAttribute="trailing" secondItem="ksf-e4-dkD" secondAttribute="trailing" constant="20" id="rBq-OV-IXp"/>
-                            <constraint firstItem="10m-PW-Mbd" firstAttribute="top" secondItem="ksf-e4-dkD" secondAttribute="bottom" id="sn7-yJ-Ecf"/>
+                            <constraint firstItem="10m-PW-Mbd" firstAttribute="top" secondItem="ksf-e4-dkD" secondAttribute="bottom" constant="8" id="sn7-yJ-Ecf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="5ej-by-gsk"/>
                     <connections>
                         <outlet property="cityCollectionView" destination="10m-PW-Mbd" id="A4D-oK-CrE"/>
+                        <outlet property="citySearchBar" destination="mV5-Ac-yAI" id="0oQ-qD-awa"/>
                         <outlet property="countrySegmentedControl" destination="ksf-e4-dkD" id="zas-U9-CVi"/>
                     </connections>
                 </viewController>
