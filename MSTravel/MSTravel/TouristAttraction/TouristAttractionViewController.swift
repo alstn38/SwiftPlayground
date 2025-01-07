@@ -27,7 +27,7 @@ final class TouristAttractionViewController: UIViewController {
     }
     
     /// View의 Data를 전달하는 메서드
-    func configureView() {
+    private func configureView() {
         guard let travelInfo else { return }
         if let cityImageLink = travelInfo.travel_image,
            let url = URL(string: cityImageLink) {
@@ -66,5 +66,10 @@ final class TouristAttractionViewController: UIViewController {
         anotherLocationButton.setTitle("다른 관광지 보러 가기", for: .normal)
         anotherLocationButton.titleLabel?.font = .boldSystemFont(ofSize: 18)
         anotherLocationButton.setTitleColor(.white, for: .normal)
+    }
+    
+    /// 다른 광광지 보러가긱 버튼을 클릭했을 때 동작하는 메서드
+    @IBAction private func anotherLocationButtonDidTap(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
 }
