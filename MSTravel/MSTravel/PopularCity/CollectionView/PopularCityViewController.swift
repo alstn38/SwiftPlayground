@@ -48,6 +48,8 @@ final class PopularCityViewController: UIViewController {
     
     /// 뷰의 속성을 설정하는 메서드
     private func setupView() {
+        citySearchBar.delegate = self
+        
         countrySegmentedControl.setTitle(
             CountryCategory.all.title,
             forSegmentAt: CountryCategory.all.rawValue
@@ -106,6 +108,26 @@ extension PopularCityViewController: UICollectionViewDelegate, UICollectionViewD
         item.configureCell(filteredCityArray[indexPath.row])
         
         return item
+    }
+}
+
+extension PopularCityViewController: UISearchBarDelegate {
+    
+    /// 검색어가 변경되었을 때 호출되는 메서드
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let spacing: String = " "
+        var filteredSearchText: String = searchText.trimmingCharacters(in: .whitespaces)
+        
+        while filteredSearchText.contains(spacing + spacing) {
+            filteredSearchText = filteredSearchText.replacingOccurrences(of: spacing + spacing, with: spacing)
+        }
+        
+        self.searchedText = filteredSearchText
+    }
+    
+    /// SearchBar 검색 버튼을 클릭했을 때 호출되는 메서드
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
     }
 }
 
