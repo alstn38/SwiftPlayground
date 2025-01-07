@@ -52,6 +52,20 @@ final class CityDetailTableViewController: UITableViewController {
         
         return cell
     }
+    
+    /// 관광지 세부 화면으로 push하는 메서드
+    private func pushToTouristAttractionViewController() {
+        // 1. 스토리보드를 특정하기, name: - 스토리보드 파일 이름
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        // 2. 전환할 뷰 컨트롤러를 가져오기.
+        guard let viewController = storyboard.instantiateViewController(
+            withIdentifier: TouristAttractionViewController.identifier
+        ) as? TouristAttractionViewController else { return }
+        
+        // 3. 화면을 전환할 방법 선택하기 - 아래에서 위로 / modal / present
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension CityDetailTableViewController {
@@ -70,5 +84,18 @@ extension CityDetailTableViewController {
         : tableViewDequeReusableCell(tableView, cellType: CityDetailTableViewCell.self, cellForRowAt: indexPath)
 
         return cell
+    }
+    
+    /// TableView의 Cell이 선택되었을 때 동작하는 메서드
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.reloadRows(at: [indexPath], with: .fade)
+        let isAdvertisement = travelArray[indexPath.row].ad
+        
+        switch isAdvertisement {
+        case true:
+            print("광고")
+        case false:
+            pushToTouristAttractionViewController()
+        }
     }
 }
