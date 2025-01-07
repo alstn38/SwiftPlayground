@@ -27,6 +27,12 @@ final class PopularCityCollectionViewCell: UICollectionViewCell {
         cityImageView.backgroundColor = .clear
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        cityImageView.layer.cornerRadius = cityImageView.frame.height / 2
+    }
+    
     func configureCell(_ cityInfo: City) {
         if let url = URL(string: cityInfo.city_image) {
             cityImageView.kf.setImage(with: url)
@@ -39,7 +45,6 @@ final class PopularCityCollectionViewCell: UICollectionViewCell {
     
     private func setupCell() {
         cityImageView.contentMode = .scaleToFill
-        cityImageView.layer.cornerRadius = cityImageView.frame.height / 2
         
         cityNameLabel.font = .systemFont(ofSize: 13, weight: .bold)
         cityNameLabel.textColor = .black
