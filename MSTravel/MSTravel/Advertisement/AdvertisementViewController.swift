@@ -52,6 +52,6 @@ final class AdvertisementViewController: UIViewController {
     
     /// 왼쪽 네비게이션 상단 바 버튼을 클릭했을 때 동작하는 메서드
     @objc private func leftBarButtonDidTap(_ sender: UIBarButtonItem) {
-        print(#function)
+        dismiss(animated: true)
     }
 }
