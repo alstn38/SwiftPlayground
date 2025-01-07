@@ -5,6 +5,7 @@
 //  Created by 강민수 on 1/7/25.
 //
 
+import Kingfisher
 import UIKit
 
 final class PopularCityCollectionViewCell: UICollectionViewCell {
@@ -19,6 +20,21 @@ final class PopularCityCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         
         setupCell()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cityImageView.backgroundColor = .clear
+    }
+    
+    func configureCell(_ cityInfo: City) {
+        if let url = URL(string: cityInfo.city_image) {
+            cityImageView.kf.setImage(with: url)
+        } else {
+            cityImageView.backgroundColor = .gray
+        }
+        cityNameLabel.text = cityInfo.displayCityName
+        cityDescriptionLabel.text = cityInfo.city_explain
     }
     
     private func setupCell() {
