@@ -14,6 +14,8 @@ final class GameViewController: UIViewController {
     @IBOutlet private var maxNumTextField: UITextField!
     @IBOutlet private var gameResultCollectionView: UICollectionView!
     @IBOutlet private var totalClapCountLabel: UILabel!
+    private var maxNumPickerView = UIPickerView()
+    private let maxNumber: Int = 10000
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,10 +37,14 @@ final class GameViewController: UIViewController {
         maxNumTextField.tintColor = .clear
         maxNumTextField.textAlignment = .center
         maxNumTextField.font = .systemFont(ofSize: 24, weight: .regular)
+        maxNumTextField.inputView = maxNumPickerView
         
         totalClapCountLabel.font = .boldSystemFont(ofSize: 32)
         totalClapCountLabel.numberOfLines = 0
         totalClapCountLabel.textAlignment = .center
+        
+        maxNumPickerView.delegate = self
+        maxNumPickerView.dataSource = self
     }
     
     /// 게임 ColelctionView의 속성을 정의하는 메서드
@@ -66,6 +72,10 @@ final class GameViewController: UIViewController {
         
         gameResultCollectionView.collectionViewLayout = layout
     }
+    
+    @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
 }
 
 extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -83,5 +93,24 @@ extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSour
         item.configureCell(sample[indexPath.row])
         
         return item
+    }
+}
+
+extension GameViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return maxNumber
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row + 1)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        maxNumTextField.text = String(row + 1)
     }
 }
