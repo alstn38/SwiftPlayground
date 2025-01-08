@@ -26,7 +26,7 @@ final class GameManager: ThreeSixNineGameProtocol {
     
     /// 선택된 숫자 까지의 전체 박수(👏)의 개수를 반환하는 메서드
     func getTotalClapCount(selectedNumber: Int) -> Int {
-        guard selectedNumber < maxNumber && selectedNumber >= 0 else { return 0 }
+        guard selectedNumber <= maxNumber && selectedNumber >= 0 else { return 0 }
         
         return totalClapCountDictionary[selectedNumber] ?? 0
     }
