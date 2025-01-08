@@ -8,8 +8,6 @@
 import UIKit
 
 final class GameCollectionViewCell: UICollectionViewCell {
-    
-    static let identifier: String = "GameCollectionViewCell"
 
     @IBOutlet private var numberLabel: UILabel!
     
