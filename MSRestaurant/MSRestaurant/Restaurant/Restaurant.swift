@@ -17,6 +17,39 @@ struct Restaurant {
     let category: String
     let price: Int
     let type: Int
+    
+    var foodCategory: FoodCategoryType {
+        return FoodCategoryType(category)
+    }
+}
+
+enum FoodCategoryType: String, CaseIterable {
+    case western = "양식"
+    case snack = "분식"
+    case korean = "한식"
+    case salad = "샐러드"
+    case japanese = "일식"
+    case chinese = "중식"
+    case all = "전체"
+    
+    init(_ category: String) {
+        switch category {
+        case FoodCategoryType.western.rawValue:
+            self = .western
+        case FoodCategoryType.snack.rawValue:
+            self = .snack
+        case FoodCategoryType.korean.rawValue:
+            self = .korean
+        case FoodCategoryType.salad.rawValue:
+            self = .salad
+        case FoodCategoryType.japanese.rawValue:
+            self = .japanese
+        case FoodCategoryType.chinese.rawValue:
+            self = .chinese
+        default:
+            self = .all
+        }
+    }
 }
 
 struct RestaurantList {
