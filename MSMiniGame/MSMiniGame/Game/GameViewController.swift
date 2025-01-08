@@ -8,14 +8,19 @@
 import UIKit
 
 final class GameViewController: UIViewController {
-
-    let sample: [String] = ["1", "2", "341", "12314", "123144", "1", "2", "341", "12314", "123144", "1", "2", "341", "12314", "123144"]
+    
     @IBOutlet private var gameTitleLabel: UILabel!
     @IBOutlet private var maxNumTextField: UITextField!
     @IBOutlet private var gameResultCollectionView: UICollectionView!
     @IBOutlet private var totalClapCountLabel: UILabel!
     private var maxNumPickerView = UIPickerView()
+    private let gameManager: ThreeSixNineGameProtocol = GameManager(maxNumber: 10000)
     private let maxNumber: Int = 10000
+    private var gameResultNumberArray: [String] = [] {
+        didSet {
+            gameResultCollectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +78,11 @@ final class GameViewController: UIViewController {
         gameResultCollectionView.collectionViewLayout = layout
     }
     
+    /// 게임 결과 Label의 Text를 변경하는 메서드
+    private func changeTotalClapLabel(selectedNum: Int, totalClapCount: Int) {
+        totalClapCountLabel.text = "숫자 \(selectedNum)까지 총 박수는 \(totalClapCount)번 입니다."
+    }
+    
     @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
@@ -81,7 +91,7 @@ final class GameViewController: UIViewController {
 extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sample.count
+        return gameResultNumberArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -90,7 +100,7 @@ extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSour
             for: indexPath
         ) as? GameCollectionViewCell else { return UICollectionViewCell() }
         
-        item.configureCell(sample[indexPath.row])
+        item.configureCell(gameResultNumberArray[indexPath.row])
         
         return item
     }
@@ -111,6 +121,11 @@ extension GameViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        maxNumTextField.text = String(row + 1)
+        let selectedNumber = row + 1
+        maxNumTextField.text = String(selectedNumber)
+        
+        let totalClapCount = gameManager.getTotalClapCount(selectedNumber: selectedNumber)
+        changeTotalClapLabel(selectedNum: selectedNumber, totalClapCount: totalClapCount)
+        gameResultNumberArray = gameManager.getGameResultArray(selectedNumber: selectedNumber)
     }
 }
