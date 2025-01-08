@@ -54,6 +54,7 @@ final class RestaurantViewController: UIViewController {
         return annotation
     }
     
+    /// 음식 카테고리 필터 선택하는 actionSheet를 생성하는 메서드
     private func presentActionSheet() {
         let alert = UIAlertController(
             title: nil,
@@ -78,9 +79,16 @@ final class RestaurantViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    /// 필터 선택시 동작하는 메서드
+    /// 음식 카테고리에 따른 지도 핀을 필터하는 메서드
     private func filterRestaurant(_ category: FoodCategoryType) {
-        print(#function, category.rawValue)
+        mapView.removeAnnotations(mapView.annotations)
+        
+        if category == .all {
+            restaurantArray.forEach { mapView.addAnnotation(makeAnnotation($0)) }
+        } else {
+            let filteredRestaurant: [Restaurant] = restaurantArray.filter { $0.foodCategory == category }
+            filteredRestaurant.forEach { mapView.addAnnotation(makeAnnotation($0)) }
+        }
     }
     
     /// 필터 선택 버튼을 눌렀을 때 동작하는 메서드
