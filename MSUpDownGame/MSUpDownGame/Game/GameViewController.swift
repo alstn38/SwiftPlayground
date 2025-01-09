@@ -91,6 +91,7 @@ final class GameViewController: UIViewController {
         } else {
             gameStateTitle.text = gameStatus.upDownStatus.title
             tryCountLabel.text = gameStatus.tryCountDescription
+            confirmResultButtonIsEnabled(false)
             numberCollectionView.reloadData()
         }
     }

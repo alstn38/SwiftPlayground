@@ -26,6 +26,8 @@ final class NumberCollectionViewCell: UICollectionViewCell {
     
     func configureCell(text: String) {
         numberLabel.text = text
+        numberLabel.textColor = .black
+        numberBackgroundView.backgroundColor = .white
     }
     
     func numberCellIsSelected(_ isSelect: Bool) {
