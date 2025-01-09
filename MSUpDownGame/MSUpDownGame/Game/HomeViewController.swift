@@ -53,4 +53,8 @@ final class HomeViewController: UIViewController {
         gameStartButton.layer.cornerRadius = 10
         gameStartButton.clipsToBounds = true
     }
+    
+    @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
 }
