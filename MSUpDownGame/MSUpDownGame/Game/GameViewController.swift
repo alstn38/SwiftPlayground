@@ -13,6 +13,7 @@ final class GameViewController: UIViewController {
     @IBOutlet private var tryCountLabel: UILabel!
     @IBOutlet private var numberCollectionView: UICollectionView!
     @IBOutlet private var confirmResultButton: UIButton!
+    private var selectedNumber: Int?
     var gameManager: GameManagerProtocol?
     
     override func viewDidLoad() {
@@ -75,6 +76,21 @@ final class GameViewController: UIViewController {
         confirmResultButton.backgroundColor = backgroundColor
         confirmResultButton.isEnabled = possible
     }
+    
+    /// 결과 확인하기 버튼을 클릭했을 때 동작하는 메서드
+    @IBAction private func confirmButtonDidTap(_ sender: UIButton) {
+        guard let gameManager,
+              let selectedNumber else { return }
+        
+        if gameManager.isCollectNumber(selectedNumber) {
+            presentAlert(alertTitle: "승리", actionTitle: "확인") { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+        } else {
+            tryCountLabel.text = "시도 횟수:\(gameManager.tryCount)"
+            numberCollectionView.reloadData()
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -100,11 +116,13 @@ extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? NumberCollectionViewCell else {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? NumberCollectionViewCell,
+              let remainingNumberArray = gameManager?.remainingNumberArray else {
             return
         }
         cell.numberCellIsSelected(true)
         confirmResultButtonIsEnabled(true)
+        selectedNumber = remainingNumberArray[indexPath.item]
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
