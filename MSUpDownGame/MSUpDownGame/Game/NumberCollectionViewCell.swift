@@ -28,6 +28,14 @@ final class NumberCollectionViewCell: UICollectionViewCell {
         numberLabel.text = text
     }
     
+    func numberCellIsSelected(_ isSelect: Bool) {
+        let backgroundColor = isSelect ? UIColor.black : UIColor.white
+        let textColor = isSelect ? UIColor.white : UIColor.black
+        
+        numberBackgroundView.backgroundColor = backgroundColor
+        numberLabel.textColor = textColor
+    }
+    
     private func setupCell() {
         numberLabel.textColor = .black
         numberLabel.font = .systemFont(ofSize: 12, weight: .medium)

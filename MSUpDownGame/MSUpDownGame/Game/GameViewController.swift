@@ -69,6 +69,12 @@ final class GameViewController: UIViewController {
         numberCollectionView.collectionViewLayout = layout
         numberCollectionView.backgroundColor = .clear
     }
+    
+    private func confirmResultButtonIsEnabled(_ possible: Bool) {
+        let backgroundColor = possible ? UIColor.black : UIColor.gray
+        confirmResultButton.backgroundColor = backgroundColor
+        confirmResultButton.isEnabled = possible
+    }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -91,5 +97,20 @@ extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.configureCell(text: String(remainingNumberArray[indexPath.item]))
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? NumberCollectionViewCell else {
+            return
+        }
+        cell.numberCellIsSelected(true)
+        confirmResultButtonIsEnabled(true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? NumberCollectionViewCell else {
+            return
+        }
+        cell.numberCellIsSelected(false)
     }
 }
