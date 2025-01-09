@@ -87,7 +87,16 @@ final class HomeViewController: UIViewController {
     
     /// 게임 시작하기 버튼을 클릭했을 때 호출되는 메서드
     @IBAction func gameStartButtonDidTap(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let identifier = String(describing: GameViewController.self)
         
+        guard let viewController = storyboard.instantiateViewController(withIdentifier: identifier) as? GameViewController else { return
+        }
+        
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        
+        present(viewController, animated: true)
     }
     
     @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
