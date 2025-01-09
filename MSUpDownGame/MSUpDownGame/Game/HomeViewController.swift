@@ -61,13 +61,33 @@ final class HomeViewController: UIViewController {
         gameStartButton.isEnabled = possible
     }
     
+    /// 입력된 숫자가 변경되었을 때 호출되는 메서드
     @IBAction func numberTextFieldDidChange(_ sender: UITextField) {
         guard let inputNumber = Int(sender.text ?? "") else {
             gameStartButtonIsEnabled(false)
             return
         }
         
+        guard inputNumber >= 0 else {
+            sender.text = nil
+            gameStartButtonIsEnabled(false)
+            presentAlert(alertTitle: "숫자는 0보다 커야합니다.", actionTitle: "확인")
+            return
+        }
+        
+        guard inputNumber <= 300 else {
+            sender.text = nil
+            gameStartButtonIsEnabled(false)
+            presentAlert(alertTitle: "숫자는 300이하로 입력해주세요.", actionTitle: "확인")
+            return
+        }
+        
         gameStartButtonIsEnabled(true)
+    }
+    
+    /// 게임 시작하기 버튼을 클릭했을 때 호출되는 메서드
+    @IBAction func gameStartButtonDidTap(_ sender: UIButton) {
+        
     }
     
     @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
