@@ -68,7 +68,7 @@ final class HomeViewController: UIViewController {
             return
         }
         
-        guard inputNumber >= 0 else {
+        guard inputNumber > 0 else {
             sender.text = nil
             gameStartButtonIsEnabled(false)
             presentAlert(alertTitle: "숫자는 0보다 커야합니다.", actionTitle: "확인")
