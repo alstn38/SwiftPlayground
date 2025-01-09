@@ -42,6 +42,7 @@ final class HomeViewController: UIViewController {
         numberTextField.placeholder = "최대 숫자를 입력해주세요."
         numberTextField.font = .systemFont(ofSize: 30, weight: .bold)
         numberTextField.keyboardType = .numberPad
+        numberTextField.textAlignment = .center
         
         textFieldLineView.backgroundColor = .white
         
@@ -52,6 +53,21 @@ final class HomeViewController: UIViewController {
         gameStartButton.backgroundColor = .gray
         gameStartButton.layer.cornerRadius = 10
         gameStartButton.clipsToBounds = true
+    }
+    
+    private func gameStartButtonIsEnabled(_ possible: Bool) {
+        let backgroundColor = possible ? UIColor.black : UIColor.gray
+        gameStartButton.backgroundColor = backgroundColor
+        gameStartButton.isEnabled = possible
+    }
+    
+    @IBAction func numberTextFieldDidChange(_ sender: UITextField) {
+        guard let inputNumber = Int(sender.text ?? "") else {
+            gameStartButtonIsEnabled(false)
+            return
+        }
+        
+        gameStartButtonIsEnabled(true)
     }
     
     @IBAction private func viewDidTap(_ sender: UITapGestureRecognizer) {
