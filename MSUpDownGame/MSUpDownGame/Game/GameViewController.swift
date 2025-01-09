@@ -13,7 +13,7 @@ final class GameViewController: UIViewController {
     @IBOutlet private var tryCountLabel: UILabel!
     @IBOutlet private var numberCollectionView: UICollectionView!
     @IBOutlet private var confirmResultButton: UIButton!
-    var sample: [Int] = Array(1...100)
+    var gameManager: GameManagerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +75,7 @@ final class GameViewController: UIViewController {
 extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sample.count
+        return gameManager?.remainingNumberArray.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -83,6 +83,12 @@ extension GameViewController: UICollectionViewDelegate, UICollectionViewDataSour
             withReuseIdentifier: NumberCollectionViewCell.identifier,
             for: indexPath
         ) as? NumberCollectionViewCell else { return UICollectionViewCell() }
+        
+        guard let remainingNumberArray = gameManager?.remainingNumberArray else {
+            return UICollectionViewCell()
+        }
+        
+        cell.configureCell(text: String(remainingNumberArray[indexPath.item]))
         
         return cell
     }

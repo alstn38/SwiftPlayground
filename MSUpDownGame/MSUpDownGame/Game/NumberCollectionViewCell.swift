@@ -14,11 +14,23 @@ final class NumberCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        setupCell()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         numberBackgroundView.layer.cornerRadius = numberBackgroundView.frame.height / 2
+    }
+    
+    func configureCell(text: String) {
+        numberLabel.text = text
+    }
+    
+    private func setupCell() {
+        numberLabel.textColor = .black
+        numberLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        numberLabel.textAlignment = .center
     }
 }
