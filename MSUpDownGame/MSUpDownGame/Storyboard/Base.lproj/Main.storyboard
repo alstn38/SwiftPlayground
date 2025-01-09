@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -59,6 +60,9 @@
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="gameStartButtonDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2Z7-zC-cOD"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -106,6 +110,89 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1055.625" y="-34.859154929577464"/>
+        </scene>
+        <!--Game View Controller-->
+        <scene sceneID="T8B-KT-Rf8">
+            <objects>
+                <viewController storyboardIdentifier="GameViewController" id="r58-UD-UGX" customClass="GameViewController" customModule="MSUpDownGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xhT-oO-Y7G">
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pO-9K-Ptt">
+                                <rect key="frame" x="20" y="82" width="362" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLC-XI-B7q">
+                                <rect key="frame" x="20" y="138" width="362" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eKu-Lp-K09">
+                                <rect key="frame" x="0.0" y="197" width="402" height="402"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="eKu-Lp-K09" secondAttribute="height" multiplier="1:1" id="uSw-63-ilC"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FIz-bK-k2R">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="V3d-3d-Bz6">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="AUi-Gc-onC">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ONQ-Fe-9Er">
+                                <rect key="frame" x="30" y="785" width="342" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="jjK-se-rxW"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="gameStartButtonDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1bP-xG-bPc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sYU-uu-Kgo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="eKu-Lp-K09" firstAttribute="leading" secondItem="sYU-uu-Kgo" secondAttribute="leading" id="1Hl-IG-kuC"/>
+                            <constraint firstItem="sYU-uu-Kgo" firstAttribute="bottom" secondItem="ONQ-Fe-9Er" secondAttribute="bottom" constant="5" id="3lj-rb-dZh"/>
+                            <constraint firstItem="sYU-uu-Kgo" firstAttribute="trailing" secondItem="ONQ-Fe-9Er" secondAttribute="trailing" constant="30" id="7Qz-Dy-8wT"/>
+                            <constraint firstItem="ONQ-Fe-9Er" firstAttribute="leading" secondItem="sYU-uu-Kgo" secondAttribute="leading" constant="30" id="B8Q-wl-rag"/>
+                            <constraint firstItem="sYU-uu-Kgo" firstAttribute="trailing" secondItem="eKu-Lp-K09" secondAttribute="trailing" id="Dma-jd-koU"/>
+                            <constraint firstItem="5pO-9K-Ptt" firstAttribute="top" secondItem="sYU-uu-Kgo" secondAttribute="top" constant="20" id="QRv-vo-xQn"/>
+                            <constraint firstItem="sYU-uu-Kgo" firstAttribute="trailing" secondItem="QLC-XI-B7q" secondAttribute="trailing" constant="20" id="TQo-YV-J1X"/>
+                            <constraint firstItem="sYU-uu-Kgo" firstAttribute="trailing" secondItem="5pO-9K-Ptt" secondAttribute="trailing" constant="20" id="VlO-td-OJS"/>
+                            <constraint firstItem="QLC-XI-B7q" firstAttribute="leading" secondItem="sYU-uu-Kgo" secondAttribute="leading" constant="20" id="asV-0B-sjJ"/>
+                            <constraint firstItem="5pO-9K-Ptt" firstAttribute="leading" secondItem="sYU-uu-Kgo" secondAttribute="leading" constant="20" id="hMf-D6-qVA"/>
+                            <constraint firstItem="QLC-XI-B7q" firstAttribute="top" secondItem="5pO-9K-Ptt" secondAttribute="bottom" constant="8" id="spK-tG-F6B"/>
+                            <constraint firstItem="eKu-Lp-K09" firstAttribute="top" secondItem="QLC-XI-B7q" secondAttribute="bottom" constant="30" id="vlM-Sc-R27"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="confirmResultButton" destination="ONQ-Fe-9Er" id="oPc-cr-CR1"/>
+                        <outlet property="gameStateTitle" destination="5pO-9K-Ptt" id="GiB-Cr-803"/>
+                        <outlet property="numberCollectionView" destination="eKu-Lp-K09" id="XUQ-O0-JUo"/>
+                        <outlet property="tryCountLabel" destination="QLC-XI-B7q" id="Dm4-Ka-Vfp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1fU-E3-ij0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1961" y="-35"/>
         </scene>
     </scenes>
     <resources>
