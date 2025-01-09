@@ -82,12 +82,15 @@ final class GameViewController: UIViewController {
         guard let gameManager,
               let selectedNumber else { return }
         
-        if gameManager.isCollectNumber(selectedNumber) {
+        let gameStatus = gameManager.isCollectNumber(selectedNumber)
+        
+        if gameStatus.upDownStatus == .correct {
             presentAlert(alertTitle: "승리", actionTitle: "확인") { [weak self] _ in
                 self?.dismiss(animated: true)
             }
         } else {
-            tryCountLabel.text = "시도 횟수:\(gameManager.tryCount)"
+            gameStateTitle.text = gameStatus.upDownStatus.title
+            tryCountLabel.text = gameStatus.tryCountDescription
             numberCollectionView.reloadData()
         }
     }
