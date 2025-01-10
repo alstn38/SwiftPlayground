@@ -92,6 +92,11 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        view.endEditing(true)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let viewController = storyboard.instantiateViewController(
+            withIdentifier: ChatRoomViewController.identifier
+        ) as? ChatRoomViewController else { return }
+        
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
