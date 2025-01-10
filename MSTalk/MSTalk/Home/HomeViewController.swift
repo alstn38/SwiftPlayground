@@ -11,6 +11,7 @@ final class HomeViewController: UIViewController {
     
     @IBOutlet private var friendSearchBar: UISearchBar!
     @IBOutlet private var talkCollectionView: UICollectionView!
+    private let chatRoomArray: [ChatRoom] = ChatRoom.mockChatList
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +59,7 @@ extension HomeViewController: UISearchBarDelegate {
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return chatRoomArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -66,6 +67,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             withReuseIdentifier: TalkCollectionViewCell.identifier,
             for: indexPath
         ) as? TalkCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.configureCell(chatRoomArray[indexPath.item])
         
         return cell
     }
