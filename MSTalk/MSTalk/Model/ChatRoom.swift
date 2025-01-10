@@ -13,6 +13,10 @@ struct ChatRoom {
     let chatroomName: String //채팅방 이름
     var chatList: [Chat] = [] //채팅 화면에서 사용할 데이터
     
+    func isUserIncludedChatRoom(_ searchText: String) -> Bool {
+        return chatList.contains { $0.user.rawValue.contains(searchText) }
+    }
+    
     var lastChatDate: String? {
         return chatList.last?.date
     }

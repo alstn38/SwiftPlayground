@@ -12,6 +12,11 @@ final class HomeViewController: UIViewController {
     @IBOutlet private var friendSearchBar: UISearchBar!
     @IBOutlet private var talkCollectionView: UICollectionView!
     private let chatRoomArray: [ChatRoom] = ChatRoom.mockChatList
+    private var filteredChatRoomArray: [ChatRoom] = [] {
+        didSet {
+            talkCollectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +24,7 @@ final class HomeViewController: UIViewController {
         setupNavigation()
         setupView()
         setupCollectionView()
+        filteredChatRoomArray = chatRoomArray
     }
     
     private func setupNavigation() {
@@ -47,19 +53,31 @@ final class HomeViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
         talkCollectionView.collectionViewLayout = layout
+        talkCollectionView.keyboardDismissMode = .onDrag
     }
 }
 
 // MARK: - UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard !searchText.isEmpty else {
+            return filteredChatRoomArray = chatRoomArray
+        }
+        
+        filteredChatRoomArray = chatRoomArray.filter { $0.isUserIncludedChatRoom(searchText) }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return chatRoomArray.count
+        return filteredChatRoomArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -68,8 +86,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             for: indexPath
         ) as? TalkCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.configureCell(chatRoomArray[indexPath.item])
+        cell.configureCell(filteredChatRoomArray[indexPath.item])
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        view.endEditing(true)
     }
 }
