@@ -95,11 +95,24 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        view.endEditing(true)
+    }
 }
 
 // MARK: - UITextViewDelegate
 extension ChatRoomViewController: UITextViewDelegate {
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textViewPlaceholderLabel.isHidden = true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textViewPlaceholderLabel.isHidden = false
+        }
+    }
 }
 
 // MARK: - ReusableViewProtocol
