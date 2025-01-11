@@ -24,6 +24,7 @@ final class SenderTableViewCell: UITableViewCell {
         chatBackgroundView.layer.cornerRadius = 10
         chatBackgroundView.layer.borderWidth = 1
         chatBackgroundView.layer.borderColor = UIColor.black.cgColor
+        chatBackgroundView.backgroundColor = .systemGray5
         
         chatMessageLabel.font = .systemFont(ofSize: 12, weight: .regular)
         chatMessageLabel.textColor = .black
