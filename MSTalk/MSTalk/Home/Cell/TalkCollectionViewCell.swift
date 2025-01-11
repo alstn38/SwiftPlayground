@@ -26,14 +26,6 @@ final class TalkCollectionViewCell: UICollectionViewCell {
         profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
     }
     
-    func configureCell(_ chatRoom: ChatRoom) {
-        let chatRoomImageName = chatRoom.chatroomImage.first ?? "person.fill"
-        profileImageView.image = UIImage(named: chatRoomImageName)
-        chatRoomNameLabel.text = chatRoom.chatroomName
-        chatMessageLabel.text = chatRoom.lastChatMessage
-        chatDateLabel.text = DateFormatterManager.shared.convertDateString(chatRoom.lastChatDate)
-    }
-    
     private func setupCell() {
         profileImageView.contentMode = .scaleAspectFit
         profileImageView.tintColor = .black
@@ -49,5 +41,17 @@ final class TalkCollectionViewCell: UICollectionViewCell {
         chatDateLabel.font = .systemFont(ofSize: 11, weight: .regular)
         chatDateLabel.textColor = .gray
         chatDateLabel.textAlignment = .right
+    }
+}
+
+// MARK: - TalkCellConfigurable
+extension TalkCollectionViewCell: TalkCellConfigurable {
+    
+    func configureCell(_ chatRoom: ChatRoom) {
+        let chatRoomImageName = chatRoom.chatroomImage.first ?? "person.fill"
+        profileImageView.image = UIImage(named: chatRoomImageName)
+        chatRoomNameLabel.text = chatRoom.chatroomName
+        chatMessageLabel.text = chatRoom.lastChatMessage
+        chatDateLabel.text = DateFormatterManager.shared.convertDateString(chatRoom.lastChatDate)
     }
 }
