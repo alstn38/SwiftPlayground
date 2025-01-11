@@ -44,3 +44,14 @@ final class ReceiverTableViewCell: UITableViewCell {
         dateLabel.numberOfLines = 1
     }
 }
+
+// MARK: - ChatCellConfigurable
+extension ReceiverTableViewCell: ChatCellConfigurable {
+    
+    func configureChatCell(_ chat: Chat) {
+        let profileImage = UIImage(named: chat.user.rawValue) ?? UIImage(systemName: "person.fill")
+        profileImageView.image = profileImage
+        chatMessageLabel.text = chat.message
+        dateLabel.text = DateFormatterManager.shared.convertTimeString(chat.date)
+    }
+}

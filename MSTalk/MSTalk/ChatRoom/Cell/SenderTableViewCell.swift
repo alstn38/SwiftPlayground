@@ -34,3 +34,12 @@ final class SenderTableViewCell: UITableViewCell {
         dateLabel.numberOfLines = 1
     }
 }
+
+// MARK: - ChatCellConfigurable
+extension SenderTableViewCell: ChatCellConfigurable {
+    
+    func configureChatCell(_ chat: Chat) {
+        chatMessageLabel.text = chat.message
+        dateLabel.text = DateFormatterManager.shared.convertTimeString(chat.date)
+    }
+}
