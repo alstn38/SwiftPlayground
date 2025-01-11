@@ -43,6 +43,7 @@ final class HomeViewController: UIViewController {
         numberTextField.font = .systemFont(ofSize: 30, weight: .bold)
         numberTextField.keyboardType = .numberPad
         numberTextField.textAlignment = .center
+        numberTextField.textColor = .black
         
         textFieldLineView.backgroundColor = .white
         
