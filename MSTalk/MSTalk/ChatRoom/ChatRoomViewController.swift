@@ -28,6 +28,7 @@ final class ChatRoomViewController: UIViewController {
         setupView()
         configureView()
         setupTableView()
+        setupKeyboardEvent()
     }
     
     private func setupNavigation() {
@@ -72,6 +73,23 @@ final class ChatRoomViewController: UIViewController {
         let receiverTableViewCellNib = UINib(nibName: ReceiverTableViewCell.identifier, bundle: nil)
         chatTableView.register(receiverTableViewCellNib, forCellReuseIdentifier: ReceiverTableViewCell.identifier)
     }
+    
+    private func setupKeyboardEvent() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(noticeKeyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func noticeKeyboardWillShow(_ sender: Notification) {
+        chatTableView.scrollToRow(
+            at: IndexPath(row: self.chatArray.count - 1, section: 0),
+            at: .bottom,
+            animated: true
+        )
+    }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -97,6 +115,7 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.reloadRows(at: [indexPath], with: .none)
         view.endEditing(true)
     }
 }
