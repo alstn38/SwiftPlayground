@@ -25,11 +25,11 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Us6-UT-aHG">
-                        <rect key="frame" x="75" y="10" width="198" height="70"/>
+                        <rect key="frame" x="75" y="30" width="198" height="50"/>
                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nbK-62-5m5">
-                        <rect key="frame" x="85" y="20" width="178" height="50"/>
+                        <rect key="frame" x="85" y="40" width="178" height="30"/>
                         <string key="text">할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~할 수 있 다 ! 강 민 수 흐에에에ㅔ~</string>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
@@ -41,14 +41,23 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="59A-3c-FHE">
+                        <rect key="frame" x="75" y="10" width="31" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="fl4-Qj-C6d" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="5wR-Gz-QAW"/>
+                    <constraint firstItem="59A-3c-FHE" firstAttribute="leading" secondItem="fl4-Qj-C6d" secondAttribute="trailing" constant="10" id="HZN-pA-daC"/>
                     <constraint firstItem="Us6-UT-aHG" firstAttribute="bottom" secondItem="nbK-62-5m5" secondAttribute="bottom" constant="10" id="NFG-B8-GBr"/>
                     <constraint firstItem="Us6-UT-aHG" firstAttribute="trailing" secondItem="nbK-62-5m5" secondAttribute="trailing" constant="10" id="ODn-H1-4nC"/>
                     <constraint firstItem="Us6-UT-aHG" firstAttribute="top" secondItem="nbK-62-5m5" secondAttribute="top" constant="-10" id="PWl-xL-PXq"/>
-                    <constraint firstItem="nbK-62-5m5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="bNM-CL-6hK"/>
+                    <constraint firstItem="59A-3c-FHE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Rhp-mw-FcM"/>
+                    <constraint firstItem="nbK-62-5m5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="40" id="bNM-CL-6hK"/>
                     <constraint firstItem="fl4-Qj-C6d" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="cAB-bU-8Ea"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="59A-3c-FHE" secondAttribute="trailing" constant="80" id="cy0-Nd-yjm"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nbK-62-5m5" secondAttribute="trailing" constant="90" id="mbh-TN-fMs"/>
                     <constraint firstAttribute="bottom" secondItem="nbK-62-5m5" secondAttribute="bottom" constant="20" id="pFV-b2-WGe"/>
                     <constraint firstItem="CHB-qL-t1m" firstAttribute="bottom" secondItem="nbK-62-5m5" secondAttribute="bottom" id="sL1-yf-QCU"/>
@@ -63,6 +72,7 @@
                 <outlet property="chatMessageLabel" destination="nbK-62-5m5" id="1Xc-Cj-TvA"/>
                 <outlet property="dateLabel" destination="CHB-qL-t1m" id="3rc-s0-C5A"/>
                 <outlet property="profileImageView" destination="fl4-Qj-C6d" id="iOg-nE-x7u"/>
+                <outlet property="userNameLabel" destination="59A-3c-FHE" id="MLI-yJ-vKJ"/>
             </connections>
             <point key="canvasLocation" x="156.4885496183206" y="4.9295774647887329"/>
         </tableViewCell>

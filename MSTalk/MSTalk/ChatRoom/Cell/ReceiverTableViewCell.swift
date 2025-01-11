@@ -9,6 +9,7 @@ import UIKit
 
 final class ReceiverTableViewCell: UITableViewCell {
     
+    @IBOutlet private var userNameLabel: UILabel!
     @IBOutlet private var profileImageView: UIImageView!
     @IBOutlet private var chatBackgroundView: UIView!
     @IBOutlet private var chatMessageLabel: UILabel!
@@ -27,6 +28,10 @@ final class ReceiverTableViewCell: UITableViewCell {
     }
 
     private func setupCell() {
+        userNameLabel.textColor = .black
+        userNameLabel.font = .boldSystemFont(ofSize: 12)
+        userNameLabel.numberOfLines = 1
+        
         profileImageView.contentMode = .scaleAspectFit
         profileImageView.tintColor = .black
         
@@ -49,6 +54,7 @@ final class ReceiverTableViewCell: UITableViewCell {
 extension ReceiverTableViewCell: ChatCellConfigurable {
     
     func configureChatCell(_ chat: Chat) {
+        userNameLabel.text = chat.user.rawValue
         let profileImage = UIImage(named: chat.user.rawValue) ?? UIImage(systemName: "person.fill")
         profileImageView.image = profileImage
         chatMessageLabel.text = chat.message
