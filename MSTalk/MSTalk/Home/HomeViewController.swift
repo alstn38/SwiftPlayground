@@ -96,6 +96,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let viewController = storyboard.instantiateViewController(
             withIdentifier: ChatRoomViewController.identifier
         ) as? ChatRoomViewController else { return }
+        viewController.chatRoom = filteredChatRoomArray[indexPath.item]
         
         navigationController?.pushViewController(viewController, animated: true)
     }
