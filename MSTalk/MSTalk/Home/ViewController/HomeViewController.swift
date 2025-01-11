@@ -42,8 +42,18 @@ final class HomeViewController: UIViewController {
         talkCollectionView.delegate = self
         talkCollectionView.dataSource = self
         
-        let uiNib = UINib(nibName: TalkCollectionViewCell.identifier, bundle: nil)
-        talkCollectionView.register(uiNib, forCellWithReuseIdentifier: TalkCollectionViewCell.identifier)
+        let talkOneCellUINib = UINib(nibName: TalkCollectionViewCell.identifier, bundle: nil)
+        talkCollectionView.register(talkOneCellUINib, forCellWithReuseIdentifier: TalkCollectionViewCell.identifier)
+        
+        let talkTwoCellUINib = UINib(nibName: TalkTwoCollectionViewCell.identifier, bundle: nil)
+        talkCollectionView.register(talkTwoCellUINib, forCellWithReuseIdentifier: TalkTwoCollectionViewCell.identifier)
+        
+        let talkThreeCellUINib = UINib(nibName: TalkThreeCollectionViewCell.identifier, bundle: nil)
+        talkCollectionView.register(talkThreeCellUINib, forCellWithReuseIdentifier: TalkThreeCollectionViewCell.identifier)
+        
+        let talkFourCellUINib = UINib(nibName: TalkFourCollectionViewCell.identifier, bundle: nil)
+        talkCollectionView.register(talkFourCellUINib, forCellWithReuseIdentifier: TalkFourCollectionViewCell.identifier)
+        
         
         let screenWidth: CGFloat = view.window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
         let layout = UICollectionViewFlowLayout()
@@ -81,10 +91,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let imageCount: Int = filteredChatRoomArray[indexPath.item].chatroomImage.count
+        let identifier: String = switch imageCount {
+        case 1: TalkCollectionViewCell.identifier
+        case 2: TalkTwoCollectionViewCell.identifier
+        case 3: TalkThreeCollectionViewCell.identifier
+        default: TalkFourCollectionViewCell.identifier
+        }
+        
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: TalkCollectionViewCell.identifier,
+            withReuseIdentifier: identifier,
             for: indexPath
-        ) as? TalkCollectionViewCell else { return UICollectionViewCell() }
+        ) as? TalkCellConfigurable else { return UICollectionViewCell() }
         
         cell.configureCell(filteredChatRoomArray[indexPath.item])
         
