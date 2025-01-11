@@ -27,4 +27,15 @@ final class DateFormatterManager {
         
         return convertedDate
     }
+    
+    /// yyyy-MM-dd HH:mm 형식을 hh:mm a형식의 String으로 변환하는 메서드
+    func convertTimeString(_ dateString: String?) -> String? {
+        guard let dateString else { return nil }
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        guard let date = dateFormatter.date(from: dateString) else { return nil }
+        dateFormatter.dateFormat = "hh:mm a"
+        let convertedTime = dateFormatter.string(from: date)
+        
+        return convertedTime
+    }
 }
