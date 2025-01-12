@@ -15,9 +15,10 @@ final class ChatRoomViewController: UIViewController {
     @IBOutlet private var textViewPlaceholderLabel: UILabel!
     @IBOutlet private var chatTextView: UITextView!
     @IBOutlet private var chatSendButton: UIButton!
-    private var chatArray: [Chat] = [] {
+    private lazy var chatArray: [Chat] = [] {
         didSet {
             chatTableView.reloadData()
+            scrollToBottom(animated: false)
         }
     }
     
@@ -84,11 +85,20 @@ final class ChatRoomViewController: UIViewController {
     }
     
     @objc private func noticeKeyboardWillShow(_ sender: Notification) {
-        chatTableView.scrollToRow(
-            at: IndexPath(row: self.chatArray.count - 1, section: 0),
-            at: .bottom,
-            animated: true
-        )
+        scrollToBottom(animated: true)
+    }
+    
+    private func scrollToBottom(animated: Bool) {
+        guard !chatArray.isEmpty else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            chatTableView.scrollToRow(
+                at: IndexPath(row: self.chatArray.count - 1, section: 0),
+                at: .bottom,
+                animated: animated
+            )
+        }
     }
 }
 
