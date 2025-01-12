@@ -49,4 +49,20 @@ final class DateFormatterManager {
         
         return convertedDate
     }
+    
+    /// yyyy-MM-dd HH:mm 형식의 날짜를 비교해서 같은지 확인하는 메서드
+    func isEqualToDateString(_ dateString: String, _ otherDateString: String) -> Bool {
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        guard let date = dateFormatter.date(from: dateString) else { return false }
+        guard let otherDate = dateFormatter.date(from: otherDateString) else { return false }
+        
+        let dateComponent = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        let otherDateComponent = Calendar.current.dateComponents([.year, .month, .day], from: otherDate)
+        
+        if dateComponent == otherDateComponent {
+            return true
+        } else {
+            return false
+        }
+    }
 }
