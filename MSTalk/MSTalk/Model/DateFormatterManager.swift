@@ -38,4 +38,15 @@ final class DateFormatterManager {
         
         return convertedTime
     }
+    
+    /// yyyy-MM-dd HH:mm 형식을 yyyy년 MM월 dd일 EEEE형식의 String으로 변환하는 메서드
+    func convertDateString(with dateString: String?) -> String? {
+        guard let dateString else { return nil }
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        guard let date = dateFormatter.date(from: dateString) else { return nil }
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
+        let convertedDate = dateFormatter.string(from: date)
+        
+        return convertedDate
+    }
 }
