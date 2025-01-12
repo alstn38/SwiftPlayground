@@ -11,4 +11,12 @@ struct Chat {
     let user: User
     let date: String
     let message: String
+    
+    var isDateSeparator: Bool {
+        return user == .dateSeparator
+    }
+    
+    var isUser: Bool {
+        return user == .user
+    }
 }
