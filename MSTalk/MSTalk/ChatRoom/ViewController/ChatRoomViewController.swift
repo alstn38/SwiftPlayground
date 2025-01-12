@@ -15,7 +15,7 @@ final class ChatRoomViewController: UIViewController {
     @IBOutlet private var textViewPlaceholderLabel: UILabel!
     @IBOutlet private var chatTextView: UITextView!
     @IBOutlet private var chatSendButton: UIButton!
-    private lazy var chatArray: [Chat] = [] {
+    private var chatArray: [Chat] = [] {
         didSet {
             chatTableView.reloadData()
             scrollToBottom(animated: false)
@@ -39,7 +39,25 @@ final class ChatRoomViewController: UIViewController {
     
     private func configureView() {
         guard let chatRoom else { return }
-        chatArray = chatRoom.chatList
+        chatArray = addDateSeparator(chatRoom.chatList)
+    }
+    
+    private func addDateSeparator(_ chatList: [Chat]) -> [Chat] {
+        guard !chatList.isEmpty else { return [] }
+        
+        var newChatArray: [Chat] = []
+        newChatArray.append(Chat(user: .dateSeparator, date: chatList[0].date, message: ""))
+        newChatArray.append(chatList[0])
+        
+        for i in 1..<chatList.count {
+            if !DateFormatterManager.shared.isEqualToDateString(chatList[i - 1].date, chatList[i].date) {
+                newChatArray.append(Chat(user: .dateSeparator, date: chatList[i].date, message: ""))
+            }
+            
+            newChatArray.append(chatList[i])
+        }
+        
+        return newChatArray
     }
     
     private func setupView() {
@@ -73,6 +91,9 @@ final class ChatRoomViewController: UIViewController {
         
         let receiverTableViewCellNib = UINib(nibName: ReceiverTableViewCell.identifier, bundle: nil)
         chatTableView.register(receiverTableViewCellNib, forCellReuseIdentifier: ReceiverTableViewCell.identifier)
+        
+        let dateSeparatorTableViewCellNib = UINib(nibName: DateSeparatorTableViewCell.identifier, bundle: nil)
+        chatTableView.register(dateSeparatorTableViewCellNib, forCellReuseIdentifier: DateSeparatorTableViewCell.identifier)
     }
     
     private func setupKeyboardEvent() {
@@ -111,8 +132,13 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let chatMessage = chatArray[indexPath.row]
-        let isSenderChat: Bool = chatMessage.user == .user
-        let identifier: String = isSenderChat ? SenderTableViewCell.identifier : ReceiverTableViewCell.identifier
+        let identifier: String
+        
+        if chatMessage.isDateSeparator {
+            identifier = DateSeparatorTableViewCell.identifier
+        } else {
+            identifier = chatMessage.isUser ? SenderTableViewCell.identifier : ReceiverTableViewCell.identifier
+        }
         
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: identifier,
@@ -127,6 +153,10 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.reloadRows(at: [indexPath], with: .none)
         view.endEditing(true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }
 
