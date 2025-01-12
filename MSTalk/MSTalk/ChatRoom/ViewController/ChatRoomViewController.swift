@@ -172,6 +172,22 @@ extension ChatRoomViewController: UITextViewDelegate {
             textViewPlaceholderLabel.isHidden = false
         }
     }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: textView.frame.width, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+        
+        textView.constraints.forEach { constraint in
+            if estimatedSize.height <= 60 {
+                if constraint.firstAttribute == .height {
+                    constraint.constant = estimatedSize.height
+                }
+                textView.isScrollEnabled = false
+            } else {
+                textView.isScrollEnabled = true
+            }
+        }
+    }
 }
 
 // MARK: - ReusableViewProtocol
