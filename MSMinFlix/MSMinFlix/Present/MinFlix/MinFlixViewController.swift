@@ -26,7 +26,7 @@ final class MinFlixViewController: UIViewController {
         textField.borderStyle = .none
         textField.keyboardType = .emailAddress
         textField.textColor = .white
-        textField.backgroundColor = .systemGray2
+        textField.backgroundColor = .gray
         textField.textAlignment = .center
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 5
@@ -39,7 +39,7 @@ final class MinFlixViewController: UIViewController {
         textField.placeholder = "비밀번호"
         textField.borderStyle = .none
         textField.textColor = .white
-        textField.backgroundColor = .systemGray2
+        textField.backgroundColor = .gray
         textField.textAlignment = .center
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 5
@@ -52,7 +52,7 @@ final class MinFlixViewController: UIViewController {
         textField.placeholder = "닉네임"
         textField.borderStyle = .none
         textField.textColor = .white
-        textField.backgroundColor = .systemGray2
+        textField.backgroundColor = .gray
         textField.textAlignment = .center
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 5
@@ -65,7 +65,7 @@ final class MinFlixViewController: UIViewController {
         textField.placeholder = "위치"
         textField.borderStyle = .none
         textField.textColor = .white
-        textField.backgroundColor = .systemGray2
+        textField.backgroundColor = .gray
         textField.textAlignment = .center
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 5
@@ -79,7 +79,7 @@ final class MinFlixViewController: UIViewController {
         textField.borderStyle = .none
         textField.keyboardType = .numberPad
         textField.textColor = .white
-        textField.backgroundColor = .systemGray2
+        textField.backgroundColor = .gray
         textField.textAlignment = .center
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 5
@@ -121,5 +121,78 @@ final class MinFlixViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupView()
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .black
+        
+        setupHierarchy()
+        setupLayout()
+    }
+    
+    private func setupHierarchy() {
+        [
+            titleLabel, emailTextField, passwordTextField,
+            nickNameTextField, locationTextField, recommendTextField,
+            signUpButton, additionalInfoButton, toggleSwitch
+        ].forEach {
+            view.addSubview($0)
+        }
+    }
+    
+    private func setupLayout() {
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.centerX.equalToSuperview()
+        }
+        
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(100)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(36)
+        }
+        
+        passwordTextField.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(36)
+        }
+        
+        nickNameTextField.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(36)
+        }
+        
+        locationTextField.snp.makeConstraints {
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(36)
+        }
+        
+        recommendTextField.snp.makeConstraints {
+            $0.top.equalTo(locationTextField.snp.bottom).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(36)
+        }
+        
+        signUpButton.snp.makeConstraints {
+            $0.top.equalTo(locationTextField.snp.bottom).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(40)
+        }
+        
+        additionalInfoButton.snp.makeConstraints {
+            $0.top.equalTo(signUpButton.snp.bottom).offset(10)
+            $0.leading.equalTo(view.safeAreaLayoutGuide).offset(40)
+            $0.height.equalTo(40)
+            $0.width.equalTo(100)
+        }
+        
+        toggleSwitch.snp.makeConstraints {
+            $0.top.equalTo(signUpButton.snp.bottom).offset(10)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(40)
+        }
     }
 }
