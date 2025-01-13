@@ -22,7 +22,7 @@ final class MinFlixViewController: UIViewController {
     
     private let emailTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "이메일 주소 또는 전화번호"
+        textField.setPlaceholder(placeholder: "이메일 주소 또는 전화번호", color: .systemGray5)
         textField.borderStyle = .none
         textField.keyboardType = .emailAddress
         textField.textColor = .white
@@ -36,7 +36,7 @@ final class MinFlixViewController: UIViewController {
     
     private let passwordTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "비밀번호"
+        textField.setPlaceholder(placeholder: "비밀번호", color: .systemGray5)
         textField.borderStyle = .none
         textField.textColor = .white
         textField.backgroundColor = .gray
@@ -49,7 +49,7 @@ final class MinFlixViewController: UIViewController {
     
     private let nickNameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "닉네임"
+        textField.setPlaceholder(placeholder: "닉네임", color: .systemGray5)
         textField.borderStyle = .none
         textField.textColor = .white
         textField.backgroundColor = .gray
@@ -62,7 +62,7 @@ final class MinFlixViewController: UIViewController {
     
     private let locationTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "위치"
+        textField.setPlaceholder(placeholder: "위치", color: .systemGray5)
         textField.borderStyle = .none
         textField.textColor = .white
         textField.backgroundColor = .gray
@@ -75,7 +75,7 @@ final class MinFlixViewController: UIViewController {
     
     private let recommendTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "추천 코드 입력"
+        textField.setPlaceholder(placeholder: "추천 코드 입력", color: .systemGray5)
         textField.borderStyle = .none
         textField.keyboardType = .numberPad
         textField.textColor = .white
