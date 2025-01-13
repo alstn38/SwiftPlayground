@@ -91,10 +91,19 @@ final class PayViewController: UIViewController {
         return label
     }()
     
+    private let checkStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 2
+        
+        return stackView
+    }()
+    
     private let checkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .greenCheck)
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         
         return imageView
     }()
@@ -103,7 +112,7 @@ final class PayViewController: UIViewController {
         let label = UILabel()
         label.text = "바로 결제 사용하기"
         label.font = .systemFont(ofSize: 18, weight: .bold)
-        label.textColor = .black
+        label.textColor = .darkGray
         label.textAlignment = .center
         
         return label
@@ -135,11 +144,13 @@ final class PayViewController: UIViewController {
         [
             paySegmentedControl, payView, payImageView,
             localeButton, deleteButton, lockImageView,
-            guideLabel, checkImageView, checkLabel,
-            checkButton
+            checkStackView, guideLabel, checkButton
         ].forEach {
             view.addSubview($0)
         }
+        
+        checkStackView.addArrangedSubview(checkImageView)
+        checkStackView.addArrangedSubview(checkLabel)
     }
     
     private func setupLayout() {
@@ -147,6 +158,54 @@ final class PayViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(30)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
             $0.height.equalTo(40)
+        }
+        
+        payView.snp.makeConstraints {
+            $0.top.equalTo(paySegmentedControl.snp.bottom).offset(20)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(400)
+        }
+        
+        payImageView.snp.makeConstraints {
+            $0.top.equalTo(payView).offset(20)
+            $0.leading.equalTo(payView).offset(15)
+            $0.height.equalTo(15)
+            $0.width.equalTo(75)
+        }
+        
+        localeButton.snp.makeConstraints {
+            $0.centerY.equalTo(payImageView)
+            $0.leading.equalTo(payImageView.snp.trailing)
+            $0.height.equalTo(15)
+            $0.width.equalTo(75)
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.centerY.equalTo(payImageView)
+            $0.trailing.equalTo(payView).inset(20)
+            $0.size.equalTo(15)
+        }
+        
+        lockImageView.snp.makeConstraints {
+            $0.top.equalTo(payView).offset(75)
+            $0.centerX.equalTo(payView)
+            $0.size.equalTo(150)
+        }
+        
+        checkImageView.snp.makeConstraints {
+            $0.size.equalTo(30)
+        }
+        
+        checkStackView.snp.makeConstraints {
+            $0.top.equalTo(lockImageView.snp.bottom).offset(10)
+            $0.centerX.equalTo(payView)
+        }
+        
+        checkButton.snp.makeConstraints {
+            $0.bottom.equalTo(payView).inset(30)
+            $0.horizontalEdges.equalTo(payView).inset(40)
+            $0.height.equalTo(40)
+            $0.centerX.equalTo(payView)
         }
     }
 }
