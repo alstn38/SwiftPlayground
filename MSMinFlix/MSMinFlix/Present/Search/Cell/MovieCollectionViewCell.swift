@@ -32,7 +32,8 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .regular)
         label.numberOfLines = 1
-        label.textColor = .black
+        label.textColor = .white
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         return label
     }()
@@ -41,7 +42,8 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 11, weight: .regular)
         label.numberOfLines = 1
-        label.textColor = .black
+        label.textColor = .white
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         return label
     }()
@@ -56,6 +58,12 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
         
         setupView()
+    }
+    
+    func configureCell(_ movie: Movie) {
+        numberLabel.text = movie.number
+        movieTitleLabel.text = movie.title
+        movieStartDate.text = movie.date
     }
     
     private func setupView() {
