@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F10850B12D34FBCC006F80AC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F10850B02D34FBCC006F80AC /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F108508F2D34F418006F80AC /* MSMinFlix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSMinFlix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F10850B12D34FBCC006F80AC /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = MSMinFlix;
 			packageProductDependencies = (
+				F10850B02D34FBCC006F80AC /* SnapKit */,
 			);
 			productName = MSMinFlix;
 			productReference = F108508F2D34F418006F80AC /* MSMinFlix.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = F10850862D34F418006F80AC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F10850AF2D34FBCC006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F10850902D34F418006F80AC /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F10850AF2D34FBCC006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F10850B02D34FBCC006F80AC /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F10850AF2D34FBCC006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F10850872D34F418006F80AC /* Project object */;
 }
