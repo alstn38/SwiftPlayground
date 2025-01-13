@@ -17,18 +17,27 @@ final class MSTabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        tabBar.tintColor = .black
-        tabBar.backgroundColor = .white
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        tabBar.standardAppearance = appearance
+        tabBar.tintColor = .white
     }
     
     private func setupViewControllers() {
         let minFlixViewController = MinFlixViewController()
         minFlixViewController.tabBarItem = UITabBarItem(
-            title: "MinFlix",
+            title: "MINFLIX",
             image: UIImage(systemName: "house"),
             selectedImage: UIImage(systemName: "house.fill")
         )
         
-        viewControllers = [minFlixViewController]
+        let payViewController = PayViewController()
+        payViewController.tabBarItem = UITabBarItem(
+            title: "Pay",
+            image: UIImage(systemName: "bitcoinsign.circle"),
+            selectedImage: UIImage(systemName: "bitcoinsign.circle.fill")
+        )
+        
+        viewControllers = [minFlixViewController, payViewController]
     }
 }
