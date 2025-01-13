@@ -64,10 +64,31 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupHierarchy() {
-        
+        [numberView, numberLabel, movieTitleLabel, movieStartDate].forEach {
+            contentView.addSubview($0)
+        }
     }
     
     private func setupLayout() {
+        numberView.snp.makeConstraints {
+            $0.centerY.leading.equalTo(contentView)
+            $0.height.equalTo(30)
+            $0.width.equalTo(40)
+        }
         
+        numberLabel.snp.makeConstraints {
+            $0.center.equalTo(numberView)
+        }
+        
+        movieTitleLabel.snp.makeConstraints {
+            $0.leading.equalTo(numberView.snp.trailing).offset(15)
+            $0.centerY.equalTo(contentView)
+            $0.trailing.equalTo(movieStartDate.snp.leading).offset(-15)
+        }
+        
+        movieStartDate.snp.makeConstraints {
+            $0.centerY.equalTo(contentView)
+            $0.trailing.equalTo(contentView.safeAreaLayoutGuide)
+        }
     }
 }
