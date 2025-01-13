@@ -38,6 +38,13 @@ final class MSTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "bitcoinsign.circle.fill")
         )
         
-        viewControllers = [minFlixViewController, payViewController]
+        let searchViewController = SearchViewController()
+        searchViewController.tabBarItem = UITabBarItem(
+            title: "Search",
+            image: UIImage(systemName: "magnifyingglass"),
+            selectedImage: UIImage(systemName: "magnifyingglass")
+        )
+        
+        viewControllers = [minFlixViewController, payViewController, searchViewController]
     }
 }
