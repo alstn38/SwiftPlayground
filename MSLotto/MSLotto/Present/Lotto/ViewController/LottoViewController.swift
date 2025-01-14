@@ -5,6 +5,7 @@
 //  Created by 강민수 on 1/14/25.
 //
 
+import Alamofire
 import SnapKit
 import UIKit
 
@@ -55,7 +56,7 @@ final class LottoViewController: UIViewController {
         return stackView
     }()
     
-    private let winningNumberLabel: UILabel = {
+    private let roundNumberLabel: UILabel = {
         let label = UILabel()
         label.text = "913회" // TODO: 서버연결시 제거
         label.font = .systemFont(ofSize: 24, weight: .bold)
@@ -80,7 +81,7 @@ final class LottoViewController: UIViewController {
         return stackView
     }()
     
-    private let drawBallArray: [UIView] = {
+    private let drawBallArray: [LottoResultBallView] = {
         let ballColor: [UIColor] = [.yellow, .cyan, .cyan, .systemPink, .systemPink, .gray, .clear, .gray]
         let viewArray = ballColor.map { LottoResultBallView(backgroundColor: $0) }
         return viewArray
@@ -100,6 +101,7 @@ final class LottoViewController: UIViewController {
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textColor = .black
         label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
 
@@ -120,6 +122,34 @@ final class LottoViewController: UIViewController {
         lottoNumberPickerView.dataSource = self
     }
     
+    private func getLottoResult(roundNumber: Int) {
+        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\(roundNumber)"
+        
+        AF.request(url, method: .get).responseDecodable(of: Lotto.self) { [weak self] response in
+            
+            switch response.result {
+            case .success(let value):
+                self?.configureLottoResult(value)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func configureLottoResult(_ lotto: Lotto) {
+        drawDateLabel.text = "\(lotto.drawDate) 추첨"
+        roundNumberLabel.text = "\(lotto.roundNumber)회"
+        winnerMoneyLabel.text = "당첨금\n\(lotto.firstWinnerMoney.formatted())원"
+        drawBallArray[0].configureView(lotto.drawNumber1.formatted())
+        drawBallArray[1].configureView(lotto.drawNumber2.formatted())
+        drawBallArray[2].configureView(lotto.drawNumber3.formatted())
+        drawBallArray[3].configureView(lotto.drawNumber4.formatted())
+        drawBallArray[4].configureView(lotto.drawNumber5.formatted())
+        drawBallArray[5].configureView(lotto.drawNumber6.formatted())
+        drawBallArray[6].configureView("+")
+        drawBallArray[7].configureView(lotto.bonusNumber.formatted())
+    }
+    
     private func setupView() {
         view.backgroundColor = .white
         
@@ -138,7 +168,7 @@ final class LottoViewController: UIViewController {
             drawBallStackView.addArrangedSubview($0)
         }
         
-        winningLabelStackView.addArrangedSubview(winningNumberLabel)
+        winningLabelStackView.addArrangedSubview(roundNumberLabel)
         winningLabelStackView.addArrangedSubview(winningMessageLabel)
     }
     
@@ -205,5 +235,6 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         lottoTextField.text = String(lottoNumberArray[row])
+        getLottoResult(roundNumber: lottoNumberArray[row])
     }
 }

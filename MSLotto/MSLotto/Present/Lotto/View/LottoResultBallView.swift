@@ -27,6 +27,9 @@ final class LottoResultBallView: UIView {
         super.init(frame: .zero)
         
         numberBackgroundView.backgroundColor = backgroundColor
+        if backgroundColor == UIColor.clear {
+            lottoNumberLabel.textColor = .black
+        }
         setupView()
     }
     
@@ -38,6 +41,8 @@ final class LottoResultBallView: UIView {
     
     func configureView(_ text: String) {
         lottoNumberLabel.text = text
+        
+        numberBackgroundView.layer.cornerRadius = self.frame.width / 2
     }
     
     private func setupView() {
