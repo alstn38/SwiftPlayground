@@ -46,7 +46,7 @@ final class SearchViewController: UIViewController {
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.preferredDatePickerStyle = .inline
         datePicker.locale = Locale(identifier: "ko_KR")
         
         return datePicker
@@ -187,5 +187,9 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.configureCell(dailyBoxOfficeArray[indexPath.item])
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        view.endEditing(true)
     }
 }
