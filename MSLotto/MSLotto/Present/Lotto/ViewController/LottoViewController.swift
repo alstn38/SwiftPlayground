@@ -93,6 +93,15 @@ final class LottoViewController: UIViewController {
         label.textColor = .gray
         return label
     }()
+    
+    private let winnerMoneyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "당첨금"
+        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +129,8 @@ final class LottoViewController: UIViewController {
     
     private func setupHierarchy() {
         [lottoTextField, numberGuideLabel, drawDateLabel,
-         lineView, winningLabelStackView, drawBallStackView, bonusLabel].forEach {
+         lineView, winningLabelStackView, drawBallStackView,
+         bonusLabel, winnerMoneyLabel].forEach {
             view.addSubview($0)
         }
         
@@ -169,6 +179,11 @@ final class LottoViewController: UIViewController {
         drawBallStackView.snp.makeConstraints {
             $0.top.equalTo(winningLabelStackView.snp.bottom).offset(30)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        
+        winnerMoneyLabel.snp.makeConstraints {
+            $0.top.equalTo(drawBallStackView.snp.bottom).offset(100)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
         }
     }
 }
