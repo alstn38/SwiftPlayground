@@ -5,12 +5,19 @@
 //  Created by 강민수 on 1/13/25.
 //
 
+import Alamofire
 import SnapKit
 import UIKit
 
 final class SearchViewController: UIViewController {
     
     private let movieArray: [Movie] = Movie.dummy()
+    private let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KO")
+        dateFormatter.dateFormat = "yyyyMMdd"
+        return dateFormatter
+    }()
     
     private let yesterday: Date? = {
         let calendar = Calendar.current
@@ -26,6 +33,7 @@ final class SearchViewController: UIViewController {
         textField.setPlaceholder(placeholder: "검색어를 입력해주세요", color: .systemGray4)
         textField.returnKeyType = .search
         textField.textColor = .white
+        textField.tintColor = .clear
         
         return textField
     }()
@@ -129,8 +137,29 @@ final class SearchViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(dateValueDidChange), for: .valueChanged)
     }
     
+    private func getBoxOfficeMovieRank(date: Date) {
+        guard let key = Bundle.main.apiKey else { return }
+        let targetDate = dateFormatter.string(from: date)
+        let url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=\(key)&targetDt=\(targetDate)"
+        
+        AF.request(url, method: .get).responseDecodable(of: MovieResult.self) { response in
+            switch response.result {
+            case .success(let value):
+                print(value)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     @objc private func dateValueDidChange(_ sender: UIDatePicker) {
-        print(sender.date)
+        let calendar = Calendar.current
+        let selectComponents = calendar.dateComponents([.year, .month, .day], from: sender.date)
+        getBoxOfficeMovieRank(date: sender.date)
+        guard let year = selectComponents.year else { return }
+        guard let month = selectComponents.month else { return }
+        guard let day = selectComponents.day else { return }
+        searchTextField.text = "\(year)년 \(month)월 \(day)일"
     }
 }
 
