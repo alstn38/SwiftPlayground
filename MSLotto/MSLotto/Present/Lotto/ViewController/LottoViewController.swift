@@ -78,11 +78,12 @@ final class LottoViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         stackView.alignment = .center
+        stackView.alpha = 0.0
         return stackView
     }()
     
     private let drawBallArray: [LottoResultBallView] = {
-        let ballColor: [UIColor] = [.yellow, .cyan, .cyan, .systemPink, .systemPink, .gray, .clear, .gray]
+        let ballColor: [UIColor] = [.lottoYello, .lottoBlue, .lottoBlue, .lottoRed, .lottoRed, .lottoGray, .clear, .lottoGray]
         let viewArray = ballColor.map { LottoResultBallView(backgroundColor: $0) }
         return viewArray
     }()
@@ -137,6 +138,7 @@ final class LottoViewController: UIViewController {
     }
     
     private func configureLottoResult(_ lotto: Lotto) {
+        drawBallStackView.alpha = 1.0
         drawDateLabel.text = "\(lotto.drawDate) 추첨"
         roundNumberLabel.text = "\(lotto.roundNumber)회"
         winnerMoneyLabel.text = "당첨금\n\(lotto.firstWinnerMoney.formatted())원"
