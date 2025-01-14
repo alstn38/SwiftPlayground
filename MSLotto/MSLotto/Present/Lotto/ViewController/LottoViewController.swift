@@ -11,7 +11,17 @@ import UIKit
 
 final class LottoViewController: UIViewController {
     
-    private var lottoNumberArray: [Int] = Array(1...1154).reversed()
+    private lazy var lottoNumberArray: [Int] = Array(1...recentRound).reversed()
+    
+    private var recentRound: Int = {
+        let systemCalendar = Calendar.autoupdatingCurrent
+        let startDateComponents = DateComponents(year: 2002, month: 12, day: 07)
+        guard let startDay = systemCalendar.date(from: startDateComponents) else { return 0 }
+        let today = Calendar.current.startOfDay(for: Date())
+        let differenceDay = systemCalendar.dateComponents([.day], from: startDay, to: today).day ?? 0
+        let recentRound = Int(differenceDay / 7) + 1
+        return recentRound
+    }()
     
     private let lottoTextField: UITextField = {
         let textField = UITextField()
@@ -111,6 +121,8 @@ final class LottoViewController: UIViewController {
         
         setupView()
         setupPickerView()
+        lottoTextField.text = String(recentRound)
+        getLottoResult(roundNumber: recentRound)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
