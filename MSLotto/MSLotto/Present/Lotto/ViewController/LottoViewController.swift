@@ -10,6 +10,8 @@ import UIKit
 
 final class LottoViewController: UIViewController {
     
+    private var lottoNumberArray: [Int] = Array(1...1154).reversed()
+    
     private let lottoTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
@@ -96,6 +98,13 @@ final class LottoViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        setupPickerView()
+    }
+    
+    private func setupPickerView() {
+        lottoTextField.inputView = lottoNumberPickerView
+        lottoNumberPickerView.delegate = self
+        lottoNumberPickerView.dataSource = self
     }
     
     private func setupView() {
@@ -157,5 +166,25 @@ final class LottoViewController: UIViewController {
             $0.top.equalTo(winningLabelStackView.snp.bottom).offset(30)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
+    }
+}
+
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
+extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return lottoNumberArray.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(lottoNumberArray[row])
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        lottoTextField.text = String(lottoNumberArray[row])
     }
 }
