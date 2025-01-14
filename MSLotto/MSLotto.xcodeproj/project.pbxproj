@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F10852102D364992006F80AC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F108520F2D364992006F80AC /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F108514B2D36396E006F80AC /* MSLotto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSLotto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F10852102D364992006F80AC /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = MSLotto;
 			packageProductDependencies = (
+				F108520F2D364992006F80AC /* SnapKit */,
 			);
 			productName = MSLotto;
 			productReference = F108514B2D36396E006F80AC /* MSLotto.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = F10851422D36396E006F80AC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F108514C2D36396E006F80AC /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F108520F2D364992006F80AC /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F10851432D36396E006F80AC /* Project object */;
 }
