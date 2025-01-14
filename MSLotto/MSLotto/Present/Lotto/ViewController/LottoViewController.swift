@@ -101,6 +101,10 @@ final class LottoViewController: UIViewController {
         setupPickerView()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     private func setupPickerView() {
         lottoTextField.inputView = lottoNumberPickerView
         lottoNumberPickerView.delegate = self
