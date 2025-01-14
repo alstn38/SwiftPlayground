@@ -11,7 +11,12 @@ import UIKit
 
 final class SearchViewController: UIViewController {
     
-    private let movieArray: [Movie] = Movie.dummy()
+    private var dailyBoxOfficeArray: [DailyBoxOfficeList] = [] {
+        didSet {
+            movieCollectionView.reloadData()
+        }
+    }
+    
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KO")
@@ -91,6 +96,9 @@ final class SearchViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupCollectionView()
+        
+        guard let yesterday else { return }
+        getBoxOfficeMovieRank(date: yesterday)
     }
     
     private func setupHierarchy() {
@@ -142,10 +150,10 @@ final class SearchViewController: UIViewController {
         let targetDate = dateFormatter.string(from: date)
         let url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=\(key)&targetDt=\(targetDate)"
         
-        AF.request(url, method: .get).responseDecodable(of: MovieResult.self) { response in
+        AF.request(url, method: .get).responseDecodable(of: MovieResult.self) { [weak self] response in
             switch response.result {
             case .success(let value):
-                print(value)
+                self?.dailyBoxOfficeArray = value.boxOfficeResult.dailyBoxOfficeList
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -167,7 +175,7 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movieArray.count
+        return dailyBoxOfficeArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -176,7 +184,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
             for: indexPath
         ) as? MovieCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.configureCell(movieArray[indexPath.item])
+        cell.configureCell(dailyBoxOfficeArray[indexPath.item])
         
         return cell
     }

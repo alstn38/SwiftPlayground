@@ -60,10 +60,10 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         setupView()
     }
     
-    func configureCell(_ movie: Movie) {
-        numberLabel.text = movie.number
-        movieTitleLabel.text = movie.title
-        movieStartDate.text = movie.date
+    func configureCell(_ movie: DailyBoxOfficeList) {
+        numberLabel.text = movie.rank
+        movieTitleLabel.text = movie.movieName
+        movieStartDate.text = movie.openDate
     }
     
     private func setupView() {
