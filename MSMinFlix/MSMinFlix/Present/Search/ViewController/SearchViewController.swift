@@ -12,6 +12,14 @@ final class SearchViewController: UIViewController {
     
     private let movieArray: [Movie] = Movie.dummy()
     
+    private let yesterday: Date? = {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let yesterDay = calendar.date(byAdding: .day, value: -1, to: today)
+        
+        return yesterDay
+    }()
+    
     private let searchTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .none
@@ -20,6 +28,15 @@ final class SearchViewController: UIViewController {
         textField.textColor = .white
         
         return textField
+    }()
+    
+    private let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ko_KR")
+        
+        return datePicker
     }()
     
     private let searchLineView: UIView = {
@@ -57,6 +74,7 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        setupDatePicker()
     }
     
     private func setupView() {
@@ -103,6 +121,16 @@ final class SearchViewController: UIViewController {
         movieCollectionView.delegate = self
         movieCollectionView.dataSource = self
         movieCollectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.identifier)
+    }
+    
+    private func setupDatePicker() {
+        searchTextField.inputView = datePicker
+        datePicker.maximumDate = yesterday
+        datePicker.addTarget(self, action: #selector(dateValueDidChange), for: .valueChanged)
+    }
+    
+    @objc private func dateValueDidChange(_ sender: UIDatePicker) {
+        print(sender.date)
     }
 }
 
