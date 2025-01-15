@@ -30,7 +30,12 @@ final class SearchResultViewController: UIViewController {
     }()
     
     private let filterButtonArray: [FilterButton] = {
-        let button = FilterButton.FilterButtonType.allCases.map { FilterButton(type: $0) }
+        let button = FilterButton.FilterButtonType.allCases.map {
+            let button = FilterButton(type: $0)
+            button.tag = $0.rawValue
+            return button
+        }
+        
         button[FilterButton.FilterButtonType.accuracy.rawValue].isSelected = true
         return button
     }()
@@ -71,6 +76,7 @@ final class SearchResultViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupCollectionView()
+        addTargetButton()
     }
     
     private func setupHierarchy() {
@@ -99,9 +105,21 @@ final class SearchResultViewController: UIViewController {
         }
     }
     
+    private func addTargetButton() {
+        filterButtonArray.forEach {
+            $0.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
+        }
+    }
+    
     private func setupCollectionView() {
 //        productCollectionView.delegate = self
 //        productCollectionView.dataSource = self
+    }
+    
+    @objc private func filterButtonDidTap(_ sender: UIButton) {
+        selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
+        filterButtonArray.forEach { $0.isSelected = false }
+        sender.isSelected = true
     }
 }
 
