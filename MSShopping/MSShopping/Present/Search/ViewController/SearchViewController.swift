@@ -114,6 +114,7 @@ extension SearchViewController: UISearchBarDelegate {
         searchWarningLabel.isHidden = isLargerThanTwoLetters
         
         guard isLargerThanTwoLetters else { return }
-        // TODO: 화면 이동.
+        let searchResultViewController = SearchResultViewController(searchedText: searchBar.text ?? "검색결과")
+        navigationController?.pushViewController(searchResultViewController, animated: true)
     }
 }
