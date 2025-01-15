@@ -45,11 +45,11 @@ final class SearchResultViewController: UIViewController {
         let spacing: CGFloat = 20
         let cellWidth = (screenWidth - spacing * 3) / 2
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = spacing
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 30
         layout.minimumInteritemSpacing = spacing
         layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 50)
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 60)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .black
         return collectionView
@@ -112,8 +112,9 @@ final class SearchResultViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-//        productCollectionView.delegate = self
-//        productCollectionView.dataSource = self
+        productCollectionView.delegate = self
+        productCollectionView.dataSource = self
+        productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.identifier)
     }
     
     @objc private func filterButtonDidTap(_ sender: UIButton) {
@@ -124,13 +125,18 @@ final class SearchResultViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-//extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-//    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 20
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        return UICollectionViewCell()
-//    }
-//}
+extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ProductCollectionViewCell.identifier,
+            for: indexPath
+        ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
+        
+        return cell
+    }
+}
