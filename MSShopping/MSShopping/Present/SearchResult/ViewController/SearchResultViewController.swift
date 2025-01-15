@@ -5,16 +5,22 @@
 //  Created by 강민수 on 1/15/25.
 //
 
+import Alamofire
 import SnapKit
 import UIKit
 
 final class SearchResultViewController: UIViewController {
     
     private var selectedFilterButtonType: FilterButton.FilterButtonType = .accuracy
+    private var searchedText: String
+    private var productItemArray: [Item] = [] {
+        didSet {
+            productCollectionView.reloadData()
+        }
+    }
     
     private let searchTotalCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "13,235,449개의 검색 결과" // TODO: 서버 연결시 제거
         label.textColor = .systemGreen
         label.font = .systemFont(ofSize: 12, weight: .bold)
         return label
@@ -56,11 +62,13 @@ final class SearchResultViewController: UIViewController {
     }()
     
     init(searchedText: String) {
+        self.searchedText = searchedText
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = searchedText
     }
     
     required init?(coder: NSCoder) {
+        self.searchedText = ""
         super.init(coder: coder)
     }
     
@@ -68,6 +76,7 @@ final class SearchResultViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        getProductResult()
     }
     
     private func setupView() {
@@ -117,6 +126,26 @@ final class SearchResultViewController: UIViewController {
         productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.identifier)
     }
     
+    private func getProductResult() {
+        let encodeString = searchedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=100"
+        let header: HTTPHeaders = [
+            "X-Naver-Client-Id": Bundle.main.clientID,
+            "X-Naver-Client-Secret": Bundle.main.apiKey
+        ]
+        
+        AF.request(url, method: .get, headers: header)
+            .responseDecodable(of: Product.self) { [weak self] response in
+            switch response.result {
+            case .success(let value):
+                self?.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
+                self?.productItemArray = value.items
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     @objc private func filterButtonDidTap(_ sender: UIButton) {
         selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
         filterButtonArray.forEach { $0.isSelected = false }
@@ -128,7 +157,7 @@ final class SearchResultViewController: UIViewController {
 extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return productItemArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,6 +165,7 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
             withReuseIdentifier: ProductCollectionViewCell.identifier,
             for: indexPath
         ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
+        cell.configureCell(productItemArray[indexPath.item])
         
         return cell
     }
