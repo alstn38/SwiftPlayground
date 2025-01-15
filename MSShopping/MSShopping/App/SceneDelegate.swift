@@ -15,6 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         let navigationController = UINavigationController(rootViewController: SearchViewController())
         navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController.navigationBar.tintColor = .white
         
         window = UIWindow(windowScene: scene)
         window?.rootViewController = navigationController
