@@ -5,20 +5,27 @@
 //  Created by 강민수 on 1/15/25.
 //
 
+import SnapKit
 import UIKit
 
 final class SearchViewController: UIViewController {
     
     private let shoppingSearchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "브랜드, 상품, 프로필, 태그 등"
+        searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.leftView?.tintColor = .gray
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "브랜드, 상품, 프로필, 태그 등",
+            attributes: [.foregroundColor: UIColor.gray]
+        )
         return searchBar
     }()
     
     private let shoppingImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(resource: .shoppingMan)
-        imageView.contentMode = .scaleToFill
+        imageView.image = UIImage(resource: .personShopping)
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -51,10 +58,28 @@ final class SearchViewController: UIViewController {
     }
     
     private func setupHierarchy() {
-        
+        [shoppingSearchBar, shoppingImageView, shoppingMessageLabel].forEach {
+            view.addSubview($0)
+        }
     }
     
     private func setupLayout() {
         
+        shoppingSearchBar.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.height.equalTo(38)
+        }
+        
+        shoppingImageView.snp.makeConstraints {
+            $0.center.equalTo(view)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.height.equalTo(shoppingImageView.snp.width)
+        }
+        
+        shoppingMessageLabel.snp.makeConstraints {
+            $0.top.equalTo(shoppingImageView.snp.bottom).offset(20)
+            $0.centerX.equalTo(view)
+        }
     }
 }
