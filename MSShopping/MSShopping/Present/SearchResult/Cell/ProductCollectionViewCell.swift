@@ -59,10 +59,14 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         let imageURL = URL(string: item.image)
         productImageView.kf.setImage(with: imageURL)
         mallNameLabel.text = item.mallName
-        productNameLabel.text = item.title
-        
         let price = Int(item.lowPrice) ?? 0
         productPriceLabel.text = price.formatted() + "원"
+        productNameLabel.text = item.title.replacingOccurrences(
+            of: "<[^>]+>|&quot;",
+            with: "",
+            options: .regularExpression,
+            range: nil
+        )
     }
     
     private func setupCell() {
