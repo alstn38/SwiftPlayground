@@ -61,6 +61,14 @@ final class SearchResultViewController: UIViewController {
         return collectionView
     }()
     
+    private let indicatorView: UIActivityIndicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .medium
+        indicatorView.color = .white
+        indicatorView.hidesWhenStopped = true
+        return indicatorView
+    }()
+    
     init(searchedText: String) {
         self.searchedText = searchedText
         super.init(nibName: nil, bundle: nil)
@@ -79,6 +87,16 @@ final class SearchResultViewController: UIViewController {
         getProductResult()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        indicatorView.startAnimating()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        indicatorView.stopAnimating()
+    }
+    
     private func setupView() {
         view.backgroundColor = .black
         
@@ -89,7 +107,7 @@ final class SearchResultViewController: UIViewController {
     }
     
     private func setupHierarchy() {
-        [searchTotalCountLabel, filterStackView, productCollectionView].forEach {
+        [searchTotalCountLabel, filterStackView, productCollectionView, indicatorView].forEach {
             view.addSubview($0)
         }
         
@@ -112,6 +130,10 @@ final class SearchResultViewController: UIViewController {
             $0.top.equalTo(filterStackView.snp.bottom).offset(5)
             $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        indicatorView.snp.makeConstraints {
+            $0.center.equalTo(productCollectionView)
+        }
     }
     
     private func addTargetButton() {
@@ -127,6 +149,8 @@ final class SearchResultViewController: UIViewController {
     }
     
     private func getProductResult() {
+        productItemArray = []
+        indicatorView.startAnimating()
         let encodeString = searchedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let url = Bundle.main.mainURL + "?query=\(encodeString)&display=100&sort=\(selectedFilterButtonType.query)"
         let header: HTTPHeaders = [
@@ -140,6 +164,7 @@ final class SearchResultViewController: UIViewController {
             case .success(let value):
                 self?.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
                 self?.productItemArray = value.items
+                self?.indicatorView.stopAnimating()
             case .failure(let error):
                 print(error.localizedDescription)
             }
