@@ -22,6 +22,15 @@ final class SearchViewController: UIViewController {
         return searchBar
     }()
     
+    private let searchWarningLabel: UILabel = {
+        let label = UILabel()
+        label.text = "최소 2글자 이상 입력해주세요."
+        label.isHidden = true
+        label.textColor = .systemRed
+        label.font = .systemFont(ofSize: 12, weight: .medium)
+        return label
+    }()
+    
     private let shoppingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .personShopping)
@@ -55,6 +64,7 @@ final class SearchViewController: UIViewController {
         setupNavigation()
         setupHierarchy()
         setupLayout()
+        setupSearchBar()
     }
     
     private func setupNavigation() {
@@ -62,17 +72,21 @@ final class SearchViewController: UIViewController {
     }
     
     private func setupHierarchy() {
-        [shoppingSearchBar, shoppingImageView, shoppingMessageLabel].forEach {
+        [shoppingSearchBar, searchWarningLabel, shoppingImageView, shoppingMessageLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setupLayout() {
-        
         shoppingSearchBar.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.height.equalTo(38)
+        }
+        
+        searchWarningLabel.snp.makeConstraints {
+            $0.top.equalTo(shoppingSearchBar.snp.bottom).offset(5)
+            $0.leading.equalTo(shoppingSearchBar).offset(15)
         }
         
         shoppingImageView.snp.makeConstraints {
@@ -85,5 +99,21 @@ final class SearchViewController: UIViewController {
             $0.top.equalTo(shoppingImageView.snp.bottom).offset(20)
             $0.centerX.equalTo(view)
         }
+    }
+    
+    private func setupSearchBar() {
+        shoppingSearchBar.delegate = self
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let isLargerThanTwoLetters: Bool = searchBar.text?.count ?? 0 >= 2
+        searchWarningLabel.isHidden = isLargerThanTwoLetters
+        
+        guard isLargerThanTwoLetters else { return }
+        // TODO: 화면 이동.
     }
 }
