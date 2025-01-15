@@ -6,6 +6,7 @@
 //
 
 import SnapKit
+import Kingfisher
 import UIKit
 
 final class ProductCollectionViewCell: UICollectionViewCell {
@@ -13,7 +14,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 20
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -51,6 +53,16 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
         
         setupCell()
+    }
+    
+    func configureCell(_ item: Item) {
+        let imageURL = URL(string: item.image)
+        productImageView.kf.setImage(with: imageURL)
+        mallNameLabel.text = item.mallName
+        productNameLabel.text = item.title
+        
+        let price = Int(item.lowPrice) ?? 0
+        productPriceLabel.text = price.formatted() + "원"
     }
     
     private func setupCell() {
