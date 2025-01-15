@@ -59,5 +59,18 @@ extension FilterButton {
                 return "  가격낮은순  "
             }
         }
+        
+        var query: String {
+            switch self {
+            case .accuracy:
+                "sim"
+            case .date:
+                "date"
+            case .highestPrice:
+                "dsc"
+            case .lowestPrice:
+                "asc"
+            }
+        }
     }
 }

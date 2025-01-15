@@ -128,7 +128,7 @@ final class SearchResultViewController: UIViewController {
     
     private func getProductResult() {
         let encodeString = searchedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=100"
+        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=100&sort=\(selectedFilterButtonType.query)"
         let header: HTTPHeaders = [
             "X-Naver-Client-Id": Bundle.main.clientID,
             "X-Naver-Client-Secret": Bundle.main.apiKey
@@ -150,6 +150,7 @@ final class SearchResultViewController: UIViewController {
         selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
         filterButtonArray.forEach { $0.isSelected = false }
         sender.isSelected = true
+        getProductResult()
     }
 }
 
