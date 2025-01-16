@@ -48,6 +48,10 @@ extension SearchViewController: UISearchBarDelegate {
         let isLargerThanTwoLetters: Bool = searchBar.text?.count ?? 0 >= 2
         searchView.searchWarningLabel.isHidden = isLargerThanTwoLetters
         
+        if !isLargerThanTwoLetters {
+            presentWarningAlert(alertTitle: "2글자 이상 입력해주세요.")
+        }
+        
         guard isLargerThanTwoLetters else { return }
         guard let searchedText = searchBar.text else { return }
         let searchResultViewController = SearchResultViewController(searchedText: searchedText)
