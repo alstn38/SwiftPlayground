@@ -38,15 +38,12 @@ final class SearchResultView: BaseView {
     }()
     
     let productCollectionView: UICollectionView = {
-        let screenWidth = UIScreen.main.bounds.width
-        let spacing: CGFloat = 20
-        let cellWidth = (screenWidth - spacing * 3) / 2
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 30
-        layout.minimumInteritemSpacing = spacing
-        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 60)
+        let layout = BaseCollectionViewFlowLayout(
+            cellCountOfRow: 2,
+            insetSize: 20,
+            minimumSpacing: 30,
+            heightMultiply: 1.4
+        )
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .black
         collectionView.showsVerticalScrollIndicator = true
