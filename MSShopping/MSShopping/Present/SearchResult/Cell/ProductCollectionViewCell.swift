@@ -9,7 +9,7 @@ import SnapKit
 import Kingfisher
 import UIKit
 
-final class ProductCollectionViewCell: UICollectionViewCell {
+final class ProductCollectionViewCell: BaseCollectionViewCell {
     
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
@@ -43,18 +43,6 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupCell()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        setupCell()
-    }
-    
     func configureCell(_ item: Item) {
         let imageURL = URL(string: item.image)
         productImageView.kf.setImage(with: imageURL)
@@ -69,18 +57,18 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         )
     }
     
-    private func setupCell() {
+    override func setupCell() {
         setupHierarchy()
         setupLayout()
     }
     
-    private func setupHierarchy() {
+    override func setupHierarchy() {
         [productImageView, mallNameLabel, productNameLabel, productPriceLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
-    private func setupLayout() {
+    override func setupLayout() {
         productImageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(productImageView.snp.width)
