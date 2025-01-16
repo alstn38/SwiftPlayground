@@ -12,6 +12,7 @@ import UIKit
 final class SearchResultViewController: UIViewController {
     
     private var selectedFilterButtonType: FilterButton.FilterButtonType = .accuracy
+    private var startPage: Int = 1
     private var searchedText: String
     private var productItemArray: [Item] = [] {
         didSet {
@@ -58,6 +59,8 @@ final class SearchResultViewController: UIViewController {
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 60)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .black
+        collectionView.showsVerticalScrollIndicator = true
+        collectionView.indicatorStyle = .white
         return collectionView
     }()
     
@@ -149,10 +152,9 @@ final class SearchResultViewController: UIViewController {
     }
     
     private func getProductResult() {
-        productItemArray = []
         indicatorView.startAnimating()
         let encodeString = searchedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=100&sort=\(selectedFilterButtonType.query)"
+        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=30&sort=\(selectedFilterButtonType.query)&start=\(startPage)"
         let header: HTTPHeaders = [
             "X-Naver-Client-Id": Bundle.main.clientID,
             "X-Naver-Client-Secret": Bundle.main.apiKey
@@ -163,7 +165,7 @@ final class SearchResultViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 self?.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
-                self?.productItemArray = value.items
+                self?.productItemArray.append(contentsOf: value.items)
                 self?.indicatorView.stopAnimating()
             case .failure(let error):
                 print(error.localizedDescription)
@@ -172,6 +174,8 @@ final class SearchResultViewController: UIViewController {
     }
     
     @objc private func filterButtonDidTap(_ sender: UIButton) {
+        productItemArray = []
+        startPage = 1
         selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
         filterButtonArray.forEach { $0.isSelected = false }
         sender.isSelected = true
@@ -194,5 +198,14 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
         cell.configureCell(productItemArray[indexPath.item])
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard startPage <= 1000 else { return }
+        let rowItemCount: Int = 2
+        if productItemArray.count - (rowItemCount * 1) - 1  == indexPath.item {
+            startPage += 1
+            getProductResult()
+        }
     }
 }
