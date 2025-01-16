@@ -49,7 +49,7 @@ extension SearchViewController: UISearchBarDelegate {
         searchView.searchWarningLabel.isHidden = isLargerThanTwoLetters
         
         if !isLargerThanTwoLetters {
-            presentWarningAlert(alertTitle: "2글자 이상 입력해주세요.")
+            presentDefaultAlert(alertTitle: "2글자 이상 입력해주세요.")
         }
         
         guard isLargerThanTwoLetters else { return }
