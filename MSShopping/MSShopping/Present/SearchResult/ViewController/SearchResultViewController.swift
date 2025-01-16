@@ -5,7 +5,6 @@
 //  Created by 강민수 on 1/15/25.
 //
 
-import Alamofire
 import UIKit
 
 final class SearchResultViewController: UIViewController {
@@ -71,23 +70,23 @@ final class SearchResultViewController: UIViewController {
     
     private func getProductResult() {
         searchResultView.indicatorView.startAnimating()
-        let encodeString = searchedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let url = Bundle.main.mainURL + "?query=\(encodeString)&display=30&sort=\(selectedFilterButtonType.query)&start=\(startPage)"
-        let header: HTTPHeaders = [
-            "X-Naver-Client-Id": Bundle.main.clientID,
-            "X-Naver-Client-Secret": Bundle.main.apiKey
-        ]
         
-        AF.request(url, method: .get, headers: header)
-            .responseDecodable(of: Product.self) { [weak self] response in
-            switch response.result {
+        NetworkManager.shared.getShoppingResult(
+            searchedText: searchedText,
+            sortType: selectedFilterButtonType.query,
+            page: startPage
+        ) { [weak self] result in
+            guard let self else { return }
+            switch result {
             case .success(let value):
-                self?.productTotalCount = value.total
-                self?.searchResultView.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
-                self?.productItemArray.append(contentsOf: value.items)
-                self?.searchResultView.indicatorView.stopAnimating()
-            case .failure(let error):
-                print(error.localizedDescription)
+                self.productTotalCount = value.total
+                self.searchResultView.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
+                self.productItemArray.append(contentsOf: value.items)
+                self.searchResultView.indicatorView.stopAnimating()
+            case .failure(_):
+                self.presentDefaultAlert(alertTitle: "결과 값을 불러올 수 없습니다.") {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }
     }
