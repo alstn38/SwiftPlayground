@@ -92,6 +92,7 @@ final class SearchResultViewController: UIViewController {
     }
     
     @objc private func filterButtonDidTap(_ sender: UIButton) {
+        guard !productItemArray.isEmpty, sender.tag != selectedFilterButtonType.rawValue else { return }
         searchResultView.productCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
         productItemArray = []
         startPage = 1
