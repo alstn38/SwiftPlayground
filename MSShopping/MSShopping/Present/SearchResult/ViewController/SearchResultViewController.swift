@@ -14,6 +14,7 @@ final class SearchResultViewController: UIViewController {
     private var selectedFilterButtonType: FilterButton.FilterButtonType = .accuracy
     private var startPage: Int = 1
     private var searchedText: String
+    private var productTotalCount: Int?
     private var productItemArray: [Item] = [] {
         didSet {
             productCollectionView.reloadData()
@@ -164,6 +165,7 @@ final class SearchResultViewController: UIViewController {
             .responseDecodable(of: Product.self) { [weak self] response in
             switch response.result {
             case .success(let value):
+                self?.productTotalCount = value.total
                 self?.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
                 self?.productItemArray.append(contentsOf: value.items)
                 self?.indicatorView.stopAnimating()
@@ -202,7 +204,9 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard startPage <= 1000 else { return }
+        guard let productTotalCount,
+                startPage <= 1000 || productItemArray.count == productTotalCount else { return }
+        
         let rowItemCount: Int = 2
         if productItemArray.count - (rowItemCount * 1) - 1  == indexPath.item {
             startPage += 1
