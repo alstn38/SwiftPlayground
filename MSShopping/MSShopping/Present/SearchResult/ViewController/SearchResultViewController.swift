@@ -174,6 +174,7 @@ final class SearchResultViewController: UIViewController {
     }
     
     @objc private func filterButtonDidTap(_ sender: UIButton) {
+        productCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
         productItemArray = []
         startPage = 1
         selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
