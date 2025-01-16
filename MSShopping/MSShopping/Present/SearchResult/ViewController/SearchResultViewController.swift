@@ -122,8 +122,7 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let productTotalCount,
-                startPage <= 1000 || productItemArray.count == productTotalCount else { return }
-        
+                startPage <= 1000 && productItemArray.count < productTotalCount else { return }
         let rowItemCount: Int = 2
         if productItemArray.count - (rowItemCount * 1) - 1  == indexPath.item {
             startPage += 1
