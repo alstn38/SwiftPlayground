@@ -83,7 +83,8 @@ final class SearchResultViewController: UIViewController {
                 self.searchResultView.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
                 self.productItemArray.append(contentsOf: value.items)
                 self.searchResultView.indicatorView.stopAnimating()
-            case .failure(_):
+            case .failure(let error):
+                print(error)
                 self.presentDefaultAlert(alertTitle: "결과 값을 불러올 수 없습니다.") {
                     self.navigationController?.popViewController(animated: true)
                 }
