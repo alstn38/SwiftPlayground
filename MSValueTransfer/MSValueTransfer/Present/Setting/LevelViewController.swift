@@ -8,10 +8,17 @@
 import SnapKit
 import UIKit
 
+protocol LevelViewControllerDelegate {
+    func didChangeValue(value: String)
+}
+
 final class LevelViewController: UIViewController {
     
-    private let levelSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["상", "중", "하"])
+    var delegate: LevelViewControllerDelegate?
+    
+    let levelTitleArray: [String] = ["상", "중", "하"]
+    lazy var levelSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: levelTitleArray)
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
@@ -35,6 +42,14 @@ final class LevelViewController: UIViewController {
         configureView()
         configureHierarchy()
         configureLayout()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        let selectedIndex = levelSegmentedControl.selectedSegmentIndex
+        let level = levelTitleArray[selectedIndex]
+        delegate?.didChangeValue(value: level)
     }
     
     private func configureView() {
@@ -62,6 +77,6 @@ final class LevelViewController: UIViewController {
     }
     
     @objc private func confirmButtonDidTap(_ sender: UIButton) {
-        print(#function)
+        navigationController?.popViewController(animated: true)
     }
 }
