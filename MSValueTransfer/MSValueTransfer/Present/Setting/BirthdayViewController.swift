@@ -10,7 +10,9 @@ import UIKit
 
 final class BirthdayViewController: UIViewController {
     
-    private let birthdayDatePicker: UIDatePicker = {
+    var closure: ((Date) -> Void)?
+    
+    let birthdayDatePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.datePickerMode = .date
@@ -38,6 +40,12 @@ final class BirthdayViewController: UIViewController {
         configureLayout()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        closure?(birthdayDatePicker.date)
+    }
+    
     private func configureView() {
         view.backgroundColor = .white
     }
@@ -62,6 +70,6 @@ final class BirthdayViewController: UIViewController {
     }
     
     @objc private func confirmButtonDidTap(_ sender: UIButton) {
-        print(#function)
+        navigationController?.popViewController(animated: true)
     }
 }
