@@ -14,6 +14,12 @@ final class ProfileViewController: UIViewController {
     private var isBirthdayEnter: Bool = false
     private var isLevelEnter: Bool = false
     
+    private let dateformatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일"
+        return formatter
+    }()
+    
     private lazy var nickNameLabel: TapAnimationLabel = {
         let label = TapAnimationLabel(text: "닉네임")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(nickNameLabelDidTap))
@@ -133,17 +139,17 @@ final class ProfileViewController: UIViewController {
         
         displayNickNameLabel.snp.makeConstraints {
             $0.centerY.equalTo(nickNameLabel)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(30)
         }
         
         displayBirthdayLabel.snp.makeConstraints {
             $0.centerY.equalTo(birthdayLabel)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(30)
         }
         
         displayLevelLabel.snp.makeConstraints {
             $0.centerY.equalTo(levelLabel)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(30)
         }
         
         saveButton.snp.makeConstraints {
@@ -186,6 +192,19 @@ final class ProfileViewController: UIViewController {
     
     @objc private func birthdayLabelDidTap(_ sender: UITapGestureRecognizer) {
         let birthdayViewController = BirthdayViewController()
+        birthdayViewController.closure = { [weak self] date in
+            let dateString = self?.dateformatter.string(from: date)
+            
+            self?.displayBirthdayLabel.text = dateString
+            self?.isBirthdayEnter = true
+        }
+        
+        if isBirthdayEnter {
+            let dateString = displayLevelLabel.text ?? ""
+            let date = dateformatter.date(from: dateString) ?? Date()
+            birthdayViewController.birthdayDatePicker.date = date
+        }
+        
         navigationController?.pushViewController(birthdayViewController, animated: true)
     }
     
