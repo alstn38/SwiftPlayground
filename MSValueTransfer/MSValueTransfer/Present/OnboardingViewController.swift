@@ -11,14 +11,15 @@ import UIKit
 final class OnboardingViewController: UIViewController {
     
     private lazy var startButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("시작하기", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 34, weight: .bold)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 20
+        var titleContainer = AttributeContainer()
+        titleContainer.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        var configuration = UIButton.Configuration.filled()
+        configuration.attributedTitle = AttributedString("시작하기", attributes: titleContainer)
+        
+        let button = UIButton(configuration: configuration)
         button.addTarget(self, action: #selector(startButtonDidTap), for: .touchUpInside)
+        
         return button
     }()
     
