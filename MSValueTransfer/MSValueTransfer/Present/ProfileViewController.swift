@@ -210,6 +210,13 @@ final class ProfileViewController: UIViewController {
     
     @objc private func levelLabelDidTap(_ sender: UITapGestureRecognizer) {
         let levelViewController = LevelViewController()
+        levelViewController.delegate = self
+        
+        if isLevelEnter {
+            let selectedIndex = levelViewController.levelTitleArray.firstIndex(of: displayLevelLabel.text ?? "") ?? 0
+            levelViewController.levelSegmentedControl.selectedSegmentIndex = selectedIndex
+        }
+        
         navigationController?.pushViewController(levelViewController, animated: true)
     }
     
@@ -222,5 +229,14 @@ final class ProfileViewController: UIViewController {
         let onboardingViewController = OnboardingViewController()
         window.rootViewController = onboardingViewController
         window.makeKeyAndVisible()
+    }
+}
+
+// MARK: - LevelViewControllerDelegate
+extension ProfileViewController: LevelViewControllerDelegate {
+    
+    func didChangeValue(value: String) {
+        displayLevelLabel.text = value
+        isLevelEnter = true
     }
 }
