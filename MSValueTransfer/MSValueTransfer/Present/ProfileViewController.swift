@@ -9,10 +9,30 @@ import SnapKit
 import UIKit
 
 final class ProfileViewController: UIViewController {
-
-    private var isNickNameEnter: Bool = false
-    private var isBirthdayEnter: Bool = false
-    private var isLevelEnter: Bool = false
+    
+    private var isNickNameEnter: Bool = false {
+        didSet {
+            if isNickNameEnter && isBirthdayEnter && isLevelEnter {
+                saveButton.isEnabled = true
+            }
+        }
+    }
+    
+    private var isBirthdayEnter: Bool = false {
+        didSet {
+            if isNickNameEnter && isBirthdayEnter && isLevelEnter {
+                saveButton.isEnabled = true
+            }
+        }
+    }
+    
+    private var isLevelEnter: Bool = false {
+        didSet {
+            if isNickNameEnter && isBirthdayEnter && isLevelEnter {
+                saveButton.isEnabled = true
+            }
+        }
+    }
     
     private let dateformatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -43,7 +63,6 @@ final class ProfileViewController: UIViewController {
     
     private let displayNickNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "NO NAME"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .lightGray
         return label
@@ -51,7 +70,6 @@ final class ProfileViewController: UIViewController {
     
     private let displayBirthdayLabel: UILabel = {
         let label = UILabel()
-        label.text = "NO Date"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .lightGray
         return label
@@ -59,13 +77,12 @@ final class ProfileViewController: UIViewController {
     
     private let displayLevelLabel: UILabel = {
         let label = UILabel()
-        label.text = "NO Level"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .lightGray
         return label
     }()
     
-    private let saveButton: UIButton = {
+    private lazy var saveButton: UIButton = {
         var titleContainer = AttributeContainer()
         titleContainer.font = UIFont.boldSystemFont(ofSize: 20)
         
@@ -73,6 +90,7 @@ final class ProfileViewController: UIViewController {
         configuration.attributedTitle = AttributedString("저장하기", attributes: titleContainer)
         
         let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         button.isEnabled = false
         
         return button
@@ -91,7 +109,7 @@ final class ProfileViewController: UIViewController {
         
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,6 +117,7 @@ final class ProfileViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureNotification()
+        configureDisplayLabel()
     }
     
     private func configureView() {
@@ -174,6 +193,16 @@ final class ProfileViewController: UIViewController {
         )
     }
     
+    private func configureDisplayLabel() {
+        let nickNameText = UserDefaults.standard.string(forKey: "nickName") ?? "NO NAME"
+        let birthdayText = UserDefaults.standard.string(forKey: "birthday") ?? "NO Date"
+        let levelText = UserDefaults.standard.string(forKey: "level") ?? "NO Level"
+        
+        displayNickNameLabel.text = nickNameText
+        displayBirthdayLabel.text = birthdayText
+        displayLevelLabel.text = levelText
+    }
+    
     @objc private func nickNameTextFieldDidChange(_ notification: NSNotification) {
         guard let newNickName = notification.userInfo?["nickName"] as? String else { return }
         displayNickNameLabel.text = newNickName
@@ -218,6 +247,13 @@ final class ProfileViewController: UIViewController {
         }
         
         navigationController?.pushViewController(levelViewController, animated: true)
+    }
+    
+    @objc private func saveButtonDidTap(_ sender: UIButton) {
+        UserDefaults.standard.set(displayNickNameLabel.text, forKey: "nickName")
+        UserDefaults.standard.set(displayBirthdayLabel.text, forKey: "birthday")
+        UserDefaults.standard.set(displayLevelLabel.text, forKey: "level")
+        presentAlert(title: "저장성공")
     }
     
     @objc private func withdrawButtonDidTap(_ sender: UIButton) {
