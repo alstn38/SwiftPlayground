@@ -9,13 +9,32 @@ import SnapKit
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    
+
     private var isNickNameEnter: Bool = false
     private var isBirthdayEnter: Bool = false
     private var isLevelEnter: Bool = false
-    private let nickNameLabel = TapAnimationLabel(text: "닉네임")
-    private let birthdayLabel = TapAnimationLabel(text: "생일")
-    private let levelLabel = TapAnimationLabel(text: "레벨")
+    
+    private lazy var nickNameLabel: TapAnimationLabel = {
+        let label = TapAnimationLabel(text: "닉네임")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(nickNameLabelDidTap))
+        label.addGestureRecognizer(tapGesture)
+        return label
+    }()
+    
+    private lazy var birthdayLabel: TapAnimationLabel = {
+        let label = TapAnimationLabel(text: "생일")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(birthdayLabelDidTap))
+        label.addGestureRecognizer(tapGesture)
+        return label
+    }()
+    
+    private lazy var levelLabel: TapAnimationLabel = {
+        let label = TapAnimationLabel(text: "레벨")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(levelLabelDidTap))
+        label.addGestureRecognizer(tapGesture)
+        return label
+    }()
+    
     private let saveButton: UIButton = {
         var titleContainer = AttributeContainer()
         titleContainer.font = UIFont.boldSystemFont(ofSize: 20)
@@ -95,6 +114,21 @@ final class ProfileViewController: UIViewController {
             $0.height.equalTo(60)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
         }
+    }
+    
+    @objc private func nickNameLabelDidTap(_ sender: UITapGestureRecognizer) {
+        let nickNameViewController = NickNameViewController()
+        navigationController?.pushViewController(nickNameViewController, animated: true)
+    }
+    
+    @objc private func birthdayLabelDidTap(_ sender: UITapGestureRecognizer) {
+        let birthdayViewController = BirthdayViewController()
+        navigationController?.pushViewController(birthdayViewController, animated: true)
+    }
+    
+    @objc private func levelLabelDidTap(_ sender: UITapGestureRecognizer) {
+        let levelViewController = LevelViewController()
+        navigationController?.pushViewController(levelViewController, animated: true)
     }
     
     @objc private func withdrawButtonDidTap(_ sender: UIButton) {
