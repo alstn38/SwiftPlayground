@@ -48,7 +48,7 @@ final class OnboardingViewController: UIViewController {
     }
     
     @objc private func startButtonDidTap(_ sender: UIButton) {
-        print(#function)
+        UserDefaults.standard.set(true, forKey: "isOnboardExperience")
         guard
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
             let window = windowScene.windows.first
