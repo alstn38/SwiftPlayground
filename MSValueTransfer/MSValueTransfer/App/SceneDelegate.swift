@@ -13,9 +13,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let viewController = OnboardingViewController()
+        let viewController = getInitViewController()
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = viewController
+        window?.rootViewController = UINavigationController(rootViewController: viewController)
         window?.makeKeyAndVisible()
+    }
+    
+    private func getInitViewController() -> UIViewController {
+        let isOnboardExperience = UserDefaults.standard.bool(forKey: "isOnboardExperience")
+        
+        switch isOnboardExperience {
+        case true:
+            return ProfileViewController()
+        case false:
+            return OnboardingViewController()
+        }
     }
 }
