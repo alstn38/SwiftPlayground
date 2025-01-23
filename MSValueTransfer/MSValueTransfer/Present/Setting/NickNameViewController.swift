@@ -10,7 +10,7 @@ import UIKit
 
 final class NickNameViewController: UIViewController {
     
-    private let nickNameTextField: UITextField = {
+    let nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "닉네임을 입력해주세요."
         textField.textColor = .black
@@ -39,6 +39,11 @@ final class NickNameViewController: UIViewController {
         configureLayout()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        postNotification()
+    }
+    
     private func configureView() {
         view.backgroundColor = .white
     }
@@ -57,13 +62,24 @@ final class NickNameViewController: UIViewController {
         }
         
         confirmButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.keyboardLayoutGuide).inset(30)
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-30)
             $0.height.equalTo(60)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
         }
     }
     
+    private func postNotification() {
+        guard let newNickName = nickNameTextField.text else { return }
+        guard !newNickName.isEmpty else { return }
+        
+        NotificationCenter.default.post(
+            name: NSNotification.Name("nickNameTextFieldDidChange"),
+            object: nil,
+            userInfo: ["nickName": newNickName]
+        )
+    }
+    
     @objc private func confirmButtonDidTap(_ sender: UIButton) {
-        print(#function)
+        navigationController?.popViewController(animated: true)
     }
 }
