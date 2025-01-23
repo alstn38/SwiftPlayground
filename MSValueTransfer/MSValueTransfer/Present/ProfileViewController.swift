@@ -92,6 +92,7 @@ final class ProfileViewController: UIViewController {
         configureView()
         configureHierarchy()
         configureLayout()
+        configureNotification()
     }
     
     private func configureView() {
@@ -158,8 +159,28 @@ final class ProfileViewController: UIViewController {
         }
     }
     
+    private func configureNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(nickNameTextFieldDidChange),
+            name: NSNotification.Name("nickNameTextFieldDidChange"),
+            object: nil
+        )
+    }
+    
+    @objc private func nickNameTextFieldDidChange(_ notification: NSNotification) {
+        guard let newNickName = notification.userInfo?["nickName"] as? String else { return }
+        displayNickNameLabel.text = newNickName
+        isNickNameEnter = true
+    }
+    
     @objc private func nickNameLabelDidTap(_ sender: UITapGestureRecognizer) {
         let nickNameViewController = NickNameViewController()
+        
+        if isNickNameEnter {
+            nickNameViewController.nickNameTextField.text = displayNickNameLabel.text
+        }
+        
         navigationController?.pushViewController(nickNameViewController, animated: true)
     }
     
