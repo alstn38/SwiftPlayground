@@ -9,11 +9,9 @@ import UIKit
 
 final class TapAnimationLabel: UILabel {
     
-    private let labelText: String
-    
     init(text: String) {
-        self.labelText = text
         super.init(frame: .zero)
+        self.text = text
         
         configureLabel()
     }
@@ -51,10 +49,8 @@ final class TapAnimationLabel: UILabel {
     }
     
     private func configureLabel() {
-        self.text = "\n   \(labelText)   \n"
         self.font = .systemFont(ofSize: 24, weight: .bold)
         self.textAlignment = .center
-        self.numberOfLines = 3
         self.textColor = .black
         self.isUserInteractionEnabled = true
     }
