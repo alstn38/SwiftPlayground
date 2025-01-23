@@ -35,6 +35,30 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
+    private let displayNickNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "NO NAME"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .lightGray
+        return label
+    }()
+    
+    private let displayBirthdayLabel: UILabel = {
+        let label = UILabel()
+        label.text = "NO Date"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .lightGray
+        return label
+    }()
+    
+    private let displayLevelLabel: UILabel = {
+        let label = UILabel()
+        label.text = "NO Level"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .lightGray
+        return label
+    }()
+    
     private let saveButton: UIButton = {
         var titleContainer = AttributeContainer()
         titleContainer.font = UIFont.boldSystemFont(ofSize: 20)
@@ -79,6 +103,9 @@ final class ProfileViewController: UIViewController {
             nickNameLabel,
             birthdayLabel,
             levelLabel,
+            displayNickNameLabel,
+            displayBirthdayLabel,
+            displayLevelLabel,
             saveButton,
             withdrawButton
         )
@@ -88,18 +115,33 @@ final class ProfileViewController: UIViewController {
         nickNameLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(60)
             $0.height.equalTo(60)
-            $0.centerX.equalToSuperview()
+            $0.centerX.equalToSuperview().offset(-90)
         }
         
         birthdayLabel.snp.makeConstraints {
             $0.top.equalTo(nickNameLabel.snp.bottom).offset(30)
             $0.height.equalTo(60)
-            $0.centerX.equalToSuperview()
+            $0.centerX.equalToSuperview().offset(-90)
         }
         
         levelLabel.snp.makeConstraints {
             $0.top.equalTo(birthdayLabel.snp.bottom).offset(30)
             $0.height.equalTo(60)
+            $0.centerX.equalToSuperview().offset(-90)
+        }
+        
+        displayNickNameLabel.snp.makeConstraints {
+            $0.centerY.equalTo(nickNameLabel)
+            $0.centerX.equalToSuperview()
+        }
+        
+        displayBirthdayLabel.snp.makeConstraints {
+            $0.centerY.equalTo(birthdayLabel)
+            $0.centerX.equalToSuperview()
+        }
+        
+        displayLevelLabel.snp.makeConstraints {
+            $0.centerY.equalTo(levelLabel)
             $0.centerX.equalToSuperview()
         }
         
