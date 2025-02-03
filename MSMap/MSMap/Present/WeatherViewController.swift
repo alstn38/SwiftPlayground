@@ -11,6 +11,11 @@ import UIKit
 
 final class WeatherViewController: UIViewController {
     
+    private let defaultLocation = CLLocationCoordinate2D(
+        latitude: 37.65453812853827,
+        longitude: 127.04992470255024
+    )
+    
     private let locationManager: CLLocationManager = {
         let locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -108,6 +113,45 @@ final class WeatherViewController: UIViewController {
         locationManager.delegate = self
     }
     
+    private func updateCurrentLocation(_ location: CLLocationCoordinate2D?) {
+        let location = location ?? defaultLocation
+        if let annotations = mapView.annotations as? MKAnnotation {
+            mapView.removeAnnotation(annotations)
+        }
+        moveToRegion(location: location)
+        createAnnotation(location: location)
+        locationManager.stopUpdatingLocation()
+    }
+    
+    private func moveToRegion(location: CLLocationCoordinate2D) {
+        let center = location
+        let region = MKCoordinateRegion(
+            center: center,
+            latitudinalMeters: 500,
+            longitudinalMeters: 500
+        )
+        
+        mapView.setRegion(region, animated: true)
+    }
+    
+    private func createAnnotation(location: CLLocationCoordinate2D) {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        mapView.addAnnotation(annotation)
+    }
+    
+    private func getWeatherInfo() {
+        let request = WeatherRequest.currentWeather(latitude: 44.34, longitude: 10.99)
+        NetworkManager.shared.request(urlRequest: request, responseType: Weather.self) { response in
+            switch response {
+            case .success(let success):
+                print(success)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
     /// 사용자의 현재 정보를 가져오는 메서드
     private func refreshCurrentLocation() {
         checkDeviceLocationAuth { result in
@@ -164,7 +208,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
     
     /// 사용자의 위치를 성공적으로 가져왔을 때 호출되는 메서드
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(locations.last?.coordinate)
+        updateCurrentLocation(locations.last?.coordinate)
     }
     
     /// 사용자의 위치를 가져오는 것에 실패했을 때 호출되는 메서드
