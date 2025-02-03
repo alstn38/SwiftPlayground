@@ -10,6 +10,12 @@ import SnapKit
 import UIKit
 
 final class WeatherViewController: UIViewController {
+    
+    private let locationManager: CLLocationManager = {
+        let locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        return locationManager
+    }()
      
     private let mapView: MKMapView = {
         let view = MKMapView()
@@ -57,6 +63,7 @@ final class WeatherViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupActions()
+        setupDelegate()
     }
     
     // MARK: - UI Setup
@@ -97,6 +104,51 @@ final class WeatherViewController: UIViewController {
         refreshButton.addTarget(self, action: #selector(refreshButtonTapped), for: .touchUpInside)
     }
     
+    private func setupDelegate() {
+        locationManager.delegate = self
+    }
+    
+    /// 사용자의 현재 정보를 가져오는 메서드
+    private func refreshCurrentLocation() {
+        checkDeviceLocationAuth { result in
+            DispatchQueue.main.async {
+                switch result {
+                case true:
+                    self.checkCurrentLocationStatus()
+                case false:
+                    self.presentToSettingAppWithLocation()
+                }
+            }
+        }
+    }
+    
+    /// 사용자 기기의 위치 권한(시스템 설정)을 확인하는 메서드
+    private func checkDeviceLocationAuth(completionHandler: @escaping (Bool) -> Void) {
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                completionHandler(true)
+            } else {
+                completionHandler(false)
+            }
+        }
+    }
+    
+    /// 사용자의 앱 위치 권한을 확인하고 관련 동작을 수행하는 메서드
+    private func checkCurrentLocationStatus() {
+        let status = locationManager.authorizationStatus
+        
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .denied:
+            presentToSettingAppWithLocation()
+        case .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
+        default:
+            presentWarningAlert()
+        }
+    }
+    
     // MARK: - Actions
     @objc private func currentLocationButtonTapped() {
         // 현재 위치 가져오기 구현
@@ -104,5 +156,32 @@ final class WeatherViewController: UIViewController {
     
     @objc private func refreshButtonTapped() {
         // 날씨 새로고침 구현
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    
+    /// 사용자의 위치를 성공적으로 가져왔을 때 호출되는 메서드
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print(locations.last?.coordinate)
+    }
+    
+    /// 사용자의 위치를 가져오는 것에 실패했을 때 호출되는 메서드
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+        presentWarningAlert()
+    }
+    
+    /// iOS 14+
+    /// 사용자의 위치 권한 상태가 변경되었을 때 호출되는 메서드
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        print(#function)
+        refreshCurrentLocation()
+    }
+    
+    /// iOS 14미만
+    /// 사용자의 위치 권한 상태가 변경되었을 때 호출되는 메서드
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        refreshCurrentLocation()
     }
 }
