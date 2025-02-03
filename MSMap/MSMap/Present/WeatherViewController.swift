@@ -186,6 +186,7 @@ final class WeatherViewController: UIViewController {
             locationManager.requestWhenInUseAuthorization()
         case .denied:
             updateCurrentLocation(nil)
+            presentToSettingAppWithLocation()
         case .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
         default:
@@ -195,7 +196,7 @@ final class WeatherViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func currentLocationButtonTapped() {
-        // 현재 위치 가져오기 구현
+        refreshCurrentLocation()
     }
     
     @objc private func refreshButtonTapped() {
