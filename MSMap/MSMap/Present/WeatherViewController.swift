@@ -33,6 +33,7 @@ final class WeatherViewController: UIViewController {
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16)
         label.text = "날씨 정보를 불러오는 중..."
+        label.textColor = .black
         return label
     }()
     
@@ -120,6 +121,7 @@ final class WeatherViewController: UIViewController {
         }
         moveToRegion(location: location)
         createAnnotation(location: location)
+        getWeatherInfo(location: location)
         locationManager.stopUpdatingLocation()
     }
     
@@ -140,12 +142,16 @@ final class WeatherViewController: UIViewController {
         mapView.addAnnotation(annotation)
     }
     
-    private func getWeatherInfo() {
-        let request = WeatherRequest.currentWeather(latitude: 44.34, longitude: 10.99)
-        NetworkManager.shared.request(urlRequest: request, responseType: Weather.self) { response in
+    private func getWeatherInfo(location: CLLocationCoordinate2D) {
+        let request = WeatherRequest.currentWeather(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+        
+        NetworkManager.shared.request(urlRequest: request, responseType: Weather.self) { [weak self] response in
             switch response {
             case .success(let success):
-                print(success)
+                self?.weatherInfoLabel.text = success.description
             case .failure(let failure):
                 print(failure)
             }
@@ -200,7 +206,7 @@ final class WeatherViewController: UIViewController {
     }
     
     @objc private func refreshButtonTapped() {
-        // 날씨 새로고침 구현
+        refreshCurrentLocation()
     }
 }
 
