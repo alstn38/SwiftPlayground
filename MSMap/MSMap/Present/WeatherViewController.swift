@@ -185,7 +185,7 @@ final class WeatherViewController: UIViewController {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .denied:
-            presentToSettingAppWithLocation()
+            updateCurrentLocation(nil)
         case .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
         default:
@@ -219,7 +219,6 @@ extension WeatherViewController: CLLocationManagerDelegate {
     /// iOS 14+
     /// 사용자의 위치 권한 상태가 변경되었을 때 호출되는 메서드
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print(#function)
         refreshCurrentLocation()
     }
     
