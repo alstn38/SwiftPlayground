@@ -19,8 +19,6 @@ final class NetworkManager {
         responseType: T.Type,
         completionHandler: @escaping (Result<T, AFError>) -> Void
     ) {
-        let url = try? urlRequest.asURLRequest().url
-        print(url)
         
         AF.request(urlRequest)
             .validate(statusCode: 200...299)
