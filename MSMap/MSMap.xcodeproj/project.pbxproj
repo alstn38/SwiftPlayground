@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F1D7241F2D50AA8C005C4A83 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F1D7241E2D50AA8C005C4A83 /* Alamofire */; };
+		F1D724222D50AA94005C4A83 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F1D724212D50AA94005C4A83 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F1D723FE2D50A877005C4A83 /* MSMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1D7241F2D50AA8C005C4A83 /* Alamofire in Frameworks */,
+				F1D724222D50AA94005C4A83 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = MSMap;
 			packageProductDependencies = (
+				F1D7241E2D50AA8C005C4A83 /* Alamofire */,
+				F1D724212D50AA94005C4A83 /* SnapKit */,
 			);
 			productName = MSMap;
 			productReference = F1D723FE2D50A877005C4A83 /* MSMap.app */;
@@ -107,6 +116,10 @@
 			);
 			mainGroup = F1D723F52D50A877005C4A83;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F1D7241D2D50AA8C005C4A83 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F1D724202D50AA94005C4A83 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F1D723FF2D50A877005C4A83 /* Products */;
 			projectDirPath = "";
@@ -343,6 +356,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F1D7241D2D50AA8C005C4A83 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		F1D724202D50AA94005C4A83 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F1D7241E2D50AA8C005C4A83 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D7241D2D50AA8C005C4A83 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		F1D724212D50AA94005C4A83 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D724202D50AA94005C4A83 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F1D723F62D50A877005C4A83 /* Project object */;
 }
