@@ -5,9 +5,16 @@
 //  Created by 강민수 on 2/4/25.
 //
 
+import PhotosUI
 import UIKit
 
 final class PhotoViewController: UIViewController {
+    
+    private var photoImageArray: [UIImage] = [] {
+        didSet {
+            photoCollectionView.reloadData()
+        }
+    }
     
     private lazy var photoCollectionView: UICollectionView = {
         let spacing: CGFloat = 10
@@ -59,7 +66,13 @@ final class PhotoViewController: UIViewController {
     }
     
     @objc private func albumButtonTapped(_ sender: UIBarButtonItem) {
-        print(#function)
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 20
+
+        let pickerViewController = PHPickerViewController(configuration: configuration)
+        pickerViewController.delegate = self
+        
+        present(pickerViewController, animated: true)
     }
 }
 
@@ -67,7 +80,7 @@ final class PhotoViewController: UIViewController {
 extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return photoImageArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -77,5 +90,13 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         ) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
         
         return cell
+    }
+}
+
+// MARK: - PHPickerViewControllerDelegate
+extension PhotoViewController: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        print(#function)
     }
 }
