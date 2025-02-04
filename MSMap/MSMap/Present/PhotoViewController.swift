@@ -89,6 +89,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
             for: indexPath
         ) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
         
+        cell.setUI(photoImageArray[indexPath.item])
         return cell
     }
 }
@@ -97,6 +98,39 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
 extension PhotoViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        print(#function)
+        let itemProviderArray = results.map { $0.itemProvider }
+        
+        guard itemProviderArray.allSatisfy({ $0.canLoadObject(ofClass: UIImage.self) }) else {
+            dismiss(animated: true) {
+                self.presentWarningAlert(title: "사진 오류", message: "선택된 사진에서 가져올 수 없는 사진이 있습니다.")
+            }
+            return
+        }
+        
+        let dispatchGroup = DispatchGroup()
+        var newImageArray: [UIImage] = []
+        for provider in itemProviderArray {
+            dispatchGroup.enter()
+            
+            provider.loadObject(ofClass: UIImage.self) { image, error in
+                if let image = image as? UIImage {
+                    newImageArray.append(image)
+                }
+                
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            guard newImageArray.count == results.count else {
+                self.dismiss(animated: true) {
+                    self.presentWarningAlert(title: "사진 오류", message: "선택된 사진을 가져오는데 실패했습니다.")
+                }
+                return
+            }
+            
+            self.photoImageArray = newImageArray
+            self.dismiss(animated: true)
+        }
     }
 }
