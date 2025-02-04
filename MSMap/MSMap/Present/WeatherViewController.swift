@@ -37,6 +37,13 @@ final class WeatherViewController: UIViewController {
         return label
     }()
     
+    private let selectedImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     private let currentLocationButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "location.fill"), for: .normal)
@@ -89,7 +96,7 @@ final class WeatherViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        [mapView, weatherInfoLabel, currentLocationButton, refreshButton, photoButton].forEach {
+        [mapView, weatherInfoLabel, selectedImageView, currentLocationButton, refreshButton, photoButton].forEach {
             view.addSubview($0)
         }
     }
@@ -102,7 +109,15 @@ final class WeatherViewController: UIViewController {
         
         weatherInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(mapView.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalTo(view.snp.centerX)
+        }
+        
+        selectedImageView.snp.makeConstraints { make in
+            make.top.equalTo(mapView.snp.bottom).offset(20)
+            make.leading.equalTo(view.snp.centerX)
+            make.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(currentLocationButton.snp.top)
         }
         
         currentLocationButton.snp.makeConstraints { make in
@@ -231,6 +246,7 @@ final class WeatherViewController: UIViewController {
     
     @objc private func photoButtonTapped(_ sender: UIButton) {
         let photoViewController = PhotoViewController()
+        photoViewController.delegate = self
         navigationController?.pushViewController(photoViewController, animated: true)
     }
 }
@@ -258,5 +274,13 @@ extension WeatherViewController: CLLocationManagerDelegate {
     /// 사용자의 위치 권한 상태가 변경되었을 때 호출되는 메서드
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         refreshCurrentLocation()
+    }
+}
+
+// MARK: - PhotoViewControllerDelegate
+extension WeatherViewController: PhotoViewControllerDelegate {
+    
+    func photoViewController(_ viewController: UIViewController, didSelectedItemImage: UIImage) {
+        selectedImageView.image = didSelectedItemImage
     }
 }
