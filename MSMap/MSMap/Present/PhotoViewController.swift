@@ -32,8 +32,19 @@ final class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupNavigation()
         setupUI()
         setupConstraints()
+    }
+    
+    private func setupNavigation() {
+        let albumButton = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            style: .plain,
+            target: self,
+            action: #selector(albumButtonTapped))
+        
+        navigationItem.rightBarButtonItem = albumButton
     }
     
     private func setupUI() {
@@ -45,6 +56,10 @@ final class PhotoViewController: UIViewController {
         photoCollectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    @objc private func albumButtonTapped(_ sender: UIBarButtonItem) {
+        print(#function)
     }
 }
 
