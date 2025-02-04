@@ -8,7 +8,13 @@
 import PhotosUI
 import UIKit
 
+protocol PhotoViewControllerDelegate: AnyObject {
+    func photoViewController(_ viewController: UIViewController, didSelectedItemImage: UIImage)
+}
+
 final class PhotoViewController: UIViewController {
+    
+    weak var delegate: PhotoViewControllerDelegate?
     
     private var photoImageArray: [UIImage] = [] {
         didSet {
@@ -91,6 +97,12 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         cell.setUI(photoImageArray[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedImage = photoImageArray[indexPath.item]
+        delegate?.photoViewController(self, didSelectedItemImage: selectedImage)
+        navigationController?.popViewController(animated: true)
     }
 }
 
