@@ -16,6 +16,13 @@ final class PhotoViewController: UIViewController {
     
     weak var delegate: PhotoViewControllerDelegate?
     
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.color = .gray
+        return activityIndicatorView
+    }()
+    
     private var photoImageArray: [UIImage] = [] {
         didSet {
             photoCollectionView.reloadData()
@@ -62,10 +69,16 @@ final class PhotoViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
-        view.addSubview(photoCollectionView)
+        [photoCollectionView, activityIndicatorView].forEach {
+            view.addSubview($0)
+        }
     }
     
     private func setupConstraints() {
+        activityIndicatorView.snp.makeConstraints {
+            $0.center.equalTo(view.safeAreaLayoutGuide)
+        }
+        
         photoCollectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -110,6 +123,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
 extension PhotoViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        activityIndicatorView.startAnimating()
         let itemProviderArray = results.map { $0.itemProvider }
         
         guard itemProviderArray.allSatisfy({ $0.canLoadObject(ofClass: UIImage.self) }) else {
@@ -135,14 +149,14 @@ extension PhotoViewController: PHPickerViewControllerDelegate {
         
         dispatchGroup.notify(queue: .main) {
             guard newImageArray.count == results.count else {
-                self.dismiss(animated: true) {
-                    self.presentWarningAlert(title: "사진 오류", message: "선택된 사진을 가져오는데 실패했습니다.")
-                }
+                self.presentWarningAlert(title: "사진 오류", message: "선택된 사진을 가져오는데 실패했습니다.")
                 return
             }
             
             self.photoImageArray = newImageArray
-            self.dismiss(animated: true)
+            self.activityIndicatorView.stopAnimating()
         }
+        
+        dismiss(animated: true)
     }
 }
