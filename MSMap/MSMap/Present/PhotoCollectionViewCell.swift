@@ -14,6 +14,7 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .gray
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -27,6 +28,10 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
         setUI()
         setupConstraints()
+    }
+    
+    func setUI(_ image: UIImage) {
+        photoImageView.image = image
     }
     
     private func setUI() {
