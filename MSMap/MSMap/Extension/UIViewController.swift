@@ -49,4 +49,20 @@ extension UIViewController {
         alertController.addAction(alertAction)
         present(alertController, animated: true)
     }
+    
+    func presentWarningAlert(title: String, message: String) {
+        let alertController = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        let alertAction = UIAlertAction(
+            title: "확인",
+            style: .default
+        )
+        
+        alertController.addAction(alertAction)
+        present(alertController, animated: true)
+    }
 }
