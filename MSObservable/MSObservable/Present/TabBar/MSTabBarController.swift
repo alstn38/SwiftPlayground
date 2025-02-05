@@ -32,10 +32,18 @@ final class MSTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "text.document")
         )
         
+        let userListViewController = UserListViewController()
+        userListViewController.tabBarItem = UITabBarItem(
+            title: "유저리스트",
+            image: UIImage(systemName: "person.circle"),
+            selectedImage: UIImage(systemName: "person.circle")
+        )
+        
         let currencyExchangeNavigationController = UINavigationController(rootViewController: currencyExchangeViewController)
         let wordCounterNavigationController = UINavigationController(rootViewController: wordCounterViewController)
+        let userListNavigationController = UINavigationController(rootViewController: userListViewController)
         setViewControllers(
-            [currencyExchangeNavigationController, wordCounterNavigationController],
+            [currencyExchangeNavigationController, wordCounterNavigationController, userListNavigationController],
             animated: true
         )
     }
