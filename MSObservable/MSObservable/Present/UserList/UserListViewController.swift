@@ -5,12 +5,12 @@
 //  Created by 강민수 on 2/5/25.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 final class UserListViewController: UIViewController {
  
-    private var people: [Person] = []
+    private let viewModel = UserListViewModel()
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -59,10 +59,18 @@ final class UserListViewController: UIViewController {
      
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupBind()
         setupUI()
         setupConstraints()
         setupTableView()
         setupActions()
+    }
+    
+    private func setupBind() {
+        viewModel.outputPersonArray.bind { [weak self] personArray in
+            self?.tableView.reloadData()
+        }
     }
      
     private func setupUI() {
@@ -100,37 +108,27 @@ final class UserListViewController: UIViewController {
     }
      
     @objc private func loadButtonTapped() {
-        people = [
-            Person(name: "James", age: Int.random(in: 20...70)),
-            Person(name: "Mary", age: Int.random(in: 20...70)),
-            Person(name: "John", age: Int.random(in: 20...70)),
-            Person(name: "Patricia", age: Int.random(in: 20...70)),
-            Person(name: "Robert", age: Int.random(in: 20...70))
-        ]
-        tableView.reloadData()
+        viewModel.inputButtonDidTap.value = .loadButton
     }
     
     @objc private func resetButtonTapped() {
-        people.removeAll()
-        tableView.reloadData()
+        viewModel.inputButtonDidTap.value = .resetButton
     }
     
     @objc private func addButtonTapped() {
-        let names = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen"]
-        let user = Person(name: names.randomElement()!, age: Int.random(in: 20...70))
-        people.append(user)
-        tableView.reloadData()
+        viewModel.inputButtonDidTap.value = .addButton
     }
 }
  
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return people.count
+        return viewModel.outputPersonArray.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let person = viewModel.outputPersonArray.value[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "PersonCell", for: indexPath)
-        let person = people[indexPath.row]
+        
         cell.textLabel?.text = "\(person.name), \(person.age)세"
         return cell
     }
