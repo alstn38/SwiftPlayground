@@ -10,6 +10,8 @@ import UIKit
 
 final class CurrencyExchangeViewController: UIViewController {
     
+    private let viewModel = CurrencyExchangeViewModel()
+    
     private let exchangeRateLabel: UILabel = {
         let label = UILabel()
         label.text = "현재 환율: 1 USD = 1,350 KRW"
@@ -48,9 +50,17 @@ final class CurrencyExchangeViewController: UIViewController {
      
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupBind()
         setupUI()
         setupConstraints()
         setupActions()
+    }
+    
+    private func setupBind() {
+        viewModel.outputAmountResultLabelText.bind { [weak self] text in
+            self?.resultLabel.text = text
+        }
     }
      
     private func setupUI() {
@@ -86,18 +96,15 @@ final class CurrencyExchangeViewController: UIViewController {
     }
     
     private func setupActions() {
+        amountTextField.addTarget(self, action: #selector(amountTextFieldEditingChanged), for: .editingChanged)
         convertButton.addTarget(self, action: #selector(convertButtonTapped), for: .touchUpInside)
     }
-     
-    @objc private func convertButtonTapped() {
-        guard let amountText = amountTextField.text,
-              let amount = Double(amountText) else {
-            resultLabel.text = "올바른 금액을 입력해주세요"
-            return
-        }
-        
-        let exchangeRate = 1350.0 // 실제 환율 데이터로 대체 필요
-        let convertedAmount = amount / exchangeRate
-        resultLabel.text = String(format: "%.2f USD (약 $%.2f)", convertedAmount, convertedAmount)
+    
+    @objc private func amountTextFieldEditingChanged(_ sender: UITextField) {
+        viewModel.inputAmountTextFieldTextDidChange.value = sender.text
+    }
+    
+    @objc private func convertButtonTapped(_sender: UIButton) {
+        viewModel.inputConvertButtonDidTap.value = ()
     }
 }
