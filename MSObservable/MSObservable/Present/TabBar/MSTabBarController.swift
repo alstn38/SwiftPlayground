@@ -25,9 +25,17 @@ final class MSTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "wonsign.bank.building")
         )
         
+        let wordCounterViewController = WordCounterViewController()
+        wordCounterViewController.tabBarItem = UITabBarItem(
+            title: "글자계산기",
+            image: UIImage(systemName: "text.document"),
+            selectedImage: UIImage(systemName: "text.document")
+        )
+        
         let currencyExchangeNavigationController = UINavigationController(rootViewController: currencyExchangeViewController)
+        let wordCounterNavigationController = UINavigationController(rootViewController: wordCounterViewController)
         setViewControllers(
-            [currencyExchangeNavigationController],
+            [currencyExchangeNavigationController, wordCounterNavigationController],
             animated: true
         )
     }
