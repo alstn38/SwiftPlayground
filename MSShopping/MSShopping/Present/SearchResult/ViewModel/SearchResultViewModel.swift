@@ -41,7 +41,6 @@ final class SearchResultViewModel {
     func transform(from input: Input) -> Output {
         input.viewDidLoad.bind { [weak self] _ in
             guard let self else { return }
-            indicatorAnimateSubject.send(true)
             updateProductResult()
         }
         
@@ -71,6 +70,7 @@ final class SearchResultViewModel {
     }
     
     private func updateProductResult() {
+        indicatorAnimateSubject.send(true)
         NetworkManager.shared.getShoppingResult(
             searchedText: searchedText,
             sortType: selectedFilterButtonType.query,
