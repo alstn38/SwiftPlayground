@@ -10,20 +10,60 @@ import UIKit
 final class SearchViewController: UIViewController {
     
     private let searchView = SearchView()
+    private let viewModel: SearchViewModel
+    private let input: SearchViewModel.Input
+    private let output: SearchViewModel.Output
+    
+    private let shoppingSearchTextDidChangeSubject: Observable<String?> = Observable(nil)
+    private let searchButtonDidClickSubject: Observable<Void> = Observable(())
     
     override func loadView() {
         view = searchView
     }
     
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+        self.input = SearchViewModel.Input(
+            shoppingSearchTextDidChange: shoppingSearchTextDidChangeSubject,
+            searchButtonDidClick: searchButtonDidClickSubject
+        )
+        
+        self.output = viewModel.transform(from: input)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigation()
-        setupSearchBar()
+        setupBind()
+        setupView()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    private func setupBind() {
+        output.searchWarningLabelText.bind { [weak self] text in
+            guard let self else { return }
+            searchView.searchWarningLabel.text = text
+        }
+        
+        output.pushToResultViewController.bind { [weak self] searchedText in
+            guard let self else { return }
+            let searchResultViewController = SearchResultViewController(searchedText: searchedText)
+            navigationController?.pushViewController(searchResultViewController, animated: true)
+        }
+        
+        output.alertError.bind { [weak self] alertText in
+            guard let self else { return }
+            presentDefaultAlert(alertTitle: alertText)
+        }
     }
     
     private func setupView() {
@@ -38,6 +78,15 @@ final class SearchViewController: UIViewController {
     
     private func setupSearchBar() {
         searchView.shoppingSearchBar.delegate = self
+        searchView.shoppingSearchBar.searchTextField.addTarget(
+            self,
+            action: #selector(shoppingSearchTextFieldDidEditingChange),
+            for: .editingChanged
+        )
+    }
+    
+    @objc private func shoppingSearchTextFieldDidEditingChange(_ sender: UISearchTextField) {
+        shoppingSearchTextDidChangeSubject.send(sender.text)
     }
 }
 
@@ -45,16 +94,6 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let isLargerThanTwoLetters: Bool = searchBar.text?.count ?? 0 >= 2
-        searchView.searchWarningLabel.isHidden = isLargerThanTwoLetters
-        
-        if !isLargerThanTwoLetters {
-            presentDefaultAlert(alertTitle: "2글자 이상 입력해주세요.")
-        }
-        
-        guard isLargerThanTwoLetters else { return }
-        guard let searchedText = searchBar.text else { return }
-        let searchResultViewController = SearchResultViewController(searchedText: searchedText)
-        navigationController?.pushViewController(searchResultViewController, animated: true)
+        searchButtonDidClickSubject.send(())
     }
 }
