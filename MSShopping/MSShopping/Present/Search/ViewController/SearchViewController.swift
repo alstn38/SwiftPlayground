@@ -56,7 +56,8 @@ final class SearchViewController: UIViewController {
         
         output.pushToResultViewController.bind { [weak self] searchedText in
             guard let self else { return }
-            let searchResultViewController = SearchResultViewController(searchedText: searchedText)
+            let searchResultViewModel = SearchResultViewModel(searchedText: searchedText)
+            let searchResultViewController = SearchResultViewController(viewModel: searchResultViewModel)
             navigationController?.pushViewController(searchResultViewController, animated: true)
         }
         
