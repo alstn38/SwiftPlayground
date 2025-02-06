@@ -24,8 +24,6 @@ final class SearchView: BaseView {
     
     let searchWarningLabel: UILabel = {
         let label = UILabel()
-        label.text = "최소 2글자 이상 입력해주세요."
-        label.isHidden = true
         label.textColor = .systemRed
         label.font = .systemFont(ofSize: 12, weight: .medium)
         return label
