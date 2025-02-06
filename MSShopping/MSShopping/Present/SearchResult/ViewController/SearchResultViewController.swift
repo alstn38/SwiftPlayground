@@ -10,25 +10,28 @@ import UIKit
 final class SearchResultViewController: UIViewController {
     
     private let searchResultView = SearchResultView()
-    private var selectedFilterButtonType: FilterButton.FilterButtonType = .accuracy
-    private var startPage: Int = 1
-    private var searchedText: String
-    private var productTotalCount: Int?
-    private var productItemArray: [Item] = [] {
-        didSet {
-            searchResultView.productCollectionView.reloadData()
-        }
-    }
+    private let viewModel: SearchResultViewModel
+    private let input: SearchResultViewModel.Input
+    private let output: SearchResultViewModel.Output
     
-    init(searchedText: String) {
-        self.searchedText = searchedText
+    private let viewDidLoadSubject: Observable<Void> = Observable(())
+    private let selectedFilterButtonDidTapSubject: Observable<FilterButton.FilterButtonType> = Observable(.accuracy)
+    private let didRequestMoreResultSubject: Observable<Void> = Observable(())
+    
+    init(viewModel: SearchResultViewModel) {
+        self.viewModel = viewModel
+        self.input = SearchResultViewModel.Input(
+            viewDidLoad: viewDidLoadSubject,
+            selectedFilterButtonDidTap: selectedFilterButtonDidTapSubject,
+            didRequestMoreResult: didRequestMoreResultSubject
+        )
+        self.output = viewModel.transform(from: input)
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = searchedText
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        self.searchedText = ""
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func loadView() {
@@ -38,22 +41,39 @@ final class SearchResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addTargetButton()
+        setupBind()
+        setupAddTargetButton()
         setupCollectionView()
-        getProductResult()
+        viewDidLoadSubject.send(())
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        searchResultView.indicatorView.startAnimating()
+    private func setupBind() {
+        output.indicatorAnimate.bind { [weak self] isAnimate in
+            guard let self else { return }
+            if isAnimate {
+                searchResultView.indicatorView.startAnimating()
+            } else {
+                searchResultView.indicatorView.stopAnimating()
+            }
+        }
+        
+        output.productTotalCountText.bind { [weak self] text in
+            guard let self else { return }
+            searchResultView.searchTotalCountLabel.text = text
+        }
+        
+        output.searchProductArrayUpdate.bind { [weak self] _ in
+            guard let self else { return }
+            searchResultView.productCollectionView.reloadData()
+        }
+        
+        output.alertError.bind { [weak self] alertTitle in
+            guard let self else { return }
+            presentDefaultAlert(alertTitle: alertTitle)
+        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchResultView.indicatorView.stopAnimating()
-    }
-    
-    private func addTargetButton() {
+    private func setupAddTargetButton() {
         searchResultView.filterButtonArray.forEach {
             $0.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
         }
@@ -68,39 +88,12 @@ final class SearchResultViewController: UIViewController {
         )
     }
     
-    private func getProductResult() {
-        searchResultView.indicatorView.startAnimating()
-        
-        NetworkManager.shared.getShoppingResult(
-            searchedText: searchedText,
-            sortType: selectedFilterButtonType.query,
-            page: startPage
-        ) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let value):
-                self.productTotalCount = value.total
-                self.searchResultView.searchTotalCountLabel.text = "\(value.total.formatted())개의 검색 결과"
-                self.productItemArray.append(contentsOf: value.items)
-                self.searchResultView.indicatorView.stopAnimating()
-            case .failure(let error):
-                print(error)
-                self.presentDefaultAlert(alertTitle: "결과 값을 불러올 수 없습니다.") {
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
-    }
-    
     @objc private func filterButtonDidTap(_ sender: UIButton) {
-        guard !productItemArray.isEmpty, sender.tag != selectedFilterButtonType.rawValue else { return }
+        let buttonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
+        selectedFilterButtonDidTapSubject.send(buttonType)
         searchResultView.productCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
-        productItemArray = []
-        startPage = 1
-        selectedFilterButtonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
         searchResultView.filterButtonArray.forEach { $0.isSelected = false }
         sender.isSelected = true
-        getProductResult()
     }
 }
 
@@ -108,7 +101,7 @@ final class SearchResultViewController: UIViewController {
 extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return productItemArray.count
+        return viewModel.searchProductArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -116,18 +109,14 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
             withReuseIdentifier: ProductCollectionViewCell.identifier,
             for: indexPath
         ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureCell(productItemArray[indexPath.item])
+        cell.configureCell(viewModel.searchProductArray[indexPath.item])
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let productTotalCount,
-                startPage <= 1000 && productItemArray.count < productTotalCount else { return }
-        let rowItemCount: Int = 2
-        if productItemArray.count - (rowItemCount * 1) - 1  == indexPath.item {
-            startPage += 1
-            getProductResult()
+        if viewModel.searchProductArray.count - 3  == indexPath.item {
+            didRequestMoreResultSubject.send(())
         }
     }
 }
