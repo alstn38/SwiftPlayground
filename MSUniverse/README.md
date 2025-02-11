@@ -7,3 +7,4 @@
 
 ### 시도해 본 것
 - URLSessionDelegate
+- MVVM
