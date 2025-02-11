@@ -10,26 +10,66 @@ import SnapKit
 
 final class NasaViewController: UIViewController {
     
+    private let viewModel: NasaViewModel
+    private let input: NasaViewModel.Input
     private let progressLabel = UILabel()
     private let progressView = UIProgressView()
     private let nasaImageView = UIImageView()
     
-    private var total: Double = 0.0
-    private var buffer: Data? {
-        didSet {
-            let result = Double(buffer?.count ?? 0) / total
-            progressLabel.text = String(format: "%.2f", result * 100) + " / 100"
-            changeProgressView(Float(result))
-        }
+    init(viewModel: NasaViewModel) {
+        self.viewModel = viewModel
+        self.input = NasaViewModel.Input(requestButtonDidTap: Observable(()))
+        super.init(nibName: nil, bundle: nil)
     }
-
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureBind()
         configureNavigation()
         configureView()
         configureHierarchy()
         configureLayout()
+    }
+    
+    private func configureBind() {
+        let output = viewModel.transform(from: input)
+        
+        output.requestButtonState.bind { [weak self] state in
+            guard let self else { return }
+            navigationItem.rightBarButtonItem?.isEnabled = state
+        }
+        
+        output.progressViewHidden.bind { [weak self] isHidden in
+            guard let self else { return }
+            progressView.isHidden = isHidden
+        }
+        
+        output.universeImage.bind { [weak self] imageData in
+            guard let self else { return }
+            
+            if let imageData {
+                let image = UIImage(data: imageData)
+                nasaImageView.image = image
+            } else {
+                nasaImageView.image = UIImage(systemName: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90")
+            }
+        }
+        
+        output.progressLabelText.bind { [weak self] text in
+            guard let self else { return }
+            progressLabel.text = text
+        }
+        
+        output.progressValue.bind { [weak self] progress in
+            guard let self else { return }
+            changeProgressView(progress)
+        }
     }
     
     private func configureNavigation() {
@@ -46,6 +86,7 @@ final class NasaViewController: UIViewController {
     
     private func configureView() {
         view.backgroundColor = .black
+        progressView.isHidden = true
         progressView.progressTintColor = .systemBlue
         progressLabel.textColor = .white
         progressLabel.textAlignment = .center
@@ -74,64 +115,12 @@ final class NasaViewController: UIViewController {
     }
     
     @objc private func requestButtonClicked() {
-        fetchUniversePicture()
-    }
-    
-    private func fetchUniversePicture() {
-        let request = URLRequest(url: UniversePicture.photo, timeoutInterval: 7)
-        let configuration = URLSession(
-            configuration: .default,
-            delegate: self,
-            delegateQueue: .main
-        )
-        configuration.dataTask(with: request).resume()
+        input.requestButtonDidTap.send(())
     }
     
     private func changeProgressView(_ progress: Float) {
         UIView.animate(withDuration: 0.1) {
             self.progressView.progress = progress
         }
-    }
-}
-
-// MARK: - URLSessionDataDelegate
-extension NasaViewController: URLSessionDataDelegate {
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse) async -> URLSession.ResponseDisposition {
-        guard let response = response as? HTTPURLResponse,
-              let contentLength = response.value(forHTTPHeaderField: "Content-Length"),
-              let contentLength = Double(contentLength)
-        else {
-            return .cancel
-        }
-        
-        progressView.isHidden = false
-        buffer = Data()
-        total = contentLength
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        return .allow
-    }
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        buffer?.append(data)
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
-        if let error {
-            progressLabel.text = "사진을 가져오는데 문제가 발생했습니다. - \(error)"
-            nasaImageView.image = UIImage(systemName: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90")
-            return
-        }
-        
-        guard let buffer else {
-            progressLabel.text = "사진을 가져오는데 문제가 발생했습니다."
-            return
-        }
-        
-        let image = UIImage(data: buffer)
-        nasaImageView.image = image
-        progressLabel.text = nil
-        progressView.isHidden = true
-        navigationItem.rightBarButtonItem?.isEnabled = true
     }
 }
