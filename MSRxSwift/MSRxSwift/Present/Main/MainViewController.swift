@@ -14,7 +14,8 @@ final class MainViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     private let titles: [String] = [
-        "1. SimpleTableViewController"
+        "1. SimpleTableViewController",
+        "2. NumbersViewController"
     ]
     
     private lazy var items = Observable.just(titles)
@@ -73,6 +74,8 @@ final class MainViewController: UIViewController {
         switch index {
         case 0:
             return SimpleTableViewController()
+        case 1:
+            return NumbersViewController()
         default:
             return UIViewController()
         }
