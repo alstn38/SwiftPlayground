@@ -14,9 +14,10 @@ final class MainViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     private let titles: [String] = [
-        "1. SimpleTableViewController",
-        "2. NumbersViewController",
-        "3. SimpleValidationViewController"
+        "SimpleTableViewController",
+        "NumbersViewController",
+        "SimpleValidationViewController",
+        "BirthDayViewController"
     ]
     
     private lazy var items = Observable.just(titles)
@@ -42,7 +43,7 @@ final class MainViewController: UIViewController {
                 cellIdentifier: "UITableViewCell",
                 cellType: UITableViewCell.self
             )) { (row, element, cell) in
-                cell.textLabel?.text = element
+                cell.textLabel?.text = "\(row + 1) - \(element)"
             }
             .disposed(by: disposeBag)
         
@@ -79,6 +80,8 @@ final class MainViewController: UIViewController {
             return NumbersViewController()
         case 2:
             return SimpleValidationViewController()
+        case 3:
+            return BirthDayViewController()
         default:
             return UIViewController()
         }
