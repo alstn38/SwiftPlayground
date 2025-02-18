@@ -12,20 +12,64 @@ import RxCocoa
 
 final class BirthDayViewController: UIViewController {
 
-    let birthDayPicker = UIDatePicker()
-    let infoLabel = UILabel()
-    let containerStackView = UIStackView()
-    let yearLabel = UILabel()
-    let monthLabel = UILabel()
-    let dayLabel = UILabel()
-    let nextButton = UIButton()
+    private let disposeBag = DisposeBag()
+    private let birthDayPicker = UIDatePicker()
+    private let infoLabel = UILabel()
+    private let containerStackView = UIStackView()
+    private let yearLabel = UILabel()
+    private let monthLabel = UILabel()
+    private let dayLabel = UILabel()
+    private let nextButton = UIButton()
+    
+    private var currentYear: Int {
+        let date = Date()
+        let components = Calendar.current.dateComponents([.year,], from: date)
+        return components.year ?? 0
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureBinding()
         configureView()
         configureHierarchy()
         configureLayout()
+    }
+    
+    private func configureBinding() {
+        birthDayPicker.rx.date
+            .map { date -> (year: String, month: String, day: String) in
+                let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+                return (String(components.year ?? 0), String(components.month ?? 0), String(components.day ?? 0))
+            }
+            .bind(with: self) { owner, components in
+                owner.yearLabel.text = components.year + "년"
+                owner.monthLabel.text = components.month + "월"
+                owner.dayLabel.text = components.day + "일"
+            }
+            .disposed(by: disposeBag)
+        
+        birthDayPicker.rx.date
+            .withUnretained(self)
+            .map { owner, date -> Bool in
+                let components = Calendar.current.dateComponents([.year], from: date)
+                let inputYear = components.year ?? owner.currentYear
+                return owner.currentYear - inputYear > 17
+            }
+            .bind(to: nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        nextButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let alertView = UIAlertController(
+                    title: "RxExample",
+                    message: "Welcome !!",
+                    preferredStyle: .alert
+                )
+                alertView.addAction(UIAlertAction(title: "OK", style: .cancel))
+                owner.present(alertView, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func configureView() {
@@ -43,18 +87,15 @@ final class BirthDayViewController: UIViewController {
         containerStackView.distribution = .equalSpacing
         containerStackView.spacing = 10
         
-        yearLabel.text = "2023년"
         yearLabel.textColor = .black
-        
-        monthLabel.text = "33월"
         monthLabel.textColor = .black
-        
-        dayLabel.text = "99일"
         dayLabel.textColor = .black
         
-        nextButton.setTitle("가입하기", for: .normal)
-        nextButton.setTitleColor(.white, for: .normal)
-        nextButton.backgroundColor = .black
+        var configuration = UIButton.Configuration.filled()
+        configuration.title = "가입하기"
+        configuration.baseForegroundColor = .white
+        configuration.baseBackgroundColor = .black
+        nextButton.configuration = configuration
         nextButton.layer.cornerRadius = 10
     }
     
