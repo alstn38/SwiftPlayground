@@ -33,6 +33,10 @@ final class HomeworkViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    deinit {
+        print("HomeworkViewController - deinit")
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -48,13 +52,14 @@ final class HomeworkViewController: UIViewController {
     private func bind() {
         let output = viewModel.transform(from: input)
         
+//        // 1. deinit 작동 O
         output.updatePersonData
             .bind(to: tableView.rx.items(
                 cellIdentifier: PersonTableViewCell.identifier,
                 cellType: PersonTableViewCell.self
-            )) { (row, element, cell) in
+            )) { [weak self] (row, element, cell) in
+                guard let self else { return }
                 cell.configureView(element)
-                
                 cell.detailButton.rx.tap
                     .map { row }
                     .bind(with: self) { owner, index in
@@ -63,6 +68,54 @@ final class HomeworkViewController: UIViewController {
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
+        
+        // 2. deinit 작동 O
+//        output.updatePersonData
+//            .bind(to: tableView.rx.items(
+//                cellIdentifier: PersonTableViewCell.identifier,
+//                cellType: PersonTableViewCell.self
+//            )) { [weak self] (row, element, cell) in
+//                cell.configureView(element)
+//                cell.detailButton.rx.tap
+//                    .map { row }
+//                    .bind { index in
+//                        self?.detailButtonDidTapRelay.accept(index)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//            }
+//            .disposed(by: disposeBag)
+        
+        // 3. deinit 작동 X
+//        output.updatePersonData
+//            .bind(to: tableView.rx.items(
+//                cellIdentifier: PersonTableViewCell.identifier,
+//                cellType: PersonTableViewCell.self
+//            )) { (row, element, cell) in
+//                cell.configureView(element)
+//                cell.detailButton.rx.tap
+//                    .map { row }
+//                    .bind(with: self) { owner, index in
+//                        owner.detailButtonDidTapRelay.accept(index)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//            }
+//            .disposed(by: disposeBag)
+        
+        // 4. deinit 작동 X
+//        output.updatePersonData
+//            .bind(to: tableView.rx.items(
+//                cellIdentifier: PersonTableViewCell.identifier,
+//                cellType: PersonTableViewCell.self
+//            )) { (row, element, cell) in
+//                cell.configureView(element)
+//                cell.detailButton.rx.tap
+//                    .map { row }
+//                    .bind { [weak self] index in
+//                        self?.detailButtonDidTapRelay.accept(index)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//            }
+//            .disposed(by: disposeBag)
         
         output.updateRecentSearchData
             .bind(to: collectionView.rx.items(

@@ -24,6 +24,10 @@ final class HomeworkViewModel: InputOutputModel {
         let moveToDetailView: Observable<Person>
     }
     
+    deinit {
+        print("HomeworkViewModel - deinit")
+    }
+    
     private let disposeBag = DisposeBag()
     private let personData = Person.dummy()
     private let updatePersonDataRelay: PublishRelay<[Person]> = PublishRelay()
