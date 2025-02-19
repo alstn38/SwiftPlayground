@@ -10,6 +10,13 @@
 |  :-------------: |  :-------------: |
 | <img width=200 src="https://github.com/user-attachments/assets/a75826ad-6f98-4f5f-8790-2d54cb23126e"> | <img width=200 src="https://github.com/user-attachments/assets/08d9e31e-5ebd-4e8a-a200-327527f44af4"> |
 
+<br>
+
+|  HomeworkView  |
+|  :-------------: |
+| <img width=200 src="https://github.com/user-attachments/assets/02373842-2d49-4d0e-af74-6fe2afe0d725"> |
+
 ### 시도해 본 것
 - RxSwift
 - RxCocoa
+- RxRelay
