@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
+import RxSwift
 import SnapKit
 
 final class PersonTableViewCell: UITableViewCell {
     
     static let identifier = "PersonTableViewCell"
+    var disposeBag = DisposeBag()
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
@@ -30,13 +33,18 @@ final class PersonTableViewCell: UITableViewCell {
     
     let detailButton: UIButton = {
         let button = UIButton()
-        button.setTitle("받기", for: .normal)
+        button.setTitle("더보기", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.isUserInteractionEnabled = true
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 16
         return button
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
       
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -48,7 +56,11 @@ final class PersonTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-     
+    
+    func configureView(_ person: Person) {
+        usernameLabel.text = person.name
+        profileImageView.kf.setImage(with: URL(string: person.profileImage))
+    }
     
     private func configure() {
         contentView.addSubview(usernameLabel)

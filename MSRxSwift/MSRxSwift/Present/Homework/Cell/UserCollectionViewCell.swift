@@ -28,6 +28,10 @@ final class UserCollectionViewCell: UICollectionViewCell {
         layer.borderColor = UIColor.black.cgColor
     }
     
+    func configureView(_ text: String) {
+        label.text = text
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
