@@ -11,5 +11,5 @@ protocol InputOutputModel {
     associatedtype Input
     associatedtype Output
     
-    func transform(from: Input) -> Output
+    func transform(from input: Input) -> Output
 }
