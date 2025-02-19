@@ -6,26 +6,30 @@
 //
 
 import UIKit
-import SnapKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class HomeworkViewController: UIViewController {
     
     private let viewModel: HomeworkViewModel
+    private let input: HomeworkViewModel.Input
+    private let disposeBag = DisposeBag()
+    private let viewDidLoadRelay: PublishRelay<Void> = PublishRelay()
+    private let detailButtonDidTapRelay: PublishRelay<Int> = PublishRelay()
+    
     private let tableView = UITableView()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     private let searchBar = UISearchBar()
-     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        bind()
-        configureView()
-    }
     
     init(viewModel: HomeworkViewModel) {
         self.viewModel = viewModel
+        self.input = HomeworkViewModel.Input(
+            viewDidLoad: viewDidLoadRelay.asObservable(),
+            searchTextDidChange: searchBar.rx.searchButtonClicked.withLatestFrom(searchBar.rx.text.orEmpty).asObservable(),
+            personItemDidTap: tableView.rx.modelSelected(Person.self).asObservable(),
+            detailButtonDidTap: detailButtonDidTapRelay.asObservable()
+        )
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,8 +37,47 @@ final class HomeworkViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        bind()
+        configureView()
+        viewDidLoadRelay.accept(())
+    }
+    
     private func bind() {
-          
+        let output = viewModel.transform(from: input)
+        
+        output.updatePersonData
+            .bind(to: tableView.rx.items(
+                cellIdentifier: PersonTableViewCell.identifier,
+                cellType: PersonTableViewCell.self
+            )) { (row, element, cell) in
+                cell.configureView(element)
+                
+                cell.detailButton.rx.tap
+                    .map { row }
+                    .bind(with: self) { owner, index in
+                        owner.detailButtonDidTapRelay.accept(index)
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        output.updateRecentSearchData
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: UserCollectionViewCell.identifier,
+                cellType: UserCollectionViewCell.self
+            )) { (row, element, cell) in
+                cell.configureView(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.moveToDetailView
+            .bind(with: self) { owner, person in
+                owner.navigationController?.pushViewController(DetailViewController(person: person), animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func configureView() {
