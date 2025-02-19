@@ -17,7 +17,8 @@ final class MainViewController: UIViewController {
         "SimpleTableViewController",
         "NumbersViewController",
         "SimpleValidationViewController",
-        "BirthDayViewController"
+        "BirthDayViewController",
+        "HomeworkViewController"
     ]
     
     private lazy var items = Observable.just(titles)
@@ -60,6 +61,7 @@ final class MainViewController: UIViewController {
     private func configureView() {
         navigationItem.title = "MS RxSwift World"
         view.backgroundColor = .white
+        navigationItem.backButtonTitle = ""
     }
     
     private func configureHierarchy() {
@@ -82,6 +84,9 @@ final class MainViewController: UIViewController {
             return SimpleValidationViewController()
         case 3:
             return BirthDayViewController()
+        case 4:
+            let homeworkViewModel = HomeworkViewModel()
+            return HomeworkViewController(viewModel: homeworkViewModel)
         default:
             return UIViewController()
         }
