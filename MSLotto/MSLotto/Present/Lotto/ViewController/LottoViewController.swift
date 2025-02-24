@@ -5,23 +5,15 @@
 //  Created by 강민수 on 1/14/25.
 //
 
-import Alamofire
-import SnapKit
 import UIKit
+import RxSwift
+import RxCocoa
+import SnapKit
 
 final class LottoViewController: UIViewController {
     
-    private lazy var lottoNumberArray: [Int] = Array(1...recentRound).reversed()
-    
-    private var recentRound: Int = {
-        let systemCalendar = Calendar.autoupdatingCurrent
-        let startDateComponents = DateComponents(year: 2002, month: 12, day: 07)
-        guard let startDay = systemCalendar.date(from: startDateComponents) else { return 0 }
-        let today = Calendar.current.startOfDay(for: Date())
-        let differenceDay = systemCalendar.dateComponents([.day], from: startDay, to: today).day ?? 0
-        let recentRound = Int(differenceDay / 7) + 1
-        return recentRound
-    }()
+    private let viewModel: LottoViewModel
+    private let disposeBag = DisposeBag()
     
     private let lottoTextField: UITextField = {
         let textField = UITextField()
@@ -45,7 +37,6 @@ final class LottoViewController: UIViewController {
     
     private let drawDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "2020-05-30추첨" // TODO: 서버 연결시 제거
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .lightGray
         return label
@@ -68,7 +59,6 @@ final class LottoViewController: UIViewController {
     
     private let roundNumberLabel: UILabel = {
         let label = UILabel()
-        label.text = "913회" // TODO: 서버연결시 제거
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textColor = .systemGreen
         return label
@@ -115,38 +105,67 @@ final class LottoViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
+    
+    init(viewModel: LottoViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupBind()
         setupView()
         setupPickerView()
-        lottoTextField.text = String(recentRound)
-        getLottoResult(roundNumber: recentRound)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
-    private func setupPickerView() {
-        lottoTextField.inputView = lottoNumberPickerView
-        lottoNumberPickerView.delegate = self
-        lottoNumberPickerView.dataSource = self
+    private func setupBind() {
+        let input = LottoViewModel.Input(
+            viewDidLoad: Observable.just(()),
+            lottoPickerDidChange: lottoNumberPickerView.rx.itemSelected.map { $0.row }.asObservable()
+        )
+        
+        let output = viewModel.transform(from: input)
+        
+        output.recentRoundNumber
+            .drive(lottoTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.lottoNumberArray
+            .drive(lottoNumberPickerView.rx.itemTitles) { _, item in
+                return String(item)
+            }
+            .disposed(by: disposeBag)
+        
+        output.lottoResult
+            .drive(with: self) { owner, value in
+                owner.configureLottoResult(value)
+            }
+            .disposed(by: disposeBag)
+        
+        output.presentAlert
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                
+                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(action)
+                owner.present(alert, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
-    private func getLottoResult(roundNumber: Int) {
-        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\(roundNumber)"
-        
-        AF.request(url, method: .get).responseDecodable(of: Lotto.self) { [weak self] response in
-            
-            switch response.result {
-            case .success(let value):
-                self?.configureLottoResult(value)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
+    private func setupPickerView() {
+        lottoTextField.inputView = lottoNumberPickerView
     }
     
     private func configureLottoResult(_ lotto: Lotto) {
@@ -229,26 +248,5 @@ final class LottoViewController: UIViewController {
             $0.top.equalTo(drawBallStackView.snp.bottom).offset(100)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
         }
-    }
-}
-
-// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
-extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return lottoNumberArray.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(lottoNumberArray[row])
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        lottoTextField.text = String(lottoNumberArray[row])
-        getLottoResult(roundNumber: lottoNumberArray[row])
     }
 }
