@@ -106,6 +106,24 @@ final class LottoViewController: UIViewController {
         return label
     }()
     
+    private let observableNetworkButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("옵저버블 네트워크", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        button.backgroundColor = .cyan
+        return button
+    }()
+    
+    private let singleNetworkButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("싱글 네트워크", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        button.backgroundColor = .systemMint
+        return button
+    }()
+    
     init(viewModel: LottoViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -131,7 +149,9 @@ final class LottoViewController: UIViewController {
     private func setupBind() {
         let input = LottoViewModel.Input(
             viewDidLoad: Observable.just(()),
-            lottoPickerDidChange: lottoNumberPickerView.rx.itemSelected.map { $0.row }.asObservable()
+            lottoPickerDidChange: lottoNumberPickerView.rx.itemSelected.map { $0.row }.asObservable(),
+            observableNetworkButtonDidTap: observableNetworkButton.rx.tap.asObservable(),
+            singleNetworkButtonDidTap: singleNetworkButton.rx.tap.asObservable()
         )
         
         let output = viewModel.transform(from: input)
@@ -193,7 +213,9 @@ final class LottoViewController: UIViewController {
     private func setupHierarchy() {
         [lottoTextField, numberGuideLabel, drawDateLabel,
          lineView, winningLabelStackView, drawBallStackView,
-         bonusLabel, winnerMoneyLabel].forEach {
+         bonusLabel, winnerMoneyLabel,
+         observableNetworkButton, singleNetworkButton
+        ].forEach {
             view.addSubview($0)
         }
         
@@ -247,6 +269,20 @@ final class LottoViewController: UIViewController {
         winnerMoneyLabel.snp.makeConstraints {
             $0.top.equalTo(drawBallStackView.snp.bottom).offset(100)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
+        }
+        
+        observableNetworkButton.snp.makeConstraints {
+            $0.top.equalTo(winnerMoneyLabel.snp.bottom).offset(50)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalTo(view.snp.centerX)
+            $0.height.equalTo(45)
+        }
+        
+        singleNetworkButton.snp.makeConstraints {
+            $0.top.equalTo(winnerMoneyLabel.snp.bottom).offset(50)
+            $0.trailing.equalToSuperview()
+            $0.leading.equalTo(view.snp.centerX)
+            $0.height.equalTo(45)
         }
     }
 }

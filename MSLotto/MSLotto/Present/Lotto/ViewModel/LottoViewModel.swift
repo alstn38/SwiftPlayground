@@ -14,6 +14,8 @@ final class LottoViewModel: InputOutputModel{
     struct Input {
         let viewDidLoad: Observable<Void>
         let lottoPickerDidChange: Observable<Int>
+        let observableNetworkButtonDidTap: Observable<Void>
+        let singleNetworkButtonDidTap: Observable<Void>
     }
     
     struct Output {
@@ -72,6 +74,43 @@ final class LottoViewModel: InputOutputModel{
         input.lottoPickerDidChange
             .withLatestFrom(lottoNumberArrayRelay) { String($1[$0]) }
             .bind(to: recentRoundNumberRelay)
+            .disposed(by: disposeBag)
+        
+        /// Observable을 위한 통신.
+        input.observableNetworkButtonDidTap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(input.lottoPickerDidChange)
+            .withLatestFrom(lottoNumberArrayRelay) { $1[$0] }
+            .map { LottoNetworkManager.shared.getLottoResultObserver(roundNumber: $0) }
+            .bind(with: self) { owner, observer in
+                observer.subscribe { lotto in
+                    lottoResultRelay.accept(lotto)
+                } onError: { error in
+                    presentAlertRelay.accept((
+                        title: "통신 오류",
+                        message: error.localizedDescription
+                    ))
+                }
+                .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        input.singleNetworkButtonDidTap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(input.lottoPickerDidChange)
+            .withLatestFrom(lottoNumberArrayRelay) { $1[$0] }
+            .map { LottoNetworkManager.shared.getLottoResultSingle(roundNumber: $0) }
+            .bind(with: self) { owner, observer in
+                observer.subscribe { lotto in
+                    lottoResultRelay.accept(lotto)
+                } onFailure: { error in
+                    presentAlertRelay.accept((
+                        title: "통신 오류",
+                        message: error.localizedDescription
+                    ))
+                }
+                .disposed(by: owner.disposeBag)
+            }
             .disposed(by: disposeBag)
         
         return Output(
