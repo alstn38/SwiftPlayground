@@ -31,4 +31,19 @@ struct Lotto: Decodable {
         case bonusNumber = "bnusNo"
         case roundNumber = "drwNo"
     }
+    
+    static func dummyLotto() -> Lotto {
+        return Lotto(
+            drawDate: "",
+            firstWinnerMoney: -1,
+            drawNumber1: -1,
+            drawNumber2: -1,
+            drawNumber3: -1,
+            drawNumber4: -1,
+            drawNumber5: -1,
+            drawNumber6: -1,
+            bonusNumber: -1,
+            roundNumber: -1
+        )
+    }
 }
