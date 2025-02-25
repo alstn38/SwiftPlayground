@@ -6,26 +6,29 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 final class SearchResultViewController: UIViewController {
     
     private let searchResultView = SearchResultView()
     private let viewModel: SearchResultViewModel
-    private let input: SearchResultViewModel.Input
-    private let output: SearchResultViewModel.Output
+    private let filterButtonRelay = BehaviorRelay(value: FilterButton.FilterButtonType.accuracy)
+    private let disposeBag = DisposeBag()
     
-    private let viewDidLoadSubject: CustomObservable<Void> = CustomObservable(())
-    private let selectedFilterButtonDidTapSubject: CustomObservable<FilterButton.FilterButtonType> = CustomObservable(.accuracy)
-    private let didRequestMoreResultSubject: CustomObservable<Void> = CustomObservable(())
+    private let dataSource = RxCollectionViewSectionedReloadDataSource<ProductSection> { dataSource, collectionView, indexPath, item in
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ProductCollectionViewCell.identifier,
+            for: indexPath
+        ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.configureCell(item)
+        return cell
+    }
     
     init(viewModel: SearchResultViewModel) {
         self.viewModel = viewModel
-        self.input = SearchResultViewModel.Input(
-            viewDidLoad: viewDidLoadSubject,
-            selectedFilterButtonDidTap: selectedFilterButtonDidTapSubject,
-            didRequestMoreResult: didRequestMoreResultSubject
-        )
-        self.output = viewModel.transform(from: input)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,81 +45,61 @@ final class SearchResultViewController: UIViewController {
         super.viewDidLoad()
         
         setupBind()
-        setupAddTargetButton()
         setupCollectionView()
-        viewDidLoadSubject.send(())
     }
     
     private func setupBind() {
-        output.indicatorAnimate.bind { [weak self] isAnimate in
-            guard let self else { return }
-            if isAnimate {
-                searchResultView.indicatorView.startAnimating()
-            } else {
-                searchResultView.indicatorView.stopAnimating()
+        let input = SearchResultViewModel.Input(
+            selectedFilterButtonDidTap: filterButtonRelay.asObservable(),
+            willDisplayIndex: searchResultView.productCollectionView.rx.willDisplayCell.map { $0.at.row }.asObservable()
+        )
+        
+        let output = viewModel.transform(from: input)
+        
+        output.indicatorAnimate
+            .drive(with: self) { owner, isAnimate in
+                if isAnimate {
+                    owner.searchResultView.indicatorView.startAnimating()
+                } else {
+                    owner.searchResultView.indicatorView.stopAnimating()
+                }
             }
-        }
+            .disposed(by: disposeBag)
         
-        output.productTotalCountText.bind { [weak self] text in
-            guard let self else { return }
-            searchResultView.searchTotalCountLabel.text = text
-        }
+        output.productTotalCount
+            .drive(with: self) { owner, count in
+                owner.searchResultView.searchTotalCountLabel.text = count.formatted() + "개의 검색결과"
+            }
+            .disposed(by: disposeBag)
         
-        output.searchProductArrayUpdate.bind { [weak self] _ in
-            guard let self else { return }
-            searchResultView.productCollectionView.reloadData()
-        }
+        output.searchProduct
+            .drive(searchResultView.productCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
         
-        output.alertError.bind { [weak self] alertTitle in
-            guard let self else { return }
-            presentDefaultAlert(alertTitle: alertTitle)
-        }
-    }
-    
-    private func setupAddTargetButton() {
-        searchResultView.filterButtonArray.forEach {
-            $0.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
+        output.alertError
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                owner.presentAlert(title: title, message: message)
+            }
+            .disposed(by: disposeBag)
+        
+        for button in searchResultView.filterButtonArray {
+            button.rx.tap
+                .bind(with: self) { owner, _ in
+                    let buttonType = FilterButton.FilterButtonType(rawValue: button.tag) ?? .accuracy
+                    owner.filterButtonRelay.accept(buttonType)
+                    owner.searchResultView.productCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                    owner.searchResultView.filterButtonArray.forEach { $0.isSelected = false }
+                    button.isSelected = true
+                }
+                .disposed(by: disposeBag)
         }
     }
     
     private func setupCollectionView() {
-        searchResultView.productCollectionView.delegate = self
-        searchResultView.productCollectionView.dataSource = self
         searchResultView.productCollectionView.register(
             ProductCollectionViewCell.self,
             forCellWithReuseIdentifier: ProductCollectionViewCell.identifier
         )
-    }
-    
-    @objc private func filterButtonDidTap(_ sender: UIButton) {
-        let buttonType = FilterButton.FilterButtonType(rawValue: sender.tag) ?? .accuracy
-        selectedFilterButtonDidTapSubject.send(buttonType)
-        searchResultView.productCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
-        searchResultView.filterButtonArray.forEach { $0.isSelected = false }
-        sender.isSelected = true
-    }
-}
-
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.searchProductArray.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ProductCollectionViewCell.identifier,
-            for: indexPath
-        ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureCell(viewModel.searchProductArray[indexPath.item])
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if viewModel.searchProductArray.count - 3  == indexPath.item {
-            didRequestMoreResultSubject.send(())
-        }
     }
 }
