@@ -6,58 +6,41 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 final class SearchViewModel {
     
     struct Input {
-        let shoppingSearchTextDidChange: CustomObservable<String?>
-        let searchButtonDidClick: CustomObservable<Void>
+        let shoppingSearchTextDidChange: Observable<String>
+        let searchButtonDidClick: Observable<Void>
     }
     
     struct Output {
-        let searchWarningLabelText: CustomObservable<String?>
-        let pushToResultViewController: CustomObservable<String>
-        let alertError: CustomObservable<String>
+        let pushToResultViewController: Driver<String>
+        let alertError: Driver<(title: String, message: String)>
     }
     
-    private let searchWarningLabelTextSubject: CustomObservable<String?> = CustomObservable(nil)
-    private let pushToResultViewControllerSubject: CustomObservable<String> = CustomObservable("")
-    private let alertErrorSubject: CustomObservable<String> = CustomObservable("")
-    
-    private var isValidSearchText: Bool = false
-    private var searchedText: String = ""
+    private let disposeBag = DisposeBag()
     
     func transform(from input: Input) -> Output {
-        input.shoppingSearchTextDidChange.bind { [weak self] inputText in
-            guard let self, let inputText else { return }
-            self.isValidSearchText = inputText.count >= 2
-            self.searchedText = inputText
-            
-            let warningLabelText = getWarningLabelText()
-            searchWarningLabelTextSubject.send(warningLabelText)
-        }
+        let pushToResultViewControllerRelay = PublishRelay<String>()
+        let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
-        input.searchButtonDidClick.bind { [weak self] _ in
-            guard let self else { return }
-            
-            switch isValidSearchText {
-            case true:
-                pushToResultViewControllerSubject.send(searchedText)
-                
-            case false:
-                alertErrorSubject.send("최소 2글자 이상 입력해주세요.")
+        input.searchButtonDidClick
+            .withLatestFrom(input.shoppingSearchTextDidChange)
+            .bind { searchText in
+                if searchText.count < 2 {
+                    alertErrorRelay.accept((title: "범위 오류", message: "최소 2글자 이상 입력해주세요."))
+                } else {
+                    pushToResultViewControllerRelay.accept(searchText)
+                }
             }
-        }
+            .disposed(by: disposeBag)
         
         return Output(
-            searchWarningLabelText: searchWarningLabelTextSubject,
-            pushToResultViewController: pushToResultViewControllerSubject,
-            alertError: alertErrorSubject
+            pushToResultViewController: pushToResultViewControllerRelay.asDriver(onErrorJustReturn: ""),
+            alertError: alertErrorRelay.asDriver(onErrorJustReturn: (title: "", message: ""))
         )
-    }
-    
-    private func getWarningLabelText() -> String {
-        let warningLabelText = isValidSearchText ? "" : "최소 2글자 이상 입력해주세요."
-        return warningLabelText
     }
 }
