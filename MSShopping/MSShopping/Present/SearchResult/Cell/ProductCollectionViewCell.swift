@@ -43,7 +43,7 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    func configureCell(_ item: Item) {
+    func configureCell(_ item: ProductInfo) {
         let imageURL = URL(string: item.image)
         productImageView.kf.setImage(with: imageURL)
         mallNameLabel.text = item.mallName

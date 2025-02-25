@@ -9,10 +9,10 @@ import Foundation
 
 struct Product: Decodable {
     let total: Int
-    let items: [Item]
+    let items: [ProductInfo]
 }
 
-struct Item: Decodable {
+struct ProductInfo: Decodable {
     let image: String
     let mallName: String
     let title: String
