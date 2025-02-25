@@ -5,98 +5,93 @@
 //  Created by 강민수 on 2/6/25.
 //
 
-import Alamofire
 import Foundation
+import RxSwift
+import RxCocoa
 
 final class SearchResultViewModel {
     
     struct Input {
-        let viewDidLoad: CustomObservable<Void>
-        let selectedFilterButtonDidTap: CustomObservable<FilterButton.FilterButtonType>
-        let didRequestMoreResult: CustomObservable<Void>
+        let selectedFilterButtonDidTap: Observable<FilterButton.FilterButtonType>
+        let willDisplayIndex: Observable<Int>
     }
     
     struct Output {
-        let indicatorAnimate: CustomObservable<Bool>
-        let productTotalCountText: CustomObservable<String?>
-        let searchProductArrayUpdate: CustomObservable<Void>
-        let alertError: CustomObservable<String>
+        let indicatorAnimate: Driver<Bool>
+        let productTotalCount: Driver<Int>
+        let searchProduct: Driver<[ProductSection]>
+        let alertError: Driver<(title: String, message: String)>
     }
     
-    private let indicatorAnimateSubject: CustomObservable<Bool> = CustomObservable(false)
-    private let productTotalCountTextSubject: CustomObservable<String?> = CustomObservable(nil)
-    private let searchProductArrayUpdateSubject: CustomObservable<Void> = CustomObservable(())
-    private let alertErrorSubject: CustomObservable<String> = CustomObservable("")
-    
-    private(set) var searchProductArray: [Item] = []
     private var searchedText: String
-    private var selectedFilterButtonType: FilterButton.FilterButtonType = .accuracy
     private var currentPage: Int = 1
     private var maximumPage: Int = 1
+    private let disposeBag = DisposeBag()
     
     init(searchedText: String) {
         self.searchedText = searchedText
     }
     
     func transform(from input: Input) -> Output {
-        input.viewDidLoad.bind { [weak self] _ in
-            guard let self else { return }
-            updateProductResult()
-        }
+        let indicatorAnimateRelay = BehaviorRelay(value: true)
+        let productTotalCountRelay = PublishRelay<Int>()
+        let searchProductRelay: BehaviorRelay<[ProductSection]> = BehaviorRelay(value: [])
+        let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
-        input.selectedFilterButtonDidTap.bind { [weak self] filterButtonType in
-            guard let self else { return }
-            guard selectedFilterButtonType != filterButtonType else { return }
-            selectedFilterButtonType = filterButtonType
-            currentPage = 1
-            maximumPage = 1
-            updateProductResult()
-        }
+        input.selectedFilterButtonDidTap
+            .withUnretained(self)
+            .filter { $0.0.currentPage != 1 }
+            .bind(with: self) { owner, _ in
+                owner.currentPage = 1
+                owner.maximumPage = 1
+            }
+            .disposed(by: disposeBag)
         
-        input.didRequestMoreResult.bind { [weak self] _ in
-            guard let self else { return }
-            currentPage += 1
-            
-            guard currentPage <= maximumPage else { return }
-            updateProductResult()
-        }
+        input.selectedFilterButtonDidTap
+            .withUnretained(self)
+            .map { ($0.0.searchedText, $0.1.query, $0.0.currentPage) }
+            .flatMap { NetworkManager.shared.getShoppingResult(searchedText: $0, sortType: $1, page: $2) }
+            .bind(with: self) { owner, response in
+                indicatorAnimateRelay.accept(false)
+                switch response {
+                case .success(let value):
+                    owner.currentPage += 1
+                    owner.maximumPage = Int(ceil(Double(value.total) / Double(100)))
+                    searchProductRelay.accept([ProductSection(items: value.items)])
+                    
+                case .failure(let error):
+                    alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.willDisplayIndex
+            .filter { (searchProductRelay.value.first?.items.count ?? 0) - 3 == $0 }
+            .withUnretained(self)
+            .filter { $0.0.currentPage < $0.0.maximumPage }
+            .withLatestFrom(input.selectedFilterButtonDidTap)
+            .withUnretained(self)
+            .map { ($0.0.searchedText, $0.1.query, $0.0.currentPage) }
+            .flatMap { NetworkManager.shared.getShoppingResult(searchedText: $0, sortType: $1, page: $2) }
+            .bind(with: self) { owner, response in
+                switch response {
+                case .success(let value):
+                    owner.currentPage += 1
+                    var existingArray = searchProductRelay.value.first?.items ?? []
+                    existingArray.append(contentsOf: value.items)
+                    searchProductRelay.accept([ProductSection(items: existingArray)])
+                    
+                case .failure(let error):
+                    alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
+                }
+            }
+            .disposed(by: disposeBag)
         
         return Output(
-            indicatorAnimate: indicatorAnimateSubject,
-            productTotalCountText: productTotalCountTextSubject,
-            searchProductArrayUpdate: searchProductArrayUpdateSubject,
-            alertError: alertErrorSubject
+            indicatorAnimate: indicatorAnimateRelay.asDriver(),
+            productTotalCount: productTotalCountRelay.asDriver(onErrorJustReturn: 0),
+            searchProduct: searchProductRelay.asDriver(),
+            alertError: alertErrorRelay.asDriver(onErrorJustReturn: (title: "", message: ""))
         )
-    }
-    
-    private func updateProductResult() {
-        indicatorAnimateSubject.send(true)
-        NetworkManager.shared.getShoppingResult(
-            searchedText: searchedText,
-            sortType: selectedFilterButtonType.query,
-            page: currentPage
-        ) { [weak self] result in
-            guard let self else { return }
-            indicatorAnimateSubject.send(false)
-            
-            switch result {
-            case .success(let value):
-                maximumPage = value.total
-                productTotalCountTextSubject.send("\(value.total.formatted())개의 검색 결과")
-                updateSearchProductArray(value.items)
-                
-            case .failure:
-                alertErrorSubject.send("결과 값을 불러올 수 없습니다.")
-            }
-        }
-    }
-    
-    private func updateSearchProductArray(_ items: [Item]) {
-        if currentPage == 1 {
-            searchProductArray = items
-        } else {
-            searchProductArray.append(contentsOf: items)
-        }
-        searchProductArrayUpdateSubject.send(())
     }
 }
