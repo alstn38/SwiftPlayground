@@ -22,13 +22,6 @@ final class SearchView: BaseView {
         return searchBar
     }()
     
-    let searchWarningLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemRed
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        return label
-    }()
-    
     private let shoppingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .personShopping)
@@ -51,7 +44,7 @@ final class SearchView: BaseView {
     }
     
     override func setupHierarchy() {
-        [shoppingSearchBar, searchWarningLabel, shoppingImageView, shoppingMessageLabel].forEach {
+        [shoppingSearchBar, shoppingImageView, shoppingMessageLabel].forEach {
             addSubview($0)
         }
     }
@@ -61,11 +54,6 @@ final class SearchView: BaseView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(10)
             $0.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             $0.height.equalTo(38)
-        }
-        
-        searchWarningLabel.snp.makeConstraints {
-            $0.top.equalTo(shoppingSearchBar.snp.bottom).offset(5)
-            $0.leading.equalTo(shoppingSearchBar).offset(15)
         }
         
         shoppingImageView.snp.makeConstraints {
