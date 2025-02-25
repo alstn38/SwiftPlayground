@@ -6,16 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class SearchViewController: UIViewController {
     
     private let searchView = SearchView()
     private let viewModel: SearchViewModel
-    private let input: SearchViewModel.Input
-    private let output: SearchViewModel.Output
-    
-    private let shoppingSearchTextDidChangeSubject: CustomObservable<String?> = CustomObservable(nil)
-    private let searchButtonDidClickSubject: CustomObservable<Void> = CustomObservable(())
+    private let disposeBag = DisposeBag()
     
     override func loadView() {
         view = searchView
@@ -23,12 +21,6 @@ final class SearchViewController: UIViewController {
     
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
-        self.input = SearchViewModel.Input(
-            shoppingSearchTextDidChange: shoppingSearchTextDidChangeSubject,
-            searchButtonDidClick: searchButtonDidClickSubject
-        )
-        
-        self.output = viewModel.transform(from: input)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,52 +41,35 @@ final class SearchViewController: UIViewController {
     }
     
     private func setupBind() {
-        output.searchWarningLabelText.bind { [weak self] text in
-            guard let self else { return }
-            searchView.searchWarningLabel.text = text
-        }
+        let input = SearchViewModel.Input(
+            shoppingSearchTextDidChange: searchView.shoppingSearchBar.rx.text.orEmpty.asObservable(),
+            searchButtonDidClick: searchView.shoppingSearchBar.rx.searchButtonClicked.asObservable()
+        )
         
-        output.pushToResultViewController.bind { [weak self] searchedText in
-            guard let self else { return }
-            let searchResultViewModel = SearchResultViewModel(searchedText: searchedText)
-            let searchResultViewController = SearchResultViewController(viewModel: searchResultViewModel)
-            navigationController?.pushViewController(searchResultViewController, animated: true)
-        }
+        let output = viewModel.transform(from: input)
         
-        output.alertError.bind { [weak self] alertText in
-            guard let self else { return }
-            presentDefaultAlert(alertTitle: alertText)
-        }
+        output.pushToResultViewController
+            .drive(with: self) { owner, searchText in
+                let viewModel = SearchResultViewModel(searchedText: searchText)
+                let viewController = SearchResultViewController(viewModel: viewModel)
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.alertError
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                owner.presentAlert(title: title, message: message)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func setupView() {
         
         setupNavigation()
-        setupSearchBar()
     }
     
     private func setupNavigation() {
         navigationItem.title = "MS의 쇼핑쇼핑"
-    }
-    
-    private func setupSearchBar() {
-        searchView.shoppingSearchBar.delegate = self
-        searchView.shoppingSearchBar.searchTextField.addTarget(
-            self,
-            action: #selector(shoppingSearchTextFieldDidEditingChange),
-            for: .editingChanged
-        )
-    }
-    
-    @objc private func shoppingSearchTextFieldDidEditingChange(_ sender: UISearchTextField) {
-        shoppingSearchTextDidChangeSubject.send(sender.text)
-    }
-}
-
-// MARK: - UISearchBarDelegate
-extension SearchViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchButtonDidClickSubject.send(())
     }
 }
