@@ -14,9 +14,9 @@ final class SearchResultViewController: UIViewController {
     private let input: SearchResultViewModel.Input
     private let output: SearchResultViewModel.Output
     
-    private let viewDidLoadSubject: Observable<Void> = Observable(())
-    private let selectedFilterButtonDidTapSubject: Observable<FilterButton.FilterButtonType> = Observable(.accuracy)
-    private let didRequestMoreResultSubject: Observable<Void> = Observable(())
+    private let viewDidLoadSubject: CustomObservable<Void> = CustomObservable(())
+    private let selectedFilterButtonDidTapSubject: CustomObservable<FilterButton.FilterButtonType> = CustomObservable(.accuracy)
+    private let didRequestMoreResultSubject: CustomObservable<Void> = CustomObservable(())
     
     init(viewModel: SearchResultViewModel) {
         self.viewModel = viewModel

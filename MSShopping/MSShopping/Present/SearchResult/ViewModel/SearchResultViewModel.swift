@@ -11,22 +11,22 @@ import Foundation
 final class SearchResultViewModel {
     
     struct Input {
-        let viewDidLoad: Observable<Void>
-        let selectedFilterButtonDidTap: Observable<FilterButton.FilterButtonType>
-        let didRequestMoreResult: Observable<Void>
+        let viewDidLoad: CustomObservable<Void>
+        let selectedFilterButtonDidTap: CustomObservable<FilterButton.FilterButtonType>
+        let didRequestMoreResult: CustomObservable<Void>
     }
     
     struct Output {
-        let indicatorAnimate: Observable<Bool>
-        let productTotalCountText: Observable<String?>
-        let searchProductArrayUpdate: Observable<Void>
-        let alertError: Observable<String>
+        let indicatorAnimate: CustomObservable<Bool>
+        let productTotalCountText: CustomObservable<String?>
+        let searchProductArrayUpdate: CustomObservable<Void>
+        let alertError: CustomObservable<String>
     }
     
-    private let indicatorAnimateSubject: Observable<Bool> = Observable(false)
-    private let productTotalCountTextSubject: Observable<String?> = Observable(nil)
-    private let searchProductArrayUpdateSubject: Observable<Void> = Observable(())
-    private let alertErrorSubject: Observable<String> = Observable("")
+    private let indicatorAnimateSubject: CustomObservable<Bool> = CustomObservable(false)
+    private let productTotalCountTextSubject: CustomObservable<String?> = CustomObservable(nil)
+    private let searchProductArrayUpdateSubject: CustomObservable<Void> = CustomObservable(())
+    private let alertErrorSubject: CustomObservable<String> = CustomObservable("")
     
     private(set) var searchProductArray: [Item] = []
     private var searchedText: String

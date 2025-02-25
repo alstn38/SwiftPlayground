@@ -14,8 +14,8 @@ final class SearchViewController: UIViewController {
     private let input: SearchViewModel.Input
     private let output: SearchViewModel.Output
     
-    private let shoppingSearchTextDidChangeSubject: Observable<String?> = Observable(nil)
-    private let searchButtonDidClickSubject: Observable<Void> = Observable(())
+    private let shoppingSearchTextDidChangeSubject: CustomObservable<String?> = CustomObservable(nil)
+    private let searchButtonDidClickSubject: CustomObservable<Void> = CustomObservable(())
     
     override func loadView() {
         view = searchView

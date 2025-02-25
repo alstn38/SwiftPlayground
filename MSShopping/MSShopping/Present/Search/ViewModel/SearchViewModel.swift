@@ -10,19 +10,19 @@ import Foundation
 final class SearchViewModel {
     
     struct Input {
-        let shoppingSearchTextDidChange: Observable<String?>
-        let searchButtonDidClick: Observable<Void>
+        let shoppingSearchTextDidChange: CustomObservable<String?>
+        let searchButtonDidClick: CustomObservable<Void>
     }
     
     struct Output {
-        let searchWarningLabelText: Observable<String?>
-        let pushToResultViewController: Observable<String>
-        let alertError: Observable<String>
+        let searchWarningLabelText: CustomObservable<String?>
+        let pushToResultViewController: CustomObservable<String>
+        let alertError: CustomObservable<String>
     }
     
-    private let searchWarningLabelTextSubject: Observable<String?> = Observable(nil)
-    private let pushToResultViewControllerSubject: Observable<String> = Observable("")
-    private let alertErrorSubject: Observable<String> = Observable("")
+    private let searchWarningLabelTextSubject: CustomObservable<String?> = CustomObservable(nil)
+    private let pushToResultViewControllerSubject: CustomObservable<String> = CustomObservable("")
+    private let alertErrorSubject: CustomObservable<String> = CustomObservable("")
     
     private var isValidSearchText: Bool = false
     private var searchedText: String = ""
