@@ -12,10 +12,50 @@ final class WishListViewController: UIViewController {
     
     private let wishListTextField = UITextField()
     private lazy var wishListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+    private var wishListArray: [Wish] = []
+    
+    private let registration = UICollectionView.CellRegistration<UICollectionViewListCell, Wish> {
+        cell, indexPath, itemIdentifier in
+        
+        var content = UIListContentConfiguration.valueCell()
+        content.text = itemIdentifier.productName
+        content.textProperties.font = .systemFont(ofSize: 14, weight: .medium)
+        content.textProperties.color = .white
+        
+        content.secondaryText = itemIdentifier.date.description
+        content.secondaryTextProperties.font = .systemFont(ofSize: 12, weight: .regular)
+        content.secondaryTextProperties.color = .gray
+        
+        content.image = UIImage(systemName: "checkmark.square")
+        content.imageProperties.tintColor = .yellow
+        cell.contentConfiguration = content
+        
+        var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
+        backgroundConfig.backgroundColor = .black
+        backgroundConfig.cornerRadius = 5
+        backgroundConfig.strokeColor = .white
+        backgroundConfig.strokeWidth = 1
+        cell.backgroundConfiguration = backgroundConfig
+    }
+    
+    private lazy var wishListDataSource = UICollectionViewDiffableDataSource<WishSection, Wish>(
+        collectionView: wishListCollectionView,
+        cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+            guard let self else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueConfiguredReusableCell(
+                using: self.registration,
+                for: indexPath,
+                item: itemIdentifier
+            )
+            
+            return cell
+        }
+    )
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        updateSnapshot()
         configureNavigation()
         configureView()
         configureHierarchy()
@@ -31,6 +71,13 @@ final class WishListViewController: UIViewController {
         view.endEditing(true)
     }
     
+    private func updateSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<WishSection, Wish>()
+        snapshot.appendSections(WishSection.allCases)
+        snapshot.appendItems(wishListArray, toSection: .product)
+        wishListDataSource.apply(snapshot)
+    }
+    
     private func configureView() {
         view.backgroundColor = .black
         wishListTextField.attributedPlaceholder = NSAttributedString(
@@ -39,7 +86,10 @@ final class WishListViewController: UIViewController {
         )
         wishListTextField.returnKeyType = .done
         wishListTextField.textColor = .white
+        wishListTextField.delegate = self
+        
         wishListCollectionView.backgroundColor = .black
+        wishListCollectionView.keyboardDismissMode = .onDrag
     }
     
     private func configureNavigation() {
@@ -58,7 +108,7 @@ final class WishListViewController: UIViewController {
         }
         
         wishListCollectionView.snp.makeConstraints {
-            $0.top.equalTo(wishListTextField.snp.bottom).offset(5)
+            $0.top.equalTo(wishListTextField.snp.bottom).offset(10)
             $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
@@ -69,5 +119,24 @@ final class WishListViewController: UIViewController {
         
         let layout = UICollectionViewCompositionalLayout.list(using: configuration)
         return layout
+    }
+}
+
+extension WishListViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let productName = textField.text else { return false }
+        wishListArray.insert(Wish(productName: productName), at: 0)
+        updateSnapshot()
+        
+        return true
+    }
+}
+
+// MARK: - WishSection
+extension WishListViewController {
+    
+    enum WishSection: CaseIterable {
+        case product
     }
 }
