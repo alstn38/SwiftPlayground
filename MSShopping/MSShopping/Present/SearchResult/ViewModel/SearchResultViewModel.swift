@@ -14,12 +14,14 @@ final class SearchResultViewModel {
     struct Input {
         let selectedFilterButtonDidTap: Observable<FilterButton.FilterButtonType>
         let willDisplayIndex: Observable<Int>
+        let productItemDidTap: Observable<ProductInfo>
     }
     
     struct Output {
         let indicatorAnimate: Driver<Bool>
         let productTotalCount: Driver<Int>
         let searchProduct: Driver<[ProductSection]>
+        let moveToDetailView: Driver<String>
         let alertError: Driver<(title: String, message: String)>
     }
     
@@ -36,6 +38,7 @@ final class SearchResultViewModel {
         let indicatorAnimateRelay = BehaviorRelay(value: true)
         let productTotalCountRelay = PublishRelay<Int>()
         let searchProductRelay: BehaviorRelay<[ProductSection]> = BehaviorRelay(value: [])
+        let moveToDetailViewRelay = PublishRelay<String>()
         let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
         input.selectedFilterButtonDidTap
@@ -87,10 +90,16 @@ final class SearchResultViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.productItemDidTap
+            .map { $0.link.replacingOccurrences(of: "\\", with: "") }
+            .bind(to: moveToDetailViewRelay)
+            .disposed(by: disposeBag)
+        
         return Output(
             indicatorAnimate: indicatorAnimateRelay.asDriver(),
             productTotalCount: productTotalCountRelay.asDriver(onErrorJustReturn: 0),
             searchProduct: searchProductRelay.asDriver(),
+            moveToDetailView: moveToDetailViewRelay.asDriver(onErrorJustReturn: ""),
             alertError: alertErrorRelay.asDriver(onErrorJustReturn: (title: "", message: ""))
         )
     }
