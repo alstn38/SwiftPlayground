@@ -17,7 +17,7 @@ final class WishListViewController: UIViewController {
     private let registration = UICollectionView.CellRegistration<UICollectionViewListCell, Wish> {
         cell, indexPath, itemIdentifier in
         
-        var content = UIListContentConfiguration.valueCell()
+        var content = UIListContentConfiguration.subtitleCell()
         content.text = itemIdentifier.productName
         content.textProperties.font = .systemFont(ofSize: 14, weight: .medium)
         content.textProperties.color = .white
@@ -25,6 +25,8 @@ final class WishListViewController: UIViewController {
         content.secondaryText = itemIdentifier.date.description
         content.secondaryTextProperties.font = .systemFont(ofSize: 12, weight: .regular)
         content.secondaryTextProperties.color = .gray
+        
+        content.textToSecondaryTextVerticalPadding = 4
         
         content.image = UIImage(systemName: "checkmark.square")
         content.imageProperties.tintColor = .yellow
@@ -90,6 +92,7 @@ final class WishListViewController: UIViewController {
         
         wishListCollectionView.backgroundColor = .black
         wishListCollectionView.keyboardDismissMode = .onDrag
+        wishListCollectionView.delegate = self
     }
     
     private func configureNavigation() {
@@ -114,19 +117,34 @@ final class WishListViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        var configuration = UICollectionLayoutListConfiguration(appearance: .sidebarPlain)
+        var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         configuration.backgroundColor = .black
+        configuration.showsSeparators = false
         
         let layout = UICollectionViewCompositionalLayout.list(using: configuration)
         return layout
     }
 }
 
+// MARK: - UICollectionViewDelegate
+extension WishListViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = wishListDataSource.itemIdentifier(for: indexPath) else { return }
+        print("\(item.productName)이 삭제됩니다.")
+        
+        wishListArray.remove(at: indexPath.item)
+        updateSnapshot()
+    }
+}
+
+// MARK: - UITextFieldDelegate
 extension WishListViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let productName = textField.text else { return false }
         wishListArray.insert(Wish(productName: productName), at: 0)
+        textField.text = nil
         updateSnapshot()
         
         return true
