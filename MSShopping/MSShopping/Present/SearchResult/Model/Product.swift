@@ -16,10 +16,11 @@ struct ProductInfo: Decodable {
     let image: String
     let mallName: String
     let title: String
+    let link: String
     let lowPrice: String
 
     enum CodingKeys: String, CodingKey {
-        case image, mallName, title
+        case image, mallName, title, link
         case lowPrice = "lprice"
     }
 }
