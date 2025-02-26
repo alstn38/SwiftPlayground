@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchViewController: UIViewController {
     
     private let searchView = SearchView()
+    private let wishlistButton = UIBarButtonItem()
     private let viewModel: SearchViewModel
     private let disposeBag = DisposeBag()
     
@@ -42,6 +43,7 @@ final class SearchViewController: UIViewController {
     
     private func setupBind() {
         let input = SearchViewModel.Input(
+            wishListButtonDidTap: wishlistButton.rx.tap.asObservable(),
             shoppingSearchTextDidChange: searchView.shoppingSearchBar.rx.text.orEmpty.asObservable(),
             searchButtonDidClick: searchView.shoppingSearchBar.rx.searchButtonClicked.asObservable()
         )
@@ -49,9 +51,17 @@ final class SearchViewController: UIViewController {
         let output = viewModel.transform(from: input)
         
         output.pushToResultViewController
-            .drive(with: self) { owner, searchText in
-                let viewModel = SearchResultViewModel(searchedText: searchText)
-                let viewController = SearchResultViewController(viewModel: viewModel)
+            .drive(with: self) { owner, moveViewType in
+                let viewController: UIViewController
+                switch moveViewType {
+                case .searchResult(let searchText):
+                    let viewModel = SearchResultViewModel(searchedText: searchText)
+                    viewController = SearchResultViewController(viewModel: viewModel)
+                    
+                case .wishList:
+                    viewController = WishListViewController()
+                }
+                
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
@@ -65,11 +75,13 @@ final class SearchViewController: UIViewController {
     }
     
     private func setupView() {
-        
         setupNavigation()
     }
     
     private func setupNavigation() {
         navigationItem.title = "MS의 쇼핑쇼핑"
+        wishlistButton.image = UIImage(systemName: "hand.thumbsup.fill")
+        wishlistButton.style = .plain
+        navigationItem.rightBarButtonItem = wishlistButton
     }
 }
