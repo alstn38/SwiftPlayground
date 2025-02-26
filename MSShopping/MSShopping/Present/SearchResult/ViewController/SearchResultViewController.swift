@@ -51,7 +51,8 @@ final class SearchResultViewController: UIViewController {
     private func setupBind() {
         let input = SearchResultViewModel.Input(
             selectedFilterButtonDidTap: filterButtonRelay.asObservable(),
-            willDisplayIndex: searchResultView.productCollectionView.rx.willDisplayCell.map { $0.at.row }.asObservable()
+            willDisplayIndex: searchResultView.productCollectionView.rx.willDisplayCell.map { $0.at.row }.asObservable(),
+            productItemDidTap: searchResultView.productCollectionView.rx.modelSelected(ProductInfo.self).asObservable()
         )
         
         let output = viewModel.transform(from: input)
@@ -74,6 +75,20 @@ final class SearchResultViewController: UIViewController {
         
         output.searchProduct
             .drive(searchResultView.productCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        output.moveToDetailView
+            .drive(with: self) { owner, link in
+//                 사파리로 open URL
+                guard let url = URL(string: link), UIApplication.shared.canOpenURL(url) else {
+                    return
+                }
+                UIApplication.shared.open(url)
+                
+                // WebKit View 사용
+//                let viewController = DetailSearchViewController(link: link)
+//                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
             .disposed(by: disposeBag)
         
         output.alertError
