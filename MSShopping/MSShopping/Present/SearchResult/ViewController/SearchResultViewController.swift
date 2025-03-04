@@ -15,15 +15,23 @@ final class SearchResultViewController: UIViewController {
     private let searchResultView = SearchResultView()
     private let viewModel: SearchResultViewModel
     private let filterButtonRelay = BehaviorRelay(value: FilterButton.FilterButtonType.accuracy)
+    private let favoriteButtonRelay = PublishRelay<Int>()
     private let disposeBag = DisposeBag()
     
-    private let dataSource = RxCollectionViewSectionedReloadDataSource<ProductSection> { dataSource, collectionView, indexPath, item in
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<ProductSection> { [weak self] dataSource, collectionView, indexPath, item in
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: ProductCollectionViewCell.identifier,
             for: indexPath
         ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
         
         cell.configureCell(item)
+        cell.favoriteButton.rx.tap
+            .map { indexPath.row }
+            .bind { row in
+                self?.favoriteButtonRelay.accept(row)
+            }
+            .disposed(by: cell.disposeBag)
+        
         return cell
     }
     
@@ -52,7 +60,8 @@ final class SearchResultViewController: UIViewController {
         let input = SearchResultViewModel.Input(
             selectedFilterButtonDidTap: filterButtonRelay.asObservable(),
             willDisplayIndex: searchResultView.productCollectionView.rx.willDisplayCell.map { $0.at.row }.asObservable(),
-            productItemDidTap: searchResultView.productCollectionView.rx.modelSelected(ProductInfo.self).asObservable()
+            productItemDidTap: searchResultView.productCollectionView.rx.modelSelected(ProductEntity.self).asObservable(),
+            favoriteButtonDidTap: favoriteButtonRelay.asObservable()
         )
         
         let output = viewModel.transform(from: input)
