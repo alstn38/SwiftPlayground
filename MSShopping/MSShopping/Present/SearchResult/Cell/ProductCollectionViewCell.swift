@@ -12,7 +12,7 @@ import UIKit
 
 final class ProductCollectionViewCell: BaseCollectionViewCell {
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
@@ -56,10 +56,16 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
-    func configureCell(_ item: ProductInfo) {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
+    
+    func configureCell(_ item: ProductEntity) {
         let imageURL = URL(string: item.image)
         productImageView.kf.setImage(with: imageURL)
         mallNameLabel.text = item.mallName
+        
         let price = Int(item.lowPrice) ?? 0
         productPriceLabel.text = price.formatted() + "원"
         productNameLabel.text = item.title.replacingOccurrences(
@@ -68,6 +74,9 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
             options: .regularExpression,
             range: nil
         )
+        
+        let favoriteImage = item.favorite ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+        favoriteButton.setImage(favoriteImage, for: .normal)
     }
     
     override func setupCell() {
