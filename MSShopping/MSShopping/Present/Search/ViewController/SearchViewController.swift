@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchViewController: UIViewController {
     
     private let searchView = SearchView()
+    private let favoriteButton = UIBarButtonItem()
     private let wishlistButton = UIBarButtonItem()
     private let viewModel: SearchViewModel
     private let disposeBag = DisposeBag()
@@ -43,6 +44,7 @@ final class SearchViewController: UIViewController {
     
     private func setupBind() {
         let input = SearchViewModel.Input(
+            favoriteButtonDidTap: favoriteButton.rx.tap.asObservable(),
             wishListButtonDidTap: wishlistButton.rx.tap.asObservable(),
             shoppingSearchTextDidChange: searchView.shoppingSearchBar.rx.text.orEmpty.asObservable(),
             searchButtonDidClick: searchView.shoppingSearchBar.rx.searchButtonClicked.asObservable()
@@ -57,6 +59,10 @@ final class SearchViewController: UIViewController {
                 case .searchResult(let searchText):
                     let viewModel = SearchResultViewModel(searchedText: searchText)
                     viewController = SearchResultViewController(viewModel: viewModel)
+                    
+                case .favorite:
+                    let viewModel = FavoriteViewModel()
+                    viewController = FavoriteViewController(viewModel: viewModel)
                     
                 case .wishList:
                     viewController = WishListViewController()
@@ -80,8 +86,13 @@ final class SearchViewController: UIViewController {
     
     private func setupNavigation() {
         navigationItem.title = "MS의 쇼핑쇼핑"
+        
+        favoriteButton.image = UIImage(systemName: "heart.fill")
+        favoriteButton.style = .plain
+        
         wishlistButton.image = UIImage(systemName: "hand.thumbsup.fill")
         wishlistButton.style = .plain
-        navigationItem.rightBarButtonItem = wishlistButton
+        
+        navigationItem.rightBarButtonItems = [wishlistButton, favoriteButton]
     }
 }

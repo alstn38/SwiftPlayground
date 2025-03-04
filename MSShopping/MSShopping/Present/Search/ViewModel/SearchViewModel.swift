@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchViewModel {
     
     struct Input {
+        let favoriteButtonDidTap: Observable<Void>
         let wishListButtonDidTap: Observable<Void>
         let shoppingSearchTextDidChange: Observable<String>
         let searchButtonDidClick: Observable<Void>
@@ -27,6 +28,11 @@ final class SearchViewModel {
     func transform(from input: Input) -> Output {
         let pushToResultViewControllerRelay = PublishRelay<MoveToOtherViewType>()
         let alertErrorRelay = PublishRelay<(title: String, message: String)>()
+        
+        input.favoriteButtonDidTap
+            .map { MoveToOtherViewType.favorite }
+            .bind(to: pushToResultViewControllerRelay)
+            .disposed(by: disposeBag)
         
         input.wishListButtonDidTap
             .map { MoveToOtherViewType.wishList }
@@ -56,6 +62,7 @@ extension SearchViewModel {
     
     enum MoveToOtherViewType {
         case searchResult(search: String)
+        case favorite
         case wishList
     }
 }
