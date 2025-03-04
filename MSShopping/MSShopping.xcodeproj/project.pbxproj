@@ -15,6 +15,7 @@
 		F180468F2D6DA02500D9FCD1 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F180468E2D6DA02500D9FCD1 /* RxSwift */; };
 		F18046922D6DA03600D9FCD1 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = F18046912D6DA03600D9FCD1 /* Differentiator */; };
 		F18046942D6DA03600D9FCD1 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = F18046932D6DA03600D9FCD1 /* RxDataSources */; };
+		F1804B0B2D77076800D9FCD1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F1804B0A2D77076800D9FCD1 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 				F18046922D6DA03600D9FCD1 /* Differentiator in Frameworks */,
 				F180468F2D6DA02500D9FCD1 /* RxSwift in Frameworks */,
 				F180468D2D6DA02500D9FCD1 /* RxRelay in Frameworks */,
+				F1804B0B2D77076800D9FCD1 /* RealmSwift in Frameworks */,
 				F10854572D3795B1006F80AC /* SnapKit in Frameworks */,
 				F10854512D37959A006F80AC /* Kingfisher in Frameworks */,
 				F18046942D6DA03600D9FCD1 /* RxDataSources in Frameworks */,
@@ -105,6 +107,7 @@
 				F180468E2D6DA02500D9FCD1 /* RxSwift */,
 				F18046912D6DA03600D9FCD1 /* Differentiator */,
 				F18046932D6DA03600D9FCD1 /* RxDataSources */,
+				F1804B0A2D77076800D9FCD1 /* RealmSwift */,
 			);
 			productName = MSShopping;
 			productReference = F108542E2D37932B006F80AC /* MSShopping.app */;
@@ -140,6 +143,7 @@
 				F10854552D3795B1006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F18046892D6DA02500D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				F18046902D6DA03600D9FCD1 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				F1804B092D77076800D9FCD1 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F108542F2D37932B006F80AC /* Products */;
@@ -417,6 +421,14 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		F1804B092D77076800D9FCD1 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 20.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -459,6 +471,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F18046902D6DA03600D9FCD1 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		F1804B0A2D77076800D9FCD1 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1804B092D77076800D9FCD1 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
