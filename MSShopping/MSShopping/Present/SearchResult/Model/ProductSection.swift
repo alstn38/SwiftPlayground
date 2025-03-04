@@ -9,13 +9,13 @@ import Foundation
 import RxDataSources
 
 struct ProductSection {
-    var items: [ProductInfo]
+    var items: [ProductEntity]
 }
 
 extension ProductSection: SectionModelType {
-    typealias Item = ProductInfo
+    typealias Item = ProductEntity
     
-    init(original: ProductSection, items: [ProductInfo]) {
+    init(original: ProductSection, items: [ProductEntity]) {
         self = original
         self.items = items
     }
