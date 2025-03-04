@@ -7,9 +7,12 @@
 
 import SnapKit
 import Kingfisher
+import RxSwift
 import UIKit
 
 final class ProductCollectionViewCell: BaseCollectionViewCell {
+    
+    let disposeBag = DisposeBag()
     
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
@@ -43,6 +46,16 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    let favoriteButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.tintColor = .black
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 15
+        button.clipsToBounds = true
+        return button
+    }()
+    
     func configureCell(_ item: ProductInfo) {
         let imageURL = URL(string: item.image)
         productImageView.kf.setImage(with: imageURL)
@@ -63,7 +76,7 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func setupHierarchy() {
-        [productImageView, mallNameLabel, productNameLabel, productPriceLabel].forEach {
+        [productImageView, mallNameLabel, productNameLabel, productPriceLabel, favoriteButton].forEach {
             contentView.addSubview($0)
         }
     }
@@ -87,6 +100,11 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         productPriceLabel.snp.makeConstraints {
             $0.top.equalTo(productNameLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
+        }
+        
+        favoriteButton.snp.makeConstraints {
+            $0.bottom.trailing.equalTo(productImageView).inset(10)
+            $0.size.equalTo(30)
         }
     }
 }
