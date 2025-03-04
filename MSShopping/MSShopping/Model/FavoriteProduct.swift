@@ -27,4 +27,16 @@ final class FavoriteProduct: Object {
         self.lowPrice = item.lowPrice
         self.favorite = item.favorite
     }
+    
+    func toEntity() -> ProductEntity {
+        return ProductEntity(
+            image: self.image,
+            mallName: self.mallName,
+            title: self.title,
+            link: self.link,
+            lowPrice: self.lowPrice,
+            productId: self.productId,
+            favorite: self.favorite
+        )
+    }
 }
