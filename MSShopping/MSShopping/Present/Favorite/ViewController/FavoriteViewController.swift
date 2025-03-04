@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 final class FavoriteViewController: UIViewController {
@@ -13,6 +15,9 @@ final class FavoriteViewController: UIViewController {
     private let viewModel: FavoriteViewModel
     private let searchTextField = UITextField()
     private lazy var favoriteCollectionView = UICollectionView(frame: .zero, collectionViewLayout: getLayout())
+    private let favoriteButtonDidTapRelay = PublishRelay<ProductEntity>()
+    private let updateSnapShotRelay = PublishRelay<Void>()
+    private let disposeBag = DisposeBag()
     
     private let registration = UICollectionView.CellRegistration<ProductCollectionViewCell, FavoriteProduct> {
         cell, indexPath, itemIdentifier in
@@ -30,6 +35,12 @@ final class FavoriteViewController: UIViewController {
                 for: indexPath,
                 item: itemIdentifier
             )
+            
+            cell.favoriteButton.rx.tap
+                .map { itemIdentifier.toEntity() }
+                .bind(to: favoriteButtonDidTapRelay)
+                .disposed(by: cell.disposeBag)
+            
             return cell
         }
     )
@@ -37,6 +48,7 @@ final class FavoriteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureBind()
         configureNavigation()
         configureView()
         configureHierarchy()
@@ -53,11 +65,36 @@ final class FavoriteViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func updateSnapshot() {
+    private func configureBind() {
+        let input = FavoriteViewModel.Input(
+            viewDidLoad: Observable.just(()),
+            searchTextDidChange: searchTextField.rx.text.orEmpty.asObservable(),
+            cellFavoriteDidTap: favoriteButtonDidTapRelay.asObservable(),
+            updateSnapShot: updateSnapShotRelay.asObservable()
+        )
+        
+        let output = viewModel.transform(from: input)
+        
+        output.updateFavoriteProduct
+            .drive(with: self) { owner, product in
+                owner.updateSnapshot(with: product)
+            }
+            .disposed(by: disposeBag)
+        
+        output.alertError
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                owner.presentAlert(title: title, message: message)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updateSnapshot(with product: [FavoriteProduct]) {
         var snapshot = NSDiffableDataSourceSnapshot<FavoriteViewModel.Section, FavoriteProduct>()
         snapshot.appendSections(FavoriteViewModel.Section.allCases)
-        snapshot.appendItems(viewModel.favoriteProduct, toSection: .favorite)
+        snapshot.appendItems(product, toSection: .favorite)
         dataSource.apply(snapshot)
+        updateSnapShotRelay.accept(())
     }
     
     private func configureNavigation() {
@@ -111,8 +148,8 @@ final class FavoriteViewController: UIViewController {
         )
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
-            heightDimension: .fractionalWidth(0.7)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(1 / 2 * 1.4)
         )
 
         let groupLayout = NSCollectionLayoutGroup.horizontal(
@@ -126,3 +163,4 @@ final class FavoriteViewController: UIViewController {
         return layout
     }
 }
+
