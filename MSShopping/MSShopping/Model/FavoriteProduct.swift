@@ -8,11 +8,11 @@
 import Foundation
 import RealmSwift
 
-final class FavoriteProduct: Object {
+final class FavoriteProduct: Object, Identifiable {
     @Persisted(primaryKey: true) var productId: String
     @Persisted var image: String
     @Persisted var mallName: String
-    @Persisted var title: String
+    @Persisted(indexed: true) var title: String
     @Persisted var link: String
     @Persisted var lowPrice: String
     @Persisted var favorite: Bool
