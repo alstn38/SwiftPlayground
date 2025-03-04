@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 import RxSwift
 import RxCocoa
 
@@ -29,7 +30,9 @@ final class SearchResultViewModel {
     private var searchedText: String
     private var currentPage: Int = 1
     private var maximumPage: Int = 1
+    private let realm = try! Realm()
     private let disposeBag = DisposeBag()
+    private let alertErrorRelay = PublishRelay<(title: String, message: String)>()
     
     init(searchedText: String) {
         self.searchedText = searchedText
@@ -40,7 +43,6 @@ final class SearchResultViewModel {
         let productTotalCountRelay = PublishRelay<Int>()
         let searchProductRelay: BehaviorRelay<[ProductSection]> = BehaviorRelay(value: [])
         let moveToDetailViewRelay = PublishRelay<String>()
-        let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
         input.selectedFilterButtonDidTap
             .withUnretained(self)
@@ -61,11 +63,17 @@ final class SearchResultViewModel {
                 case .success(let value):
                     owner.currentPage += 1
                     owner.maximumPage = Int(ceil(Double(value.total) / Double(100)))
-                    let newItems = value.items.map { $0.toEntity(isFavorite: false) }
+                    let newItems = value.items.map {
+                        if self.realm.object(ofType: FavoriteProduct.self, forPrimaryKey: $0.productId) == nil {
+                            $0.toEntity(isFavorite: false)
+                        } else {
+                            $0.toEntity(isFavorite: true)
+                        }
+                    }
                     searchProductRelay.accept([ProductSection(items: newItems)])
                     
                 case .failure(let error):
-                    alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
+                    owner.alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
                 }
             }
             .disposed(by: disposeBag)
@@ -83,12 +91,18 @@ final class SearchResultViewModel {
                 case .success(let value):
                     owner.currentPage += 1
                     var existingArray = searchProductRelay.value.first?.items ?? []
-                    let newItems = value.items.map { $0.toEntity(isFavorite: false) }
+                    let newItems = value.items.map {
+                        if self.realm.object(ofType: FavoriteProduct.self, forPrimaryKey: $0.productId) == nil {
+                            $0.toEntity(isFavorite: false)
+                        } else {
+                            $0.toEntity(isFavorite: true)
+                        }
+                    }
                     existingArray.append(contentsOf: newItems)
                     searchProductRelay.accept([ProductSection(items: existingArray)])
                     
                 case .failure(let error):
-                    alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
+                    owner.alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
                 }
             }
             .disposed(by: disposeBag)
@@ -99,10 +113,12 @@ final class SearchResultViewModel {
             .disposed(by: disposeBag)
         
         input.favoriteButtonDidTap
-            .bind { row in
+            .bind(with: self) { owner, row in
                 var existingArray = searchProductRelay.value.first?.items ?? []
                 existingArray[row].favorite.toggle()
                 searchProductRelay.accept([ProductSection(items: existingArray)])
+                
+                owner.updateFavoriteProductRealm(with: existingArray[row])
             }
             .disposed(by: disposeBag)
         
@@ -113,5 +129,42 @@ final class SearchResultViewModel {
             moveToDetailView: moveToDetailViewRelay.asDriver(onErrorJustReturn: ""),
             alertError: alertErrorRelay.asDriver(onErrorJustReturn: (title: "", message: ""))
         )
+    }
+    
+    /// ProductRealm에 있는 Favorite 정보를 업데이트하는 메서드 (제거, 추가에 대한 분기처리.)
+    private func updateFavoriteProductRealm(with item: ProductEntity) {
+        if item.favorite {
+            createFavoriteProductRealm(with: item)
+        } else {
+            deleteFavoriteProductRealm(with: item)
+        }
+    }
+    
+    /// ProductRealm에 있는 Favorite 정보를 새롭게 추가하는 메서드
+    private func createFavoriteProductRealm(with item: ProductEntity) {
+        do {
+            try realm.write {
+                let data = FavoriteProduct(item)
+                realm.add(data)
+                // TODO: 저장완료 토스트뷰 추가
+            }
+        } catch {
+            alertErrorRelay.accept((title: "로컬 오류", message: "로컬 데이터 저장에 실패했습니다."))
+        }
+    }
+    
+    /// ProductRealm에 있는 Favorite 정보를 제거하는 메서드
+    private func deleteFavoriteProductRealm(with item: ProductEntity) {
+        guard let data = realm.object(ofType: FavoriteProduct.self, forPrimaryKey: item.productId) else {
+            return
+        }
+        
+        do {
+            try realm.write {
+                realm.delete(data)
+            }
+        } catch {
+            alertErrorRelay.accept((title: "로컬 오류", message: "로컬 데이터 업데이트에 실패했습니다."))
+        }
     }
 }
