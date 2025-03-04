@@ -14,7 +14,8 @@ final class SearchResultViewModel {
     struct Input {
         let selectedFilterButtonDidTap: Observable<FilterButton.FilterButtonType>
         let willDisplayIndex: Observable<Int>
-        let productItemDidTap: Observable<ProductInfo>
+        let productItemDidTap: Observable<ProductEntity>
+        let favoriteButtonDidTap: Observable<Int>
     }
     
     struct Output {
@@ -60,7 +61,8 @@ final class SearchResultViewModel {
                 case .success(let value):
                     owner.currentPage += 1
                     owner.maximumPage = Int(ceil(Double(value.total) / Double(100)))
-                    searchProductRelay.accept([ProductSection(items: value.items)])
+                    let newItems = value.items.map { $0.toEntity(isFavorite: false) }
+                    searchProductRelay.accept([ProductSection(items: newItems)])
                     
                 case .failure(let error):
                     alertErrorRelay.accept((title: "네트워크 오류", message: error.errorDescription))
@@ -81,7 +83,8 @@ final class SearchResultViewModel {
                 case .success(let value):
                     owner.currentPage += 1
                     var existingArray = searchProductRelay.value.first?.items ?? []
-                    existingArray.append(contentsOf: value.items)
+                    let newItems = value.items.map { $0.toEntity(isFavorite: false) }
+                    existingArray.append(contentsOf: newItems)
                     searchProductRelay.accept([ProductSection(items: existingArray)])
                     
                 case .failure(let error):
@@ -93,6 +96,14 @@ final class SearchResultViewModel {
         input.productItemDidTap
             .map { $0.link.replacingOccurrences(of: "\\", with: "") }
             .bind(to: moveToDetailViewRelay)
+            .disposed(by: disposeBag)
+        
+        input.favoriteButtonDidTap
+            .bind { row in
+                var existingArray = searchProductRelay.value.first?.items ?? []
+                existingArray[row].favorite.toggle()
+                searchProductRelay.accept([ProductSection(items: existingArray)])
+            }
             .disposed(by: disposeBag)
         
         return Output(
