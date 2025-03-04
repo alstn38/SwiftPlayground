@@ -8,6 +8,10 @@
 |  :-------------: |  :-------------: |  :-------------: |
 | <img width=200 src="https://github.com/user-attachments/assets/0b97db20-9b50-4473-8dfc-bd0e96b1ea97"> |  <img width=200 src="https://github.com/user-attachments/assets/81870440-6785-4b26-ab7e-00d659a0fe06"> | <img width=200 src="https://github.com/user-attachments/assets/4b044b0b-5f2c-469e-bfae-9fe6f42b8b8f"> |
 
+|   즐겨찾기   | 
+|  :-------------: |
+| <img width=200 src="https://github.com/user-attachments/assets/ea944e5f-1e07-4450-ac02-efcd9bde95af"> | 
+
 
 ### 시도해 본 것
 - 검색 결과 통신 지연에 따른 UIActivityIndicatorView
@@ -22,6 +26,8 @@
 - DiffableDataSource + CellRegistration
 - WebKit
 - Open URL
+- DiffableDataSource
+- RealmSwift
 
 - SnapKit Library
 - Alamofire Library
