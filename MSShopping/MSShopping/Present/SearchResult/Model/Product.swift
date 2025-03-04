@@ -18,9 +18,25 @@ struct ProductInfo: Decodable {
     let title: String
     let link: String
     let lowPrice: String
+    let productId: String
 
     enum CodingKeys: String, CodingKey {
-        case image, mallName, title, link
+        case image, mallName, title, link, productId
         case lowPrice = "lprice"
+    }
+}
+
+extension ProductInfo {
+    
+    func toEntity(isFavorite: Bool) -> ProductEntity {
+        return ProductEntity(
+            image: self.image,
+            mallName: self.mallName,
+            title: self.title,
+            link: self.link,
+            lowPrice: self.lowPrice,
+            productId: self.productId,
+            favorite: isFavorite
+        )
     }
 }
