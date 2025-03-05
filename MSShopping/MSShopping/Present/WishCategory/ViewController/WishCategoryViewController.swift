@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 final class WishCategoryViewController: UIViewController {
     
     private let viewModel: WishCategoryViewModel
+    private let addFolderRelay = PublishRelay<String>()
+    private let cellDidTapRelay = PublishRelay<WishCategory>()
+    private let disposeBag = DisposeBag()
     private let addFolderButton = UIBarButtonItem()
     private lazy var wishCategoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: getLayout())
     
@@ -46,17 +51,79 @@ final class WishCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureBind()
         configureNavigation()
         configureView()
         configureHierarchy()
         configureLayout()
     }
     
-    private func updateSnapshot(with product: [WishCategory]) {
+    private func configureBind() {
+        let input = WishCategoryViewModel.Input(
+            addFolder: addFolderRelay.asObservable(),
+            cellDidTap: cellDidTapRelay.asObservable()
+        )
+        
+        let output = viewModel.transform(from: input)
+        
+        output.updateFolder
+            .drive(with: self) { owner, folders in
+                owner.updateSnapshot(with: folders)
+            }
+            .disposed(by: disposeBag)
+        
+        output.moveToDetailView
+            .drive(with: self) { owner, folder in
+                // TODO: 화면 전환 로직 구현
+            }
+            .disposed(by: disposeBag)
+        
+        output.alertError
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                owner.presentAlert(title: title, message: message)
+            }
+            .disposed(by: disposeBag)
+        
+        addFolderButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.presentTextAlert()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updateSnapshot(with folders: [WishCategory]) {
         var snapshot = NSDiffableDataSourceSnapshot<WishCategoryViewModel.Section, WishCategory>()
         snapshot.appendSections(WishCategoryViewModel.Section.allCases)
-        snapshot.appendItems(product, toSection: .folder)
+        snapshot.appendItems(folders, toSection: .folder)
         dataSource.apply(snapshot)
+    }
+    
+    private func presentTextAlert() {
+        let alert = UIAlertController(
+            title: "폴더 추가",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        alert.addTextField()
+        
+        let cancelAction = UIAlertAction(
+            title: "취소",
+            style: .cancel
+        )
+        
+        let addAction = UIAlertAction(
+            title: "추가",
+            style: .default) { [weak self] _ in
+                guard let folderName = alert.textFields?.first?.text else { return }
+                self?.addFolderRelay.accept(folderName)
+            }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(addAction)
+        
+        present(alert, animated: true)
     }
     
     private func configureNavigation() {
