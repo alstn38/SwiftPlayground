@@ -6,15 +6,18 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 final class WishListViewController: UIViewController {
     
+    private let viewModel: WishListViewModel
+    private let disposeBag = DisposeBag()
     private let wishListTextField = UITextField()
     private lazy var wishListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-    private var wishListArray: [Wish] = []
     
-    private let registration = UICollectionView.CellRegistration<UICollectionViewListCell, Wish> {
+    private let registration = UICollectionView.CellRegistration<UICollectionViewListCell, WishList> {
         cell, indexPath, itemIdentifier in
         
         var content = UIListContentConfiguration.subtitleCell()
@@ -40,7 +43,7 @@ final class WishListViewController: UIViewController {
         cell.backgroundConfiguration = backgroundConfig
     }
     
-    private lazy var wishListDataSource = UICollectionViewDiffableDataSource<WishSection, Wish>(
+    private lazy var wishListDataSource = UICollectionViewDiffableDataSource<WishListViewModel.Section, WishList>(
         collectionView: wishListCollectionView,
         cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
             guard let self else { return UICollectionViewCell() }
@@ -49,16 +52,24 @@ final class WishListViewController: UIViewController {
                 for: indexPath,
                 item: itemIdentifier
             )
-            
             return cell
         }
     )
     
+    init(viewModel: WishListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateSnapshot()
-        configureNavigation()
+        configureBind()
         configureView()
         configureHierarchy()
         configureLayout()
@@ -73,10 +84,36 @@ final class WishListViewController: UIViewController {
         view.endEditing(true)
     }
     
-    private func updateSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<WishSection, Wish>()
-        snapshot.appendSections(WishSection.allCases)
-        snapshot.appendItems(wishListArray, toSection: .product)
+    private func configureBind() {
+        let input = WishListViewModel.Input(
+            addWishList: wishListTextField.rx.controlEvent(.editingDidEndOnExit)
+                .withLatestFrom(wishListTextField.rx.text.orEmpty).asObservable()
+        )
+        
+        let output = viewModel.transform(from: input)
+        
+        output.folderName
+            .drive(navigationItem.rx.title)
+            .disposed(by: disposeBag)
+        
+        output.updateWishList
+            .drive(with: self) { owner, wishList in
+                owner.updateSnapshot(with: wishList)
+            }
+            .disposed(by: disposeBag)
+        
+        output.alertError
+            .drive(with: self) { owner, value in
+                let (title, message) = value
+                owner.presentAlert(title: title, message: message)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updateSnapshot(with wishList: [WishList]) {
+        var snapshot = NSDiffableDataSourceSnapshot<WishListViewModel.Section, WishList>()
+        snapshot.appendSections(WishListViewModel.Section.allCases)
+        snapshot.appendItems(wishList, toSection: .product)
         wishListDataSource.apply(snapshot)
     }
     
@@ -88,15 +125,9 @@ final class WishListViewController: UIViewController {
         )
         wishListTextField.returnKeyType = .done
         wishListTextField.textColor = .white
-        wishListTextField.delegate = self
         
         wishListCollectionView.backgroundColor = .black
         wishListCollectionView.keyboardDismissMode = .onDrag
-        wishListCollectionView.delegate = self
-    }
-    
-    private func configureNavigation() {
-        navigationItem.title = "위시리스트 추가"
     }
     
     private func configureHierarchy() {
@@ -123,38 +154,5 @@ final class WishListViewController: UIViewController {
         
         let layout = UICollectionViewCompositionalLayout.list(using: configuration)
         return layout
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension WishListViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = wishListDataSource.itemIdentifier(for: indexPath) else { return }
-        print("\(item.productName)이 삭제됩니다.")
-        
-        wishListArray.remove(at: indexPath.item)
-        updateSnapshot()
-    }
-}
-
-// MARK: - UITextFieldDelegate
-extension WishListViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let productName = textField.text else { return false }
-        wishListArray.insert(Wish(productName: productName), at: 0)
-        textField.text = nil
-        updateSnapshot()
-        
-        return true
-    }
-}
-
-// MARK: - WishSection
-extension WishListViewController {
-    
-    enum WishSection: CaseIterable {
-        case product
     }
 }
