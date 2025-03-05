@@ -65,7 +65,8 @@ final class SearchViewController: UIViewController {
                     viewController = FavoriteViewController(viewModel: viewModel)
                     
                 case .wishList:
-                    viewController = WishListViewController()
+                    let viewModel = WishCategoryViewModel()
+                    viewController = WishCategoryViewController(viewModel: viewModel)
                 }
                 
                 owner.navigationController?.pushViewController(viewController, animated: true)
