@@ -14,7 +14,6 @@ final class WishCategoryViewController: UIViewController {
     
     private let viewModel: WishCategoryViewModel
     private let addFolderRelay = PublishRelay<String>()
-    private let cellDidTapRelay = PublishRelay<WishCategory>()
     private let disposeBag = DisposeBag()
     private let addFolderButton = UIBarButtonItem()
     private lazy var wishCategoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: getLayout())
@@ -33,7 +32,7 @@ final class WishCategoryViewController: UIViewController {
                 for: indexPath,
                 item: itemIdentifier
             )
-            // TODO: cell 클릭 bind 추가
+            
             return cell
         }
     )
@@ -61,7 +60,7 @@ final class WishCategoryViewController: UIViewController {
     private func configureBind() {
         let input = WishCategoryViewModel.Input(
             addFolder: addFolderRelay.asObservable(),
-            cellDidTap: cellDidTapRelay.asObservable()
+            cellDidTap: wishCategoryCollectionView.rx.itemSelected.map { $0.row }.asObservable()
         )
         
         let output = viewModel.transform(from: input)
@@ -74,7 +73,9 @@ final class WishCategoryViewController: UIViewController {
         
         output.moveToDetailView
             .drive(with: self) { owner, folder in
-                // TODO: 화면 전환 로직 구현
+                let viewModel = WishListViewModel(folder: folder)
+                let viewController = WishListViewController(viewModel: viewModel)
+                owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
         
