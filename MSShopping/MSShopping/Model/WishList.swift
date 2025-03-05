@@ -16,7 +16,7 @@ final class WishList: Object {
     @Persisted(originProperty: "detail")
     var folder: LinkingObjects<WishCategory>
     
-    convenience init(productName: String, date: Date) {
+    convenience init(productName: String) {
         self.init()
         self.productName = productName
         self.date = Date()
