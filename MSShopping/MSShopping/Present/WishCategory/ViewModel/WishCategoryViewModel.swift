@@ -14,10 +14,12 @@ final class WishCategoryViewModel {
     struct Input {
         let addFolder: Observable<String>
         let cellDidTap: Observable<Int>
+        let updateWishCategory: Observable<Void>
     }
     
     struct Output {
         let updateFolder: Driver<[WishCategory]>
+        let forceUpdateFolder: Driver<[WishCategory]>
         let moveToDetailView: Driver<WishCategory>
         let alertError: Driver<(title: String, message: String)>
     }
@@ -31,6 +33,7 @@ final class WishCategoryViewModel {
     
     func transform(from input: Input) -> Output {
         let updateFolderRelay: BehaviorRelay<[WishCategory]> = BehaviorRelay(value: wishCategoryRepository.readItem())
+        let forceUpdateFolderRelay = PublishRelay<[WishCategory]>()
         let moveToDetailViewRelay = PublishRelay<WishCategory>()
         let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
@@ -50,8 +53,16 @@ final class WishCategoryViewModel {
             .bind(to: moveToDetailViewRelay)
             .disposed(by: disposeBag)
         
+        input.updateWishCategory
+            .bind(with: self) { owner, _ in
+                updateFolderRelay.accept(owner.wishCategoryRepository.readItem())
+                forceUpdateFolderRelay.accept(owner.wishCategoryRepository.readItem())
+            }
+            .disposed(by: disposeBag)
+        
         return Output(
             updateFolder: updateFolderRelay.asDriver(),
+            forceUpdateFolder: forceUpdateFolderRelay.asDriver(onErrorJustReturn: []),
             moveToDetailView: moveToDetailViewRelay.asDriver(onErrorJustReturn: WishCategory(folderName: "")),
             alertError: alertErrorRelay.asDriver(onErrorJustReturn: (title: "", message: ""))
         )

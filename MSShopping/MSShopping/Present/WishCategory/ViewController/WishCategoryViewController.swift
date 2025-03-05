@@ -14,6 +14,7 @@ final class WishCategoryViewController: UIViewController {
     
     private let viewModel: WishCategoryViewModel
     private let addFolderRelay = PublishRelay<String>()
+    private let updateWishCategory = PublishRelay<Void>()
     private let disposeBag = DisposeBag()
     private let addFolderButton = UIBarButtonItem()
     private lazy var wishCategoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: getLayout())
@@ -60,7 +61,8 @@ final class WishCategoryViewController: UIViewController {
     private func configureBind() {
         let input = WishCategoryViewModel.Input(
             addFolder: addFolderRelay.asObservable(),
-            cellDidTap: wishCategoryCollectionView.rx.itemSelected.map { $0.row }.asObservable()
+            cellDidTap: wishCategoryCollectionView.rx.itemSelected.map { $0.row }.asObservable(),
+            updateWishCategory: updateWishCategory.asObservable()
         )
         
         let output = viewModel.transform(from: input)
@@ -71,10 +73,19 @@ final class WishCategoryViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        // Q: DiffableDataSourceSnapshot에서 왜 list가 추가된것을 왜 캡쳐에서 알아차리지 못할까?
+        // 추론: list는 배열로 이루어져있고 배열의 주소값을 보고 있는 것일까?
+        // 배열의 주소값은 C언어에서 [0]번째의 주소값을 보고 있고, list가 append된다고 하더라도 결국 주소값은 변한 것이 없다?
+        // 따라서 캡쳐하는 과정에서 이러한 변화를 알아차리지 못하기 때문에 변경하지 않는 것일까??
+        output.forceUpdateFolder
+            .drive(with: self) { owner, folders in
+                owner.wishCategoryCollectionView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
         output.moveToDetailView
             .drive(with: self) { owner, folder in
-                let viewModel = WishListViewModel(folder: folder)
-                let viewController = WishListViewController(viewModel: viewModel)
+                let viewController = owner.createWishListViewController(for: folder)
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
@@ -98,6 +109,12 @@ final class WishCategoryViewController: UIViewController {
         snapshot.appendSections(WishCategoryViewModel.Section.allCases)
         snapshot.appendItems(folders, toSection: .folder)
         dataSource.apply(snapshot)
+    }
+    
+    private func createWishListViewController(for folder: WishCategory) -> UIViewController {
+        let viewModel = WishListViewModel(folder: folder)
+        viewModel.delegate = self
+        return WishListViewController(viewModel: viewModel)
     }
     
     private func presentTextAlert() {
@@ -177,5 +194,12 @@ final class WishCategoryViewController: UIViewController {
 
         let layout = UICollectionViewCompositionalLayout(section: sectionLayout)
         return layout
+    }
+}
+
+extension WishCategoryViewController: WishListViewModelProtocol {
+    
+    func wishListDidUpdate(_ viewModel: WishListViewModel) {
+        updateWishCategory.accept(())
     }
 }
