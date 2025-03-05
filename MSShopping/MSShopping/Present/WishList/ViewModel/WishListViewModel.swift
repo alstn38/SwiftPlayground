@@ -9,6 +9,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+protocol WishListViewModelProtocol: AnyObject {
+    func wishListDidUpdate(_ viewModel: WishListViewModel)
+}
+
 final class WishListViewModel {
     
     struct Input {
@@ -21,6 +25,7 @@ final class WishListViewModel {
         let alertError: Driver<(title: String, message: String)>
     }
     
+    weak var delegate: WishListViewModelProtocol?
     private let folder: WishCategory
     private let wishListRepository: WishListRepository
     private let disposeBag = DisposeBag()
@@ -40,6 +45,7 @@ final class WishListViewModel {
                 do {
                     try owner.wishListRepository.createItem(folder: owner.folder, name: wishListName)
                     updateWishListRelay.accept(Array(owner.folder.detail))
+                    owner.delegate?.wishListDidUpdate(owner)
                 } catch {
                     alertErrorRelay.accept((title: "로컬 데이터 오류", message: error.localizedDescription))
                 }
