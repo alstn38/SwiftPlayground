@@ -13,7 +13,7 @@ final class WishCategoryViewModel {
     
     struct Input {
         let addFolder: Observable<String>
-        let cellDidTap: Observable<WishCategory>
+        let cellDidTap: Observable<Int>
     }
     
     struct Output {
@@ -23,7 +23,6 @@ final class WishCategoryViewModel {
     }
     
     private let wishCategoryRepository: WishCategoryRepository
-    private lazy var updateFolderRelay: BehaviorRelay<[WishCategory]> = BehaviorRelay(value: wishCategoryRepository.readItem())
     private let disposeBag = DisposeBag()
     
     init(wishCategoryRepository: WishCategoryRepository = DefaultWishCategoryRepository()) {
@@ -31,6 +30,7 @@ final class WishCategoryViewModel {
     }
     
     func transform(from input: Input) -> Output {
+        let updateFolderRelay: BehaviorRelay<[WishCategory]> = BehaviorRelay(value: wishCategoryRepository.readItem())
         let moveToDetailViewRelay = PublishRelay<WishCategory>()
         let alertErrorRelay = PublishRelay<(title: String, message: String)>()
         
@@ -38,7 +38,7 @@ final class WishCategoryViewModel {
             .bind(with: self) { owner, folderName in
                 do {
                     try owner.wishCategoryRepository.createItem(name: folderName)
-                    owner.updateFolderRelay.accept(owner.wishCategoryRepository.readItem())
+                    updateFolderRelay.accept(owner.wishCategoryRepository.readItem())
                 } catch {
                     alertErrorRelay.accept((title: "로컬 오류", message: error.localizedDescription))
                 }
@@ -46,6 +46,7 @@ final class WishCategoryViewModel {
             .disposed(by: disposeBag)
         
         input.cellDidTap
+            .map { updateFolderRelay.value[$0] }
             .bind(to: moveToDetailViewRelay)
             .disposed(by: disposeBag)
         
