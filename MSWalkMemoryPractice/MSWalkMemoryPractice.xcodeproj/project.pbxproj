@@ -7,66 +7,58 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F10852102D364992006F80AC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F108520F2D364992006F80AC /* SnapKit */; };
-		F10852192D3654B9006F80AC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F10852182D3654B9006F80AC /* Alamofire */; };
-		F18043F52D6C71CA00D9FCD1 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F18043F42D6C71CA00D9FCD1 /* RxCocoa */; };
-		F18043F72D6C71CA00D9FCD1 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F18043F62D6C71CA00D9FCD1 /* RxRelay */; };
-		F18043F92D6C71CA00D9FCD1 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F18043F82D6C71CA00D9FCD1 /* RxSwift */; };
+		F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F18062092D882FE000D9FCD1 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F108514B2D36396E006F80AC /* MSLotto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSLotto.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSWalkMemoryPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F108515D2D363970006F80AC /* Exceptions for "MSLotto" folder in "MSLotto" target */ = {
+		F18062022D882ED400D9FCD1 /* Exceptions for "MSWalkMemoryPractice" folder in "MSWalkMemoryPractice" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resource/Info.plist,
+				Info.plist,
 			);
-			target = F108514A2D36396E006F80AC /* MSLotto */;
+			target = F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F108514D2D36396E006F80AC /* MSLotto */ = {
+		F18061F22D882ED300D9FCD1 /* MSWalkMemoryPractice */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F108515D2D363970006F80AC /* Exceptions for "MSLotto" folder in "MSLotto" target */,
+				F18062022D882ED400D9FCD1 /* Exceptions for "MSWalkMemoryPractice" folder in "MSWalkMemoryPractice" target */,
 			);
-			path = MSLotto;
+			path = MSWalkMemoryPractice;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F10851482D36396E006F80AC /* Frameworks */ = {
+		F18061ED2D882ED300D9FCD1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F18043F52D6C71CA00D9FCD1 /* RxCocoa in Frameworks */,
-				F10852102D364992006F80AC /* SnapKit in Frameworks */,
-				F18043F92D6C71CA00D9FCD1 /* RxSwift in Frameworks */,
-				F18043F72D6C71CA00D9FCD1 /* RxRelay in Frameworks */,
-				F10852192D3654B9006F80AC /* Alamofire in Frameworks */,
+				F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F10851422D36396E006F80AC = {
+		F18061E72D882ED300D9FCD1 = {
 			isa = PBXGroup;
 			children = (
-				F108514D2D36396E006F80AC /* MSLotto */,
-				F108514C2D36396E006F80AC /* Products */,
+				F18061F22D882ED300D9FCD1 /* MSWalkMemoryPractice */,
+				F18061F12D882ED300D9FCD1 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		F108514C2D36396E006F80AC /* Products */ = {
+		F18061F12D882ED300D9FCD1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F108514B2D36396E006F80AC /* MSLotto.app */,
+				F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,74 +66,68 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F108514A2D36396E006F80AC /* MSLotto */ = {
+		F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F108515E2D363970006F80AC /* Build configuration list for PBXNativeTarget "MSLotto" */;
+			buildConfigurationList = F18062032D882ED400D9FCD1 /* Build configuration list for PBXNativeTarget "MSWalkMemoryPractice" */;
 			buildPhases = (
-				F10851472D36396E006F80AC /* Sources */,
-				F10851482D36396E006F80AC /* Frameworks */,
-				F10851492D36396E006F80AC /* Resources */,
+				F18061EC2D882ED300D9FCD1 /* Sources */,
+				F18061ED2D882ED300D9FCD1 /* Frameworks */,
+				F18061EE2D882ED300D9FCD1 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F108514D2D36396E006F80AC /* MSLotto */,
+				F18061F22D882ED300D9FCD1 /* MSWalkMemoryPractice */,
 			);
-			name = MSLotto;
+			name = MSWalkMemoryPractice;
 			packageProductDependencies = (
-				F108520F2D364992006F80AC /* SnapKit */,
-				F10852182D3654B9006F80AC /* Alamofire */,
-				F18043F42D6C71CA00D9FCD1 /* RxCocoa */,
-				F18043F62D6C71CA00D9FCD1 /* RxRelay */,
-				F18043F82D6C71CA00D9FCD1 /* RxSwift */,
+				F18062092D882FE000D9FCD1 /* SnapKit */,
 			);
-			productName = MSLotto;
-			productReference = F108514B2D36396E006F80AC /* MSLotto.app */;
+			productName = MSWalkMemoryPractice;
+			productReference = F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		F10851432D36396E006F80AC /* Project object */ = {
+		F18061E82D882ED300D9FCD1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					F108514A2D36396E006F80AC = {
+					F18061EF2D882ED300D9FCD1 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
-			buildConfigurationList = F10851462D36396E006F80AC /* Build configuration list for PBXProject "MSLotto" */;
+			buildConfigurationList = F18061EB2D882ED300D9FCD1 /* Build configuration list for PBXProject "MSWalkMemoryPractice" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = F10851422D36396E006F80AC;
+			mainGroup = F18061E72D882ED300D9FCD1;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */,
-				F10852172D3654B9006F80AC /* XCRemoteSwiftPackageReference "Alamofire" */,
-				F18043F32D6C71CA00D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = F108514C2D36396E006F80AC /* Products */;
+			productRefGroup = F18061F12D882ED300D9FCD1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F108514A2D36396E006F80AC /* MSLotto */,
+				F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		F10851492D36396E006F80AC /* Resources */ = {
+		F18061EE2D882ED300D9FCD1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -151,7 +137,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		F10851472D36396E006F80AC /* Sources */ = {
+		F18061EC2D882ED300D9FCD1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -161,7 +147,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		F108515F2D363970006F80AC /* Debug */ = {
+		F18062042D882ED400D9FCD1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -170,30 +156,26 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MSLotto/Resource/Info.plist;
+				INFOPLIST_FILE = MSWalkMemoryPractice/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSLotto;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPractice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		F10851602D363970006F80AC /* Release */ = {
+		F18062052D882ED400D9FCD1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -202,30 +184,26 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MSLotto/Resource/Info.plist;
+				INFOPLIST_FILE = MSWalkMemoryPractice/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSLotto;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPractice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		F10851612D363970006F80AC /* Debug */ = {
+		F18062062D882ED400D9FCD1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -288,7 +266,7 @@
 			};
 			name = Debug;
 		};
-		F10851622D363970006F80AC /* Release */ = {
+		F18062072D882ED400D9FCD1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -347,20 +325,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F10851462D36396E006F80AC /* Build configuration list for PBXProject "MSLotto" */ = {
+		F18061EB2D882ED300D9FCD1 /* Build configuration list for PBXProject "MSWalkMemoryPractice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F10851612D363970006F80AC /* Debug */,
-				F10851622D363970006F80AC /* Release */,
+				F18062062D882ED400D9FCD1 /* Debug */,
+				F18062072D882ED400D9FCD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F108515E2D363970006F80AC /* Build configuration list for PBXNativeTarget "MSLotto" */ = {
+		F18062032D882ED400D9FCD1 /* Build configuration list for PBXNativeTarget "MSWalkMemoryPractice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F108515F2D363970006F80AC /* Debug */,
-				F10851602D363970006F80AC /* Release */,
+				F18062042D882ED400D9FCD1 /* Debug */,
+				F18062052D882ED400D9FCD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -368,7 +346,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -376,51 +354,15 @@
 				minimumVersion = 5.7.1;
 			};
 		};
-		F10852172D3654B9006F80AC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
-		F18043F32D6C71CA00D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.9.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F108520F2D364992006F80AC /* SnapKit */ = {
+		F18062092D882FE000D9FCD1 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F108520E2D364992006F80AC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		F10852182D3654B9006F80AC /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F10852172D3654B9006F80AC /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		F18043F42D6C71CA00D9FCD1 /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F18043F32D6C71CA00D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-		F18043F62D6C71CA00D9FCD1 /* RxRelay */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F18043F32D6C71CA00D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxRelay;
-		};
-		F18043F82D6C71CA00D9FCD1 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F18043F32D6C71CA00D9FCD1 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = F10851432D36396E006F80AC /* Project object */;
+	rootObject = F18061E82D882ED300D9FCD1 /* Project object */;
 }
