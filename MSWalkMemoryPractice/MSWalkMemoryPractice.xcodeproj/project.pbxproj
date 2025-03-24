@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F18062092D882FE000D9FCD1 /* SnapKit */; };
+		F19FF7E52D91756000098615 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F19FF7E42D91756000098615 /* Lottie */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */,
+				F19FF7E52D91756000098615 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = MSWalkMemoryPractice;
 			packageProductDependencies = (
 				F18062092D882FE000D9FCD1 /* SnapKit */,
+				F19FF7E42D91756000098615 /* Lottie */,
 			);
 			productName = MSWalkMemoryPractice;
 			productReference = F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F19FF7E32D91756000098615 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F18061F12D882ED300D9FCD1 /* Products */;
@@ -354,6 +358,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		F19FF7E32D91756000098615 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -361,6 +373,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		F19FF7E42D91756000098615 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F19FF7E32D91756000098615 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
