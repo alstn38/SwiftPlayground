@@ -9,10 +9,48 @@
 /* Begin PBXBuildFile section */
 		F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F18062092D882FE000D9FCD1 /* SnapKit */; };
 		F19FF7E52D91756000098615 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F19FF7E42D91756000098615 /* Lottie */; };
+		F1EDF25C2D9CD01D00B8CD5F /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F1EDF25B2D9CD01D00B8CD5F /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		F1EDF25E2D9CD01D00B8CD5F /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = F1EDF25D2D9CD01D00B8CD5F /* FirebaseCrashlytics */; };
+		F1EDF2602D9CD01D00B8CD5F /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = F1EDF25F2D9CD01D00B8CD5F /* FirebaseMessaging */; };
+		F1EE8F642DA375E600F83BEF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F1EE8F632DA375E600F83BEF /* Alamofire */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1EDF26B2D9CE5B000B8CD5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18061E82D882ED300D9FCD1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F18061EF2D882ED300D9FCD1;
+			remoteInfo = MSWalkMemoryPractice;
+		};
+		F1EDF2782D9CE5D200B8CD5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18061E82D882ED300D9FCD1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F18061EF2D882ED300D9FCD1;
+			remoteInfo = MSWalkMemoryPractice;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F1EE8EDD2DA3536800F83BEF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSWalkMemoryPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1EDF2652D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSWalkMemoryPracticeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1EDF2742D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSWalkMemoryPracticeUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1EE8EC82DA3536600F83BEF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		F1EE8ECA2DA3536600F83BEF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -34,6 +72,21 @@
 			path = MSWalkMemoryPractice;
 			sourceTree = "<group>";
 		};
+		F1EDF2662D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MSWalkMemoryPracticeUITests;
+			sourceTree = "<group>";
+		};
+		F1EDF2752D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MSWalkMemoryPracticeUnitTests;
+			sourceTree = "<group>";
+		};
+		F1EE8ECC2DA3536600F83BEF /* MSWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MSWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +95,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				F180620A2D882FE000D9FCD1 /* SnapKit in Frameworks */,
+				F1EDF25E2D9CD01D00B8CD5F /* FirebaseCrashlytics in Frameworks */,
+				F1EDF2602D9CD01D00B8CD5F /* FirebaseMessaging in Frameworks */,
+				F1EE8F642DA375E600F83BEF /* Alamofire in Frameworks */,
+				F1EDF25C2D9CD01D00B8CD5F /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				F19FF7E52D91756000098615 /* Lottie in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EDF2622D9CE5AF00B8CD5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EDF2712D9CE5D200B8CD5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +124,10 @@
 			isa = PBXGroup;
 			children = (
 				F18061F22D882ED300D9FCD1 /* MSWalkMemoryPractice */,
+				F1EDF2662D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests */,
+				F1EDF2752D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests */,
+				F1EE8ECC2DA3536600F83BEF /* MSWidget */,
+				F1EE8EC72DA3536600F83BEF /* Frameworks */,
 				F18061F12D882ED300D9FCD1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,8 +136,19 @@
 			isa = PBXGroup;
 			children = (
 				F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */,
+				F1EDF2652D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests.xctest */,
+				F1EDF2742D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F1EE8EC72DA3536600F83BEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1EE8EC82DA3536600F83BEF /* WidgetKit.framework */,
+				F1EE8ECA2DA3536600F83BEF /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -75,6 +161,7 @@
 				F18061EC2D882ED300D9FCD1 /* Sources */,
 				F18061ED2D882ED300D9FCD1 /* Frameworks */,
 				F18061EE2D882ED300D9FCD1 /* Resources */,
+				F1EE8EDD2DA3536800F83BEF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -87,10 +174,60 @@
 			packageProductDependencies = (
 				F18062092D882FE000D9FCD1 /* SnapKit */,
 				F19FF7E42D91756000098615 /* Lottie */,
+				F1EDF25B2D9CD01D00B8CD5F /* FirebaseAnalyticsWithoutAdIdSupport */,
+				F1EDF25D2D9CD01D00B8CD5F /* FirebaseCrashlytics */,
+				F1EDF25F2D9CD01D00B8CD5F /* FirebaseMessaging */,
+				F1EE8F632DA375E600F83BEF /* Alamofire */,
 			);
 			productName = MSWalkMemoryPractice;
 			productReference = F18061F02D882ED300D9FCD1 /* MSWalkMemoryPractice.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F1EDF2642D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1EDF26D2D9CE5B000B8CD5F /* Build configuration list for PBXNativeTarget "MSWalkMemoryPracticeUITests" */;
+			buildPhases = (
+				F1EDF2612D9CE5AF00B8CD5F /* Sources */,
+				F1EDF2622D9CE5AF00B8CD5F /* Frameworks */,
+				F1EDF2632D9CE5AF00B8CD5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1EDF26C2D9CE5B000B8CD5F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F1EDF2662D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests */,
+			);
+			name = MSWalkMemoryPracticeUITests;
+			packageProductDependencies = (
+			);
+			productName = MSWalkMemoryPracticeUITests;
+			productReference = F1EDF2652D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F1EDF2732D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1EDF27A2D9CE5D200B8CD5F /* Build configuration list for PBXNativeTarget "MSWalkMemoryPracticeUnitTests" */;
+			buildPhases = (
+				F1EDF2702D9CE5D200B8CD5F /* Sources */,
+				F1EDF2712D9CE5D200B8CD5F /* Frameworks */,
+				F1EDF2722D9CE5D200B8CD5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1EDF2792D9CE5D200B8CD5F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F1EDF2752D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests */,
+			);
+			name = MSWalkMemoryPracticeUnitTests;
+			packageProductDependencies = (
+			);
+			productName = MSWalkMemoryPracticeUnitTests;
+			productReference = F1EDF2742D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -99,11 +236,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					F18061EF2D882ED300D9FCD1 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					F1EDF2642D9CE5AF00B8CD5F = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = F18061EF2D882ED300D9FCD1;
+					};
+					F1EDF2732D9CE5D200B8CD5F = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = F18061EF2D882ED300D9FCD1;
 					};
 				};
 			};
@@ -119,6 +264,8 @@
 			packageReferences = (
 				F18062082D882FE000D9FCD1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F19FF7E32D91756000098615 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				F1EDF25A2D9CD01D00B8CD5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F1EE8F622DA375E600F83BEF /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F18061F12D882ED300D9FCD1 /* Products */;
@@ -126,12 +273,28 @@
 			projectRoot = "";
 			targets = (
 				F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */,
+				F1EDF2642D9CE5AF00B8CD5F /* MSWalkMemoryPracticeUITests */,
+				F1EDF2732D9CE5D200B8CD5F /* MSWalkMemoryPracticeUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F18061EE2D882ED300D9FCD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EDF2632D9CE5AF00B8CD5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EDF2722D9CE5D200B8CD5F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,7 +311,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1EDF2612D9CE5AF00B8CD5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1EDF2702D9CE5D200B8CD5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F1EDF26C2D9CE5B000B8CD5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */;
+			targetProxy = F1EDF26B2D9CE5B000B8CD5F /* PBXContainerItemProxy */;
+		};
+		F1EDF2792D9CE5D200B8CD5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F18061EF2D882ED300D9FCD1 /* MSWalkMemoryPractice */;
+			targetProxy = F1EDF2782D9CE5D200B8CD5F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F18062042D882ED400D9FCD1 /* Debug */ = {
@@ -156,11 +346,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MSWalkMemoryPractice/MSWalkMemoryPractice.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5YM44C4YT8;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MSWalkMemoryPractice/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "devBean이 사용자의 위치 정보가 (정확한 사용 목적) 때문에 필요합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -184,11 +375,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MSWalkMemoryPractice/MSWalkMemoryPractice.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5YM44C4YT8;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MSWalkMemoryPractice/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "devBean이 사용자의 위치 정보가 (정확한 사용 목적) 때문에 필요합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -242,6 +434,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -305,6 +498,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -323,6 +517,72 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F1EDF26E2D9CE5B000B8CD5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPracticeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MSWalkMemoryPractice;
+			};
+			name = Debug;
+		};
+		F1EDF26F2D9CE5B000B8CD5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPracticeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MSWalkMemoryPractice;
+			};
+			name = Release;
+		};
+		F1EDF27B2D9CE5D200B8CD5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPracticeUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MSWalkMemoryPractice.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MSWalkMemoryPractice";
+			};
+			name = Debug;
+		};
+		F1EDF27C2D9CE5D200B8CD5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alstn38.MSWalkMemoryPracticeUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MSWalkMemoryPractice.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MSWalkMemoryPractice";
 			};
 			name = Release;
 		};
@@ -347,6 +607,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F1EDF26D2D9CE5B000B8CD5F /* Build configuration list for PBXNativeTarget "MSWalkMemoryPracticeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1EDF26E2D9CE5B000B8CD5F /* Debug */,
+				F1EDF26F2D9CE5B000B8CD5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1EDF27A2D9CE5D200B8CD5F /* Build configuration list for PBXNativeTarget "MSWalkMemoryPracticeUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1EDF27B2D9CE5D200B8CD5F /* Debug */,
+				F1EDF27C2D9CE5D200B8CD5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -366,6 +644,22 @@
 				minimumVersion = 4.5.1;
 			};
 		};
+		F1EDF25A2D9CD01D00B8CD5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
+		F1EE8F622DA375E600F83BEF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -378,6 +672,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F19FF7E32D91756000098615 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		F1EDF25B2D9CD01D00B8CD5F /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EDF25A2D9CD01D00B8CD5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		F1EDF25D2D9CD01D00B8CD5F /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EDF25A2D9CD01D00B8CD5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		F1EDF25F2D9CD01D00B8CD5F /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EDF25A2D9CD01D00B8CD5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		F1EE8F632DA375E600F83BEF /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EE8F622DA375E600F83BEF /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
