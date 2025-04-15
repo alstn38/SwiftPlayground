@@ -21,6 +21,10 @@ struct ContentView: View {
             Tab("사진", systemImage: "photo") {
                 PhotoView()
             }
+            
+            Tab("지갑", systemImage: "wallet.bifold") {
+                WalletView()
+            }
         }
         .tint(.black)
     }
