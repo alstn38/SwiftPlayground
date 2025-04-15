@@ -14,11 +14,10 @@ struct DetailWalletView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(item.title)
-                    .font(.title3)
+                    .customTextStyle(font: .title3, color: .black)
                     .bold()
                 Text(item.subtitle)
-                    .font(.callout)
-                    .foregroundStyle(.gray)
+                    .customTextStyle(font: .callout, color: .gray)
             }
             Spacer()
             Text("\(item.money.formatted())원")

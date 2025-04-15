@@ -33,17 +33,15 @@ struct WalletView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(item.title)
-                    .font(.title3)
+                    .customTextStyle(font: .title3, color: .black)
                     .bold()
-                    .foregroundStyle(.black)
                 Text(item.subtitle)
                     .font(.callout)
                     .foregroundStyle(.gray)
             }
             Spacer()
             Text("\(item.money.formatted())원")
-                .font(.callout)
-                .foregroundStyle(.black)
+                .customTextStyle(font: .callout, color: .black)
         }
     }
 }

@@ -17,8 +17,7 @@ struct CountryView: View {
                 .font(.system(size: 18, weight: .semibold))
             
             Text(label)
-                .font(.footnote)
-                .foregroundStyle(.white)
+                .customTextStyle(font: .footnote, color: .white)
         }
         .frame(width: 80, height: 80)
         .background(.gray)

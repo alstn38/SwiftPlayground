@@ -19,21 +19,18 @@ struct BenefitItemView: View {
             
             VStack(alignment: .leading) {
                 Text(item.title)
-                    .font(.title3)
+                    .customTextStyle(font: .title3, color: .white)
                     .bold()
-                    .foregroundStyle(.white)
                 
                 Text(item.subTitle)
-                    .font(.callout)
-                    .foregroundStyle(.blue)
+                    .customTextStyle(font: .callout, color: .blue)
             }
             Spacer()
             
             if item.isNewItem {
                 Text("새로 나온")
-                    .font(.caption)
+                    .customTextStyle(font: .caption, color: .white)
                     .bold()
-                    .foregroundStyle(.white)
                     .padding(EdgeInsets(
                         top: 4,
                         leading: 8,

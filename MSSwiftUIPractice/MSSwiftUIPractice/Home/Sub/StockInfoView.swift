@@ -13,17 +13,14 @@ struct StockInfoView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(stockData.name)
-                .font(.callout)
-                .foregroundStyle(.gray)
+                .customTextStyle(font: .callout, color: .gray)
             
             HStack {
                 Text(String(format: "%.2f", stockData.value))
-                    .font(.footnote)
-                    .foregroundStyle(.white)
+                    .customTextStyle(font: .footnote, color: .white)
                 
                 Text(String(format: "%.1f%%", stockData.changePercent))
-                    .font(.footnote)
-                    .foregroundStyle(stockData.changeState ? .red : .blue)
+                    .customTextStyle(font: .footnote, color: stockData.changeState ? .red : .blue)
             }
         }
         .padding(.horizontal, 18)

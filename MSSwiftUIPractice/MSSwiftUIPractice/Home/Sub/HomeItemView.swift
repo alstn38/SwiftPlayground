@@ -16,7 +16,7 @@ struct HomeItemView: View {
                 .foregroundColor(.white)
             
             Text(homeMenuItem.title)
-                .foregroundColor(.white)
+                .customTextStyle(font: .headline, color: .white)
             
             Spacer()
             

@@ -18,8 +18,7 @@ struct EventView: View {
                 .background(Color.purple)
 
             Text(title)
-                .foregroundStyle(.white)
-                .font(.headline)
+                .customTextStyle(font: .headline, color: .white)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 16)

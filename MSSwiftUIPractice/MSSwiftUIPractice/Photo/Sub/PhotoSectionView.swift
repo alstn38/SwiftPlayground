@@ -14,7 +14,7 @@ struct PhotoSectionView: View {
     var body: some View {
         VStack {
             Text(section.sectionTitle)
-                .font(.title2)
+                .customTextStyle(font: .title2, color: .black)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
