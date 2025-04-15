@@ -59,6 +59,7 @@ struct HomeView: View {
                         .padding(.vertical, 8)
                 }
             }
+            .scrollDisabled(true)
             .scrollContentBackground(.hidden)
             .listStyle(.insetGrouped)
             .padding(.top, 12)
