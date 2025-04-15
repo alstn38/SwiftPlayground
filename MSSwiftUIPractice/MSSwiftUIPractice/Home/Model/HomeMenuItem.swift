@@ -16,8 +16,8 @@ struct HomeMenuItem: Identifiable {
 extension HomeMenuItem {
     
     static let items: [HomeMenuItem] = [
-        HomeMenuItem(title: "내 정보", systemImage: "person.circle"),
-        HomeMenuItem(title: "알림 설정", systemImage: "bell"),
-        HomeMenuItem(title: "로그아웃", systemImage: "star")
+        HomeMenuItem(title: "내 현금연수증", systemImage: "person.circle"),
+        HomeMenuItem(title: "내 보혐료 점검하기", systemImage: "bell"),
+        HomeMenuItem(title: "더 낸 연말정산 돌려받기", systemImage: "star")
     ]
 }
