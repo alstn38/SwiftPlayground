@@ -20,8 +20,7 @@ struct PhotoView: View {
                 }
             }
             .scrollIndicators(.hidden)
-            .navigationTitle("My Random Image")
-            .navigationBarTitleDisplayMode(.large)
+            .asLargeNavigationTitle("My Random Image")
         }
     }
 }

@@ -24,8 +24,7 @@ struct WalletView: View {
                 }
                 .padding()
             }
-            .navigationTitle("MS Wallet")
-            .navigationBarTitleDisplayMode(.large)
+            .asLargeNavigationTitle("MS Wallet")
         }
     }
     
