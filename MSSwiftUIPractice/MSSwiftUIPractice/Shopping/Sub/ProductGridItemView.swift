@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductGridItemView: View {
-    let product: ProductItem
+    @Binding var product: ProductItem
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -34,23 +34,18 @@ struct ProductGridItemView: View {
                 .customTextStyle(font: .headline, color: .black)
                 .lineLimit(1)
             
-            Text(product.lowPrice)
-                .customTextStyle(font: .subheadline, color: .black)
+            HStack {
+                Text(product.lowPrice)
+                    .customTextStyle(font: .subheadline, color: .black)
+                Image(systemName: product.favorite ? "star.fill" : "star")
+                    .tint(.black)
+                    .wrapToButton {
+                        product.favorite.toggle()
+                    }
+            }
         }
         .padding()
         .background(Color.gray.opacity(0.3))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-}
-
-#Preview {
-    ProductGridItemView(
-        product: ProductItem(
-            image: "https://picsum.photos/id/237/200/300",
-            mallName: "도봉구",
-            title: "사과",
-            lowPrice: "3999원",
-            favorite: true
-        )
-    )
 }
