@@ -10,9 +10,22 @@
 		F175216C2DAD12E400B030BB /* MSSwiftUIPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSSwiftUIPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F175248F2DAF8CE100B030BB /* Exceptions for "MSSwiftUIPractice" folder in "MSSwiftUIPractice" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F175216B2DAD12E400B030BB /* MSSwiftUIPractice */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F175216E2DAD12E400B030BB /* MSSwiftUIPractice */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F175248F2DAF8CE100B030BB /* Exceptions for "MSSwiftUIPractice" folder in "MSSwiftUIPractice" target */,
+			);
 			path = MSSwiftUIPractice;
 			sourceTree = "<group>";
 		};
@@ -127,6 +140,8 @@
 /* Begin XCBuildConfiguration section */
 		F17521752DAD12E600B030BB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = F175216E2DAD12E400B030BB /* MSSwiftUIPractice */;
+			baseConfigurationReferenceRelativePath = Resource/APIKey.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -191,6 +206,8 @@
 		};
 		F17521762DAD12E600B030BB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = F175216E2DAD12E400B030BB /* MSSwiftUIPractice */;
+			baseConfigurationReferenceRelativePath = Resource/APIKey.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -256,6 +273,7 @@
 				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MSSwiftUIPractice/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +302,7 @@
 				DEVELOPMENT_TEAM = 5YM44C4YT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MSSwiftUIPractice/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
