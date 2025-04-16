@@ -12,20 +12,23 @@ struct ProductDetailView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            AsyncImage(url: URL(string: product.image)) { image in
-                switch image {
+            AsyncImage(url: URL(string: product.image)) { data in
+                switch data {
                 case .empty:
-                    Image(systemName: "star")
+                    ProgressView()
                 case .success(let image):
                     image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                 case .failure(_):
                     Image(systemName: "star")
                 @unknown default:
-                    Image(systemName: "star")
+                    EmptyView()
                 }
             }
             .scaledToFit()
             .frame(width: 100, height: 100)
+            .clipped()
             
             Text(product.title)
                 .customTextStyle(font: .title2, color: .black)
@@ -41,7 +44,7 @@ struct ProductDetailView: View {
             Image(systemName: product.favorite ? "star.fill" : "star")
                 .tint(.black)
                 .wrapToButton {
-                    print("토글")
+                    product.favorite.toggle()
                 }
         }
     }
